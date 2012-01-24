@@ -25,7 +25,6 @@
 		738BBCD81499593D00EF9712 /* start_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 738BBCD61499593D00EF9712 /* start_pressed.png */; };
 		738BBCD91499593D00EF9712 /* start_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 738BBCD71499593D00EF9712 /* start_pressed@2x.png */; };
 		738BBCDD1499605900EF9712 /* UserScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 738BBCDC1499605900EF9712 /* UserScreen.m */; };
-		738D107B149E17710041FA39 /* NSPixel.m in Sources */ = {isa = PBXBuildFile; fileRef = 738D107A149E17710041FA39 /* NSPixel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,8 +54,6 @@
 		738BBCD71499593D00EF9712 /* start_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "start_pressed@2x.png"; sourceTree = "<group>"; };
 		738BBCDB1499605900EF9712 /* UserScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserScreen.h; sourceTree = "<group>"; };
 		738BBCDC1499605900EF9712 /* UserScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserScreen.m; sourceTree = "<group>"; };
-		738D1079149E17710041FA39 /* NSPixel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSPixel.h; sourceTree = "<group>"; };
-		738D107A149E17710041FA39 /* NSPixel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSPixel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,7 +84,6 @@
 		7323739E149A0B7E00D86DFC /* Touch Area */ = {
 			isa = PBXGroup;
 			children = (
-				738D1077149E17630041FA39 /* NSPixel */,
 				732373A2149A0C4F00D86DFC /* NSPoint */,
 				7323739F149A0B9F00D86DFC /* TouchArea.h */,
 				732373A0149A0B9F00D86DFC /* TouchArea.m */,
@@ -195,15 +191,6 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
-		738D1077149E17630041FA39 /* NSPixel */ = {
-			isa = PBXGroup;
-			children = (
-				738D1079149E17710041FA39 /* NSPixel.h */,
-				738D107A149E17710041FA39 /* NSPixel.m */,
-			);
-			name = NSPixel;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -280,7 +267,6 @@
 				738BBCDD1499605900EF9712 /* UserScreen.m in Sources */,
 				732373A1149A0B9F00D86DFC /* TouchArea.m in Sources */,
 				732373A5149A0C5C00D86DFC /* NSPoint.m in Sources */,
-				738D107B149E17710041FA39 /* NSPixel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
