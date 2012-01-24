@@ -29,20 +29,6 @@ CGImageRef UIGetScreenImage(void);
 		points_three=	[[NSMutableArray alloc] init];
 		points_four	=	[[NSMutableArray alloc] init];
 		points_five	=	[[NSMutableArray alloc] init];
-		/*
-		//	TEST BOX
-		UIView* testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 160, 320)];
-		testView.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:1];
-		[self addSubview:testView];
-
-		UIView* testView2 = [[UIView alloc] initWithFrame:CGRectMake(160, 0, 160, 320)];
-		testView2.backgroundColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:1];
-		[self addSubview:testView2];
-		
-		UIView* testView3 = [[UIView alloc] initWithFrame:CGRectMake(320, 0, 160, 320)];
-		testView3.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:1];
-		[self addSubview:testView3];
-		*/
 		
 		//	Playback head
 		playbackWindow = [[UIView alloc] initWithFrame:CGRectMake(200, 10, 125, 125)];
