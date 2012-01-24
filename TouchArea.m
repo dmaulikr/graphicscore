@@ -26,7 +26,7 @@ CGImageRef UIGetScreenImage(void);
 		//	Init paths
 		points_one	=	[[NSMutableArray alloc]	init];
 		points_two	=	[[NSMutableArray alloc]	init];	
-		points_three=	[[NSMutableArray alloc] init];
+		points_three	=	[[NSMutableArray alloc] init];
 		points_four	=	[[NSMutableArray alloc] init];
 		points_five	=	[[NSMutableArray alloc] init];
 		
