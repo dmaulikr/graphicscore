@@ -14,6 +14,7 @@
 @protocol TouchAreaDelegate <NSObject>
 
 //	DELEGATE METHODS HERE
+-(void)fillWithColor:(int) i;
 
 @end
 
@@ -36,6 +37,9 @@
 	
 	//	Fifth
 	NSMutableArray	*points_five;
+	
+	//	Mode (blur / paint / fill)
+	NSString *mode;
 }
 
 -(void) getPointsFromCurrentDrawnLines;
@@ -47,5 +51,7 @@
 @property (strong)	NSMutableArray	*points_three;
 @property (strong)	NSMutableArray	*points_four;
 @property (strong)	NSMutableArray	*points_five;
+@property (strong)	id <TouchAreaDelegate> delegate;
+@property (strong)	NSString *mode;
 
 @end

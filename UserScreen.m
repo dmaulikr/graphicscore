@@ -22,7 +22,7 @@
 	
 	//	Fade view and background alpha to 100%
 	self.view.alpha					= 1.0;
-	userBackground_imageView.alpha	= 1.0;
+	userBackground_imageView.alpha	= .75;
 	touchpad.alpha					= 1.0;
 	
 	//	Buttons fade in and move, slightly.
@@ -42,6 +42,10 @@
 	selectGreen.alpha	= 1.0;
 
 	exitButton.alpha	= 1.0;	
+	
+	selectFillMode.alpha= 1.0;
+	selectDrawMode.alpha= 1.0;
+	
 	
 	[UIView commitAnimations];
 }
@@ -73,6 +77,9 @@
 	selectGreen.alpha	= 0.0;
 	
 	exitButton.alpha = 0.0;	
+	
+	selectFillMode.alpha= 0.0;
+	selectDrawMode.alpha= 0.0;
 	
 	[UIView commitAnimations];
 }
@@ -127,6 +134,25 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////
 
+-(void) fillWithColor:(int)i	{
+	//	ADD LOGIC HERE FOR WHICH COLOR IS SELECTED
+	NSLog(@"Fill received");
+	[self.view setBackgroundColor:[UIColor redColor]];
+}
+
+-(void) fillModeSelect	{
+	[touchpad setMode:@"Fill"];
+	NSLog(@"FILL");
+}
+
+-(void) drawModeSelect	{
+	[touchpad setMode:@"Draw"];
+	NSLog(@"DRAW");
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -145,10 +171,17 @@
 				Create & add touchpad
 		*/
 		touchpad = [[TouchArea alloc] init];
+		[touchpad setDelegate:self];
 		[touchpad setFrame:CGRectMake(0, 0, self.view.frame.size.height, self.view.frame.size.width)];
 		touchpad.alpha = 0.0;
 		[self.view addSubview:touchpad];
 		
+		/*
+				Create palettes
+		 */
+		userPalette = [[Palette alloc] init];
+		[userPalette create];
+		remotePalette = [userPalette createOpposite];
 		
 		/*		
 				Add buttons to the screen
@@ -158,7 +191,8 @@
 		selectBrown = [UIButton buttonWithType:UIButtonTypeCustom];													
 		
 		//	2:	Set background color
-		selectBrown.backgroundColor = [UIColor colorWithRed:0.16 green:0.09 blue:0.0 alpha:0.22];					
+//		selectBrown.backgroundColor = [UIColor colorWithRed:0.16 green:0.09 blue:0.0 alpha:0.22];					
+		selectBrown.backgroundColor = [userPalette.colors objectAtIndex:0];
 		
 		//	3:	Add target action
 		[selectBrown addTarget:self action:@selector(selectBrown) forControlEvents:UIControlEventTouchUpInside];	
@@ -178,7 +212,8 @@
 		
 		//	BLUE
 		selectBlue = [UIButton buttonWithType:UIButtonTypeCustom];
-		selectBlue.backgroundColor = [UIColor colorWithRed:0.0 green:0.282 blue:0.63 alpha:0.22];
+//		selectBlue.backgroundColor = [UIColor colorWithRed:0.0 green:0.282 blue:0.63 alpha:0.22];
+		selectBlue.backgroundColor = [userPalette.colors objectAtIndex:1];		
 		[selectBlue addTarget:self action:@selector(selectBlue) forControlEvents:UIControlEventTouchUpInside];
 		[selectBlue setFrame:CGRectMake(98-15, 258, 44, 44)];
 		selectBlue.layer.cornerRadius = 15.0f;	
@@ -188,7 +223,8 @@
 		
 		//	YELLOW
 		selectYellow = [UIButton buttonWithType:UIButtonTypeCustom];
-		selectYellow.backgroundColor = [UIColor colorWithRed:0.69 green:0.41 blue:0.0 alpha:0.22];
+//		selectYellow.backgroundColor = [UIColor colorWithRed:0.69 green:0.41 blue:0.0 alpha:0.22];
+		selectYellow.backgroundColor = [userPalette.colors objectAtIndex:2];
 		[selectYellow addTarget:self action:@selector(selectYellow) forControlEvents:UIControlEventTouchUpInside];
 		[selectYellow setFrame:CGRectMake(178-15, 258, 44, 44)];
 		selectYellow.layer.cornerRadius = 15.0f;		
@@ -198,7 +234,8 @@
 		
 		//	RED
 		selectRed = [UIButton buttonWithType:UIButtonTypeCustom];
-		selectRed.backgroundColor = [UIColor colorWithRed:0.78 green:0.0 blue:0.19 alpha:0.22];
+		//selectRed.backgroundColor = [UIColor colorWithRed:0.78 green:0.0 blue:0.19 alpha:0.22];
+		selectRed.backgroundColor = [userPalette.colors objectAtIndex:3];		
 		[selectRed addTarget:self action:@selector(selectRed) forControlEvents:UIControlEventTouchUpInside];
 		[selectRed setFrame:CGRectMake(258-15, 258, 44, 44)];
 		selectRed.layer.cornerRadius = 15.0f;	
@@ -208,7 +245,8 @@
 		
 		//	GREEN
 		selectGreen = [UIButton buttonWithType:UIButtonTypeCustom];
-		selectGreen.backgroundColor = [UIColor colorWithRed:0.17 green:0.55 blue:00 alpha:0.22];
+//		selectGreen.backgroundColor = [UIColor colorWithRed:0.17 green:0.55 blue:00 alpha:0.22];
+		selectGreen.backgroundColor = [userPalette.colors objectAtIndex:4];		
 		[selectGreen addTarget:self action:@selector(selectGreen) forControlEvents:UIControlEventTouchUpInside];
 		[selectGreen setFrame:CGRectMake(338-15, 258, 44, 44)];
 		selectGreen.layer.cornerRadius = 15.0f;	
@@ -225,6 +263,23 @@
 		exitButton.alpha = 0.0;
 		[self.view addSubview:exitButton];		
 		
+		//	SELECT DRAW
+		selectDrawMode = [UIButton buttonWithType:UIButtonTypeCustom];
+		selectDrawMode.backgroundColor = [UIColor purpleColor];
+		[selectDrawMode addTarget:self action:@selector(drawModeSelect) forControlEvents:UIControlEventTouchUpInside];
+		[selectDrawMode setFrame:CGRectMake(3, 3, 44, 44)];
+		selectDrawMode.layer.cornerRadius = 15.0f;
+		selectDrawMode.alpha = 0.0;
+		[self.view addSubview:selectDrawMode];
+		
+		//	SELECT DRAW
+		selectFillMode = [UIButton buttonWithType:UIButtonTypeCustom];
+		selectFillMode.backgroundColor = [UIColor orangeColor];
+		[selectFillMode addTarget:self action:@selector(fillModeSelect) forControlEvents:UIControlEventTouchUpInside];
+		[selectFillMode setFrame:CGRectMake(83, 3, 44, 44)];
+		selectFillMode.layer.cornerRadius = 15.0f;
+		selectFillMode.alpha = 0.0;
+		[self.view addSubview:selectFillMode];		
 		
 		//	Fade in UI elements
 		[self fadeViewToScreen];

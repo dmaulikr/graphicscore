@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "TouchArea.h"
+#import "Palette.h"
 #import <QuartzCore/QuartzCore.h>
 
 @protocol UserScreenDelegate <NSObject>
@@ -16,7 +17,7 @@
 
 @end
 
-@interface UserScreen : UIViewController	{
+@interface UserScreen : UIViewController <TouchAreaDelegate>	{
 	//	Delegate
 	id <UserScreenDelegate> delegate;
 	
@@ -29,6 +30,9 @@
 	//	Touch control area
 	TouchArea	*touchpad;
 	
+	//	Palette
+	Palette		*userPalette;
+	Palette		*remotePalette;
 	
 	//	Palette buttons
 	UIButton	*selectBrown;
@@ -40,6 +44,9 @@
 	//	Exit
 	UIButton	*exitButton;
 	
+	//	Mode selection
+	UIButton	*selectDrawMode;
+	UIButton	*selectFillMode;
 }
 
 @property (strong) id delegate;
