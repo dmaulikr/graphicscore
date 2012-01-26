@@ -22,30 +22,29 @@
 	
 	//	Fade view and background alpha to 100%
 	self.view.alpha					= 1.0;
-	userBackground_imageView.alpha	= .75;
+	userBackground_imageView.alpha	= .15;
 	touchpad.alpha					= 1.0;
 	
 	//	Buttons fade in and move, slightly.
-	[selectBrown	setFrame:CGRectMake(18,  258, 44, 44)];	
-	[selectBlue		setFrame:CGRectMake(98,  258, 44, 44)];
-	[selectYellow	setFrame:CGRectMake(178, 258, 44, 44)];
-	[selectRed		setFrame:CGRectMake(258, 258, 44, 44)];
-	[selectGreen	setFrame:CGRectMake(338, 258, 44, 44)];
+	[selectColor1	setFrame:CGRectMake(18,  258, 44, 44)];	
+	[selectColor2	setFrame:CGRectMake(98,  258, 44, 44)];
+	[selectColor3	setFrame:CGRectMake(178, 258, 44, 44)];
+	[selectColor4	setFrame:CGRectMake(258, 258, 44, 44)];
+	[selectColor5	setFrame:CGRectMake(338, 258, 44, 44)];
 	
 	[exitButton		setFrame:CGRectMake(418, 258, 44, 44)];
 	
 	
-	selectBrown.alpha	= 1.0;
-	selectBlue.alpha	= 1.0;
-	selectYellow.alpha	= 1.0;
-	selectRed.alpha		= 1.0;
-	selectGreen.alpha	= 1.0;
+	selectColor1.alpha	= 1.0;
+	selectColor2.alpha	= 1.0;
+	selectColor3.alpha	= 1.0;
+	selectColor4.alpha	= 1.0;
+	selectColor5.alpha	= 1.0;
 
 	exitButton.alpha	= 1.0;	
 	
 	selectFillMode.alpha= 1.0;
 	selectDrawMode.alpha= 1.0;
-	
 	
 	[UIView commitAnimations];
 }
@@ -62,19 +61,19 @@
 	
 	
 	//	Buttons fade out and move, slightly.
-	[selectBrown	setFrame:CGRectMake(18-15,  258, 44, 44)];	
-	[selectBlue		setFrame:CGRectMake(98-15,  258, 44, 44)];
-	[selectYellow	setFrame:CGRectMake(178-15, 258, 44, 44)];
-	[selectRed		setFrame:CGRectMake(258-15, 258, 44, 44)];
-	[selectGreen	setFrame:CGRectMake(338-15, 258, 44, 44)];
+	[selectColor1	setFrame:CGRectMake(18-15,  258, 44, 44)];	
+	[selectColor2		setFrame:CGRectMake(98-15,  258, 44, 44)];
+	[selectColor3	setFrame:CGRectMake(178-15, 258, 44, 44)];
+	[selectColor4	setFrame:CGRectMake(258-15, 258, 44, 44)];
+	[selectColor5	setFrame:CGRectMake(338-15, 258, 44, 44)];
 	
 	[exitButton setFrame:CGRectMake(418-15, 258, 44, 44)];	
 	
-	selectBrown.alpha	= 0.0;
-	selectBlue.alpha	= 0.0;
-	selectYellow.alpha	= 0.0;
-	selectRed.alpha		= 0.0;
-	selectGreen.alpha	= 0.0;
+	selectColor1.alpha	= 0.0;
+	selectColor2.alpha	= 0.0;
+	selectColor3.alpha	= 0.0;
+	selectColor4.alpha		= 0.0;
+	selectColor5.alpha	= 0.0;
 	
 	exitButton.alpha = 0.0;	
 	
@@ -106,27 +105,27 @@
 /*
 	Selection methods for colors / controls
 */
--(void)selectBrown	{
+-(void)selectColor1	{
 	[touchpad setPathToDraw:0];
 	NSLog(@"BROWN");
 }
 
--(void)selectBlue	{
+-(void)selectColor2	{
 	[touchpad setPathToDraw:1];
 	NSLog(@"BLUE");
 }
 
--(void)selectYellow	{
+-(void)selectColor3	{
 	[touchpad setPathToDraw:2];
 	NSLog(@"YELLOW");
 }
 
--(void)selectRed	{
+-(void)selectColor4	{
 	[touchpad setPathToDraw:3];
 	NSLog(@"RED");
 }
 
--(void)selectGreen	{
+-(void)selectColor5	{
 	[touchpad setPathToDraw:4];
 	NSLog(@"GREEN");
 }
@@ -137,7 +136,7 @@
 -(void) fillWithColor:(int)i	{
 	//	ADD LOGIC HERE FOR WHICH COLOR IS SELECTED
 	NSLog(@"Fill received");
-	[self.view setBackgroundColor:[UIColor redColor]];
+	[self.view setBackgroundColor:[[userPalette colors]objectAtIndex:i]];
 }
 
 -(void) fillModeSelect	{
@@ -182,76 +181,72 @@
 		userPalette = [[Palette alloc] init];
 		[userPalette create];
 		remotePalette = [userPalette createOpposite];
+		[touchpad setPalette:userPalette];
 		
 		/*		
 				Add buttons to the screen
 		*/
 		//	BROWN
 		//	1:	Set button type
-		selectBrown = [UIButton buttonWithType:UIButtonTypeCustom];													
+		selectColor1 = [UIButton buttonWithType:UIButtonTypeCustom];													
 		
 		//	2:	Set background color
-//		selectBrown.backgroundColor = [UIColor colorWithRed:0.16 green:0.09 blue:0.0 alpha:0.22];					
-		selectBrown.backgroundColor = [userPalette.colors objectAtIndex:0];
+		selectColor1.backgroundColor = [userPalette.colors objectAtIndex:0];
 		
 		//	3:	Add target action
-		[selectBrown addTarget:self action:@selector(selectBrown) forControlEvents:UIControlEventTouchUpInside];	
+		[selectColor1 addTarget:self action:@selector(selectColor1) forControlEvents:UIControlEventTouchUpInside];	
 		
 		//	4:	Set size & position
-		[selectBrown setFrame:CGRectMake(18-15, 258, 44, 44)];
+		[selectColor1 setFrame:CGRectMake(18-15, 258, 44, 44)];
 		
 		//	5:	Configure rounded corners
-		selectBrown.layer.cornerRadius = 15.0f;
+		selectColor1.layer.cornerRadius = 15.0f;
 		
 		//	6:	Prepare for fade in
-		selectBrown.alpha = 0.0;
+		selectColor1.alpha = 0.0;
 		
 		//	7:	Add to view
-		[self.view addSubview:selectBrown];		
+		[self.view addSubview:selectColor1];		
 		
 		
 		//	BLUE
-		selectBlue = [UIButton buttonWithType:UIButtonTypeCustom];
-//		selectBlue.backgroundColor = [UIColor colorWithRed:0.0 green:0.282 blue:0.63 alpha:0.22];
-		selectBlue.backgroundColor = [userPalette.colors objectAtIndex:1];		
-		[selectBlue addTarget:self action:@selector(selectBlue) forControlEvents:UIControlEventTouchUpInside];
-		[selectBlue setFrame:CGRectMake(98-15, 258, 44, 44)];
-		selectBlue.layer.cornerRadius = 15.0f;	
-		selectBlue.alpha = 0.0;
-		[self.view addSubview:selectBlue];		
+		selectColor2 = [UIButton buttonWithType:UIButtonTypeCustom];
+		selectColor2.backgroundColor = [userPalette.colors objectAtIndex:1];		
+		[selectColor2 addTarget:self action:@selector(selectColor2) forControlEvents:UIControlEventTouchUpInside];
+		[selectColor2 setFrame:CGRectMake(98-15, 258, 44, 44)];
+		selectColor2.layer.cornerRadius = 15.0f;	
+		selectColor2.alpha = 0.0;
+		[self.view addSubview:selectColor2];		
 		
 		
 		//	YELLOW
-		selectYellow = [UIButton buttonWithType:UIButtonTypeCustom];
-//		selectYellow.backgroundColor = [UIColor colorWithRed:0.69 green:0.41 blue:0.0 alpha:0.22];
-		selectYellow.backgroundColor = [userPalette.colors objectAtIndex:2];
-		[selectYellow addTarget:self action:@selector(selectYellow) forControlEvents:UIControlEventTouchUpInside];
-		[selectYellow setFrame:CGRectMake(178-15, 258, 44, 44)];
-		selectYellow.layer.cornerRadius = 15.0f;		
-		selectYellow.alpha = 0.0;
-		[self.view addSubview:selectYellow];
+		selectColor3 = [UIButton buttonWithType:UIButtonTypeCustom];
+		selectColor3.backgroundColor = [userPalette.colors objectAtIndex:2];
+		[selectColor3 addTarget:self action:@selector(selectColor3) forControlEvents:UIControlEventTouchUpInside];
+		[selectColor3 setFrame:CGRectMake(178-15, 258, 44, 44)];
+		selectColor3.layer.cornerRadius = 15.0f;		
+		selectColor3.alpha = 0.0;
+		[self.view addSubview:selectColor3];
 		
 		
 		//	RED
-		selectRed = [UIButton buttonWithType:UIButtonTypeCustom];
-		//selectRed.backgroundColor = [UIColor colorWithRed:0.78 green:0.0 blue:0.19 alpha:0.22];
-		selectRed.backgroundColor = [userPalette.colors objectAtIndex:3];		
-		[selectRed addTarget:self action:@selector(selectRed) forControlEvents:UIControlEventTouchUpInside];
-		[selectRed setFrame:CGRectMake(258-15, 258, 44, 44)];
-		selectRed.layer.cornerRadius = 15.0f;	
-		selectRed.alpha = 0.0;
-		[self.view addSubview:selectRed];		
+		selectColor4 = [UIButton buttonWithType:UIButtonTypeCustom];
+		selectColor4.backgroundColor = [userPalette.colors objectAtIndex:3];		
+		[selectColor4 addTarget:self action:@selector(selectColor4) forControlEvents:UIControlEventTouchUpInside];
+		[selectColor4 setFrame:CGRectMake(258-15, 258, 44, 44)];
+		selectColor4.layer.cornerRadius = 15.0f;	
+		selectColor4.alpha = 0.0;
+		[self.view addSubview:selectColor4];		
 		
 		
 		//	GREEN
-		selectGreen = [UIButton buttonWithType:UIButtonTypeCustom];
-//		selectGreen.backgroundColor = [UIColor colorWithRed:0.17 green:0.55 blue:00 alpha:0.22];
-		selectGreen.backgroundColor = [userPalette.colors objectAtIndex:4];		
-		[selectGreen addTarget:self action:@selector(selectGreen) forControlEvents:UIControlEventTouchUpInside];
-		[selectGreen setFrame:CGRectMake(338-15, 258, 44, 44)];
-		selectGreen.layer.cornerRadius = 15.0f;	
-		selectGreen.alpha = 0.0;
-		[self.view addSubview:selectGreen];		
+		selectColor5 = [UIButton buttonWithType:UIButtonTypeCustom];
+		selectColor5.backgroundColor = [userPalette.colors objectAtIndex:4];		
+		[selectColor5 addTarget:self action:@selector(selectColor5) forControlEvents:UIControlEventTouchUpInside];
+		[selectColor5 setFrame:CGRectMake(338-15, 258, 44, 44)];
+		selectColor5.layer.cornerRadius = 15.0f;	
+		selectColor5.alpha = 0.0;
+		[self.view addSubview:selectColor5];		
 		
 		
 		//	EXIT

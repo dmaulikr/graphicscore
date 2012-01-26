@@ -21,7 +21,6 @@
 	//	Delegate
 	id <UserScreenDelegate> delegate;
 	
-	
 	//	Backround image setup
 	UIImageView	*userBackground_imageView;
 	UIImage		*userBackground_image;
@@ -35,11 +34,11 @@
 	Palette		*remotePalette;
 	
 	//	Palette buttons
-	UIButton	*selectBrown;
-	UIButton	*selectBlue;
-	UIButton	*selectYellow;
-	UIButton	*selectRed;
-	UIButton	*selectGreen;
+	UIButton	*selectColor1;
+	UIButton	*selectColor2;
+	UIButton	*selectColor3;
+	UIButton	*selectColor4;
+	UIButton	*selectColor5;
 	
 	//	Exit
 	UIButton	*exitButton;

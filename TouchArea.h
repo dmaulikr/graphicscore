@@ -10,6 +10,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import <CoreFoundation/CoreFoundation.h>
 #import "NSPoint.h"
+#import "Palette.h"
 
 @protocol TouchAreaDelegate <NSObject>
 
@@ -40,6 +41,9 @@
 	
 	//	Mode (blur / paint / fill)
 	NSString *mode;
+	
+	//	Palette (from parent)
+	Palette	*palette;
 }
 
 -(void) getPointsFromCurrentDrawnLines;
@@ -52,6 +56,7 @@
 @property (strong)	NSMutableArray	*points_four;
 @property (strong)	NSMutableArray	*points_five;
 @property (strong)	id <TouchAreaDelegate> delegate;
-@property (strong)	NSString *mode;
+@property (strong)	NSString	*mode;
+@property (strong)	Palette		*palette;
 
 @end

@@ -11,7 +11,7 @@
 CGImageRef UIGetScreenImage(void);
 
 @implementation TouchArea
-@synthesize pathToDraw, points_one, points_two, points_three, points_four, points_five, mode, delegate;
+@synthesize pathToDraw, points_one, points_two, points_three, points_four, points_five, mode, delegate, palette;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -32,7 +32,6 @@ CGImageRef UIGetScreenImage(void);
 	
 		//	Set mode
 		mode = @"Draw";
-		
 		
 		//	Load confirmation
 		NSLog(@"LOADED TOUCHPAD");
@@ -68,8 +67,8 @@ CGImageRef UIGetScreenImage(void);
 	[self setNeedsDisplay];
 	UITouch *touch = [touches anyObject];
 	if (touch.view==self)	{
-		NSPoint *p = [[NSPoint alloc] initWithCGPoint:[touch locationInView:self]];
-		[self performSelectorInBackground:@selector(addTouch:) withObject:p];
+		NSPoint *pp = [[NSPoint alloc] initWithCGPoint:[touch locationInView:self]];
+		[self performSelectorInBackground:@selector(addTouch:) withObject:pp];
 	}
 }
 
@@ -151,7 +150,8 @@ CGImageRef UIGetScreenImage(void);
 	*/
 	
 	//	Set line color
-	[[UIColor colorWithRed:0.16 green:0.09 blue:0.0 alpha:0.22]setStroke];
+	[[palette.colors objectAtIndex:0]setStroke];
+//	[[UIColor colorWithRed:0.16 green:0.09 blue:0.0 alpha:0.22]setStroke];
 //	[[UIColor colorWithRed:0.16 green:0.09 blue:0.0 alpha:1]setStroke];
 	//	Get path ref
 	CGMutablePathRef point_one_pathref = CGPathCreateMutable();
@@ -173,7 +173,8 @@ CGImageRef UIGetScreenImage(void);
 	*/
 	lineWidth=0.1;	
 	//	Set line color
-	[[UIColor colorWithRed:0.0 green:0.282 blue:0.63 alpha:0.22]setStroke];
+//	[[UIColor colorWithRed:0.0 green:0.282 blue:0.63 alpha:0.22]setStroke];
+	[[palette.colors objectAtIndex:1]setStroke];	
 	//	Get path ref
 	CGMutablePathRef point_two_pathref = CGPathCreateMutable();
 	
@@ -194,7 +195,8 @@ CGImageRef UIGetScreenImage(void);
 	 */
 	lineWidth=0.1;		
 	//	Set line color
-	[[UIColor colorWithRed:0.69 green:0.41 blue:00 alpha:0.22]setStroke];
+//	[[UIColor colorWithRed:0.69 green:0.41 blue:00 alpha:0.22]setStroke];
+	[[palette.colors objectAtIndex:2]setStroke];	
 	//	Get path ref
 	CGMutablePathRef point_three_pathref = CGPathCreateMutable();
 	
@@ -215,7 +217,8 @@ CGImageRef UIGetScreenImage(void);
 	 */
 	lineWidth=0.1;		
 	//	Set line color
-	[[UIColor colorWithRed:0.78 green:0.0 blue:0.19 alpha:0.22]setStroke];
+	[[palette.colors objectAtIndex:3]setStroke];	
+//	[[UIColor colorWithRed:0.78 green:0.0 blue:0.19 alpha:0.22]setStroke];
 	//	Get path ref
 	CGMutablePathRef point_four_pathref = CGPathCreateMutable();
 	
@@ -236,7 +239,8 @@ CGImageRef UIGetScreenImage(void);
 	 */
 	lineWidth=0.1;		
 	//	Set line color
-	[[UIColor colorWithRed:0.17 green:0.55 blue:00 alpha:0.22]setStroke];
+	[[palette.colors objectAtIndex:4]setStroke];	
+//	[[UIColor colorWithRed:0.17 green:0.55 blue:00 alpha:0.22]setStroke];
 	//	Get path ref
 	CGMutablePathRef point_five_pathref = CGPathCreateMutable();
 	

@@ -15,18 +15,18 @@
 	self = [super init];
 	if (self)	{
 		//	Create the possible colors
-		UIColor *color1		= [UIColor colorWithRed:0.1 green:0.7 blue:0.9 alpha:1];
-		UIColor *color2		= [UIColor colorWithRed:0.3 green:0.9 blue:0.1 alpha:1];
-		UIColor *color3		= [UIColor colorWithRed:0.5 green:0.1 blue:0.3 alpha:1];
-		UIColor *color4		= [UIColor colorWithRed:0.7 green:0.3 blue:0.5 alpha:1];
-		UIColor *color5		= [UIColor colorWithRed:0.9 green:0.5 blue:0.7 alpha:1];
-		UIColor *color6		= [UIColor colorWithRed:0.1 green:0.7 blue:0.9 alpha:1];
-		UIColor *color7		= [UIColor colorWithRed:0.1 green:0.9 blue:0.1 alpha:1];
-		UIColor *color8		= [UIColor colorWithRed:0.1 green:0.1 blue:0.3 alpha:1];
-		UIColor *color9		= [UIColor colorWithRed:0.1 green:0.3 blue:0.5 alpha:1];
-		UIColor *color10	= [UIColor colorWithRed:0.1 green:0.5 blue:0.7 alpha:1];
-		UIColor *color11	= [UIColor colorWithRed:0.1 green:0.7 blue:0.9 alpha:1];
-		UIColor *color12	= [UIColor colorWithRed:0.1 green:0.9 blue:0.1 alpha:1];
+		UIColor *color1		= [UIColor colorWithRed:0.1 green:0.7 blue:0.9 alpha:0.25];
+		UIColor *color2		= [UIColor colorWithRed:0.3 green:0.9 blue:0.1 alpha:0.25];
+		UIColor *color3		= [UIColor colorWithRed:0.5 green:0.1 blue:0.3 alpha:0.25];
+		UIColor *color4		= [UIColor colorWithRed:0.7 green:0.3 blue:0.5 alpha:0.25];
+		UIColor *color5		= [UIColor colorWithRed:0.9 green:0.5 blue:0.7 alpha:0.25];
+		UIColor *color6		= [UIColor colorWithRed:0.1 green:0.7 blue:0.9 alpha:0.25];
+		UIColor *color7		= [UIColor colorWithRed:0.1 green:0.9 blue:0.1 alpha:0.25];
+		UIColor *color8		= [UIColor colorWithRed:0.1 green:0.1 blue:0.3 alpha:0.25];
+		UIColor *color9		= [UIColor colorWithRed:0.1 green:0.3 blue:0.5 alpha:0.25];
+		UIColor *color10	= [UIColor colorWithRed:0.1 green:0.5 blue:0.7 alpha:0.25];
+		UIColor *color11	= [UIColor colorWithRed:0.1 green:0.7 blue:0.9 alpha:0.25];
+		UIColor *color12	= [UIColor colorWithRed:0.1 green:0.9 blue:0.1 alpha:0.25];
 		
 		availableRangeOfColors = [NSArray arrayWithObjects:color1, color2, color3, color4, color5, color6,
 								  color7, color8, color9, color10, color11, color12,nil];
