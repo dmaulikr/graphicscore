@@ -14,7 +14,6 @@
 /*
 	View dismissal / init animation
 */
-
 -(void)fadeViewToScreen	{
 	[UIView beginAnimations:@"Fade in view" context:nil];
 	[UIView setAnimationDelay:0.0];
