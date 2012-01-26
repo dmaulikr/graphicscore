@@ -10,7 +10,6 @@
 #import <QuartzCore/QuartzCore.h>
 #import <CoreFoundation/CoreFoundation.h>
 #import "NSPoint.h"
-//#import "NSPixel.h"
 
 @protocol TouchAreaDelegate <NSObject>
 
@@ -37,12 +36,9 @@
 	
 	//	Fifth
 	NSMutableArray	*points_five;
-	
-	//	Playback Window
-	NSMutableArray	*playbackWindowContents;
-	UIView			*playbackWindow;
 }
--(void)getCurrentPointsOnScreen;
+
+-(void) getPointsFromCurrentDrawnLines;
 
 
 @property			int	pathToDraw;

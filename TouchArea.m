@@ -30,14 +30,6 @@ CGImageRef UIGetScreenImage(void);
 		points_four	=	[[NSMutableArray alloc] init];
 		points_five	=	[[NSMutableArray alloc] init];
 		
-		//	Playback head
-		playbackWindow = [[UIView alloc] initWithFrame:CGRectMake(200, 10, 125, 125)];
-		playbackWindow.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0.2 alpha:0.1];
-		playbackWindow.layer.borderWidth = 1.0f;
-		playbackWindow.layer.borderColor = [[UIColor colorWithRed:0 green:0 blue:0 alpha:0.5] CGColor];
-		playbackWindow.layer.cornerRadius = 15.0f;
-		[self addSubview:playbackWindow];
-		
 		//	Load confirmation
 		NSLog(@"LOADED TOUCHPAD");
     }
@@ -118,8 +110,7 @@ CGImageRef UIGetScreenImage(void);
 
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event	{
 	[self processTouches:touches];	
-	[self performSelectorInBackground:@selector(getCurrentPointsOnScreen) withObject:nil];
-//	[self getCurrentPointsOnScreen];	
+	[self performSelectorInBackground:@selector(getPointsFromCurrentDrawnLines) withObject:nil];
 }
 
 
@@ -133,7 +124,7 @@ CGImageRef UIGetScreenImage(void);
     CGContextRef context = UIGraphicsGetCurrentContext();
 	
 	//	Set line width & cap
-	CGContextSetLineWidth	(context,22.0f);
+	CGContextSetLineWidth	(context,5.0f);
 	CGContextSetLineCap		(context, kCGLineCapRound);
 	
 	/*
@@ -245,56 +236,25 @@ CGImageRef UIGetScreenImage(void);
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
--(void)getCurrentPointsOnScreen	{
-#pragma mark USE CGIMAGEREF->UNSIGNED CHAR* CONVERTER HERE
+-(void) getPointsFromCurrentDrawnLines	{
+	int num_points	= 0;
 	
-	//	1:	Create temporary playback array (playback array constantly in use, so don't modify it!)
-	//NSMutableArray *_pbw	=	[[NSMutableArray alloc] init];
-	
-	//	2:	Capture the pixels on screen as a CGImageRef
-	CGImageRef	CGScreen	=	UIGetScreenImage();
-	int	width				=	CGImageGetHeight(CGScreen);
-	int	height				=	CGImageGetWidth	(CGScreen);
+	//	Only process lines with > 0 points
+	if (points_one.count>0)	{
+		/*
+		 A point is any difference between X/Y value pairs
+		 greater than 
+		 
+		 */
 		
-	//	3:	Copy the CGImageRef to NSData
-	NSData*		screenData	=	(__bridge NSData*)CGDataProviderCopyData(CGImageGetDataProvider(CGScreen));
-	
-	//	4:	Cast the data bytes to an unsigned char pointer
-	unsigned char*	pixels	=	(unsigned char*)[screenData bytes];
-	
-	//	5:	Perform a miracle of iteration
-	float	r, g, b;
-	int		offset;
-	 
-	
-	int originX = playbackWindow.frame.origin.x;
-	int originY = playbackWindow.frame.origin.y;
-	
-	int limitX	= (originX + playbackWindow.frame.size.width);
-	int limitY	= (originY + playbackWindow.frame.size.height);
-	
-	int xx = limitX, yy = limitY;
-	
-	int mainOffset = width * height * 4;
-	
-	while (yy >= originY)	{
-		while (xx >= originX)	{
-			offset = mainOffset - (((yy * width) + xx) * 4);
-			r = pixels[2+offset];
-			g = pixels[1+offset];
-			b = pixels[0+offset];
-			if (r!=255||g!=255||b!=255)	{
-//				NSLog(@"\nX: %i Y: %i\n R: %f G: %f B: %f\n \n", xx, yy, r, g, b);					
-			}
-			xx-=4;
-		}
-		xx = limitX;
-		yy-=4;
+		
+		
 	}
-	NSLog(@"Width: %i Height: %i", width, height);
-	NSLog(@"Origin X: %i Origin Y: %i", originX,	originY);
-	NSLog(@"Limit X: %i Limit Y: %i",	limitX,		limitY);
-	
+	NSLog(@"Points on line 1: %i", num_points);
+	NSLog(@"Length of lint 1: %i", points_one.count);
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
 
 @end
