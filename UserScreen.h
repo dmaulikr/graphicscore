@@ -25,7 +25,6 @@
 	UIImageView	*userBackground_imageView;
 	UIImage		*userBackground_image;
 	
-	
 	//	Touch control area
 	TouchArea	*touchpad;
 	
