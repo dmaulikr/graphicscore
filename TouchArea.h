@@ -12,6 +12,9 @@
 #import "NSPoint.h"
 #import "Palette.h"
 
+//	Import vector graphics views
+#import "GSCircle.h"
+
 @protocol TouchAreaDelegate <NSObject>
 
 //	DELEGATE METHODS HERE
@@ -45,8 +48,8 @@
 	//	Palette (from parent)
 	Palette	*palette;
 	
-	
-	UIView* box;
+	//	GSShapes
+	GSCircle*	circle;
 }
 
 -(void) getPointsFromCurrentDrawnLines;
