@@ -44,6 +44,9 @@
 	
 	//	Palette (from parent)
 	Palette	*palette;
+	
+	
+	UIView* box;
 }
 
 -(void) getPointsFromCurrentDrawnLines;

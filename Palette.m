@@ -40,12 +40,12 @@
 	memset(colorsTaken, 0, sizeof(int)*5);
 	int colorToSelect = rand()%3;
 	colorsTaken[0] = colorToSelect;
-	NSLog(@"Color Added:	%i", colorToSelect);
+	//NSLog(@"Color Added:	%i", colorToSelect);
 	[colors addObject:[availableRangeOfColors objectAtIndex:colorToSelect]];
 	
 	colorToSelect = 2+rand()%3;
 	colorsTaken[1] = colorToSelect;
-	NSLog(@"Color Added:	%i", colorToSelect);	
+	//NSLog(@"Color Added:	%i", colorToSelect);	
 	[colors addObject:[availableRangeOfColors objectAtIndex:colorToSelect]];
 
 	colorToSelect = 4+rand()%2;

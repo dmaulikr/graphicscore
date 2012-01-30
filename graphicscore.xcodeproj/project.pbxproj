@@ -11,7 +11,7 @@
 		7323739B149A062000D86DFC /* background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 73237397149A062000D86DFC /* background@2x.png */; };
 		7323739C149A062000D86DFC /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 73237398149A062000D86DFC /* logo.png */; };
 		7323739D149A062000D86DFC /* logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 73237399149A062000D86DFC /* logo@2x.png */; };
-		732373A1149A0B9F00D86DFC /* TouchArea.m in Sources */ = {isa = PBXBuildFile; fileRef = 732373A0149A0B9F00D86DFC /* TouchArea.m */; };
+		732373A1149A0B9F00D86DFC /* TouchArea.mm in Sources */ = {isa = PBXBuildFile; fileRef = 732373A0149A0B9F00D86DFC /* TouchArea.mm */; };
 		732373A5149A0C5C00D86DFC /* NSPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 732373A4149A0C5C00D86DFC /* NSPoint.m */; };
 		735D0CF314D1C56E000E83FA /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 735D0CF114D1C56E000E83FA /* Icon.png */; };
 		735D0CF414D1C56E000E83FA /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 735D0CF214D1C56E000E83FA /* Icon@2x.png */; };
@@ -36,7 +36,7 @@
 		73237398149A062000D86DFC /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
 		73237399149A062000D86DFC /* logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo@2x.png"; sourceTree = "<group>"; };
 		7323739F149A0B9F00D86DFC /* TouchArea.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TouchArea.h; sourceTree = "<group>"; };
-		732373A0149A0B9F00D86DFC /* TouchArea.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TouchArea.m; sourceTree = "<group>"; };
+		732373A0149A0B9F00D86DFC /* TouchArea.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TouchArea.mm; sourceTree = "<group>"; };
 		732373A3149A0C5C00D86DFC /* NSPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSPoint.h; sourceTree = "<group>"; };
 		732373A4149A0C5C00D86DFC /* NSPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSPoint.m; sourceTree = "<group>"; };
 		735D0CF114D1C56E000E83FA /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
@@ -95,7 +95,7 @@
 			children = (
 				732373A2149A0C4F00D86DFC /* NSPoint */,
 				7323739F149A0B9F00D86DFC /* TouchArea.h */,
-				732373A0149A0B9F00D86DFC /* TouchArea.m */,
+				732373A0149A0B9F00D86DFC /* TouchArea.mm */,
 			);
 			name = "Touch Area";
 			sourceTree = "<group>";
@@ -286,7 +286,7 @@
 				738BBCBE14994EA600EF9712 /* AppDelegate.m in Sources */,
 				738BBCC114994EA600EF9712 /* ViewController.m in Sources */,
 				738BBCDD1499605900EF9712 /* UserScreen.m in Sources */,
-				732373A1149A0B9F00D86DFC /* TouchArea.m in Sources */,
+				732373A1149A0B9F00D86DFC /* TouchArea.mm in Sources */,
 				732373A5149A0C5C00D86DFC /* NSPoint.m in Sources */,
 				73B3564214D1B48C00EC9EE3 /* Palette.m in Sources */,
 			);
