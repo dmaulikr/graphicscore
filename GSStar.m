@@ -32,7 +32,7 @@
 	CGPathAddLineToPoint(path, NULL, self.frame.size.width*0.6,		self.frame.size.height*0.33);	//	B
 	CGPathAddLineToPoint(path, NULL, self.frame.size.width*0.9,		self.frame.size.height*0.33);	//	C
 	CGPathAddLineToPoint(path, NULL, self.frame.size.width*0.66,	self.frame.size.height*0.55);	//	D
-	CGPathAddLineToPoint(path, NULL, self.frame.size.width*0.75,		self.frame.size.height*0.88);	//	E
+	CGPathAddLineToPoint(path, NULL, self.frame.size.width*0.75,	self.frame.size.height*0.88);	//	E
 	CGPathAddLineToPoint(path, NULL, self.frame.size.width*0.5,		self.frame.size.height*0.66);	//	F
 	CGPathAddLineToPoint(path, NULL, self.frame.size.width*0.25,	self.frame.size.height*0.88);	//	G
 	CGPathAddLineToPoint(path, NULL, self.frame.size.width*0.33,	self.frame.size.height*0.52);	//	H
