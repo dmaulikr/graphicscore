@@ -17,6 +17,7 @@
 		734CBFF314D7F3A200546EAC /* GSTriangle.m in Sources */ = {isa = PBXBuildFile; fileRef = 734CBFF214D7F3A200546EAC /* GSTriangle.m */; };
 		735D0CF314D1C56E000E83FA /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 735D0CF114D1C56E000E83FA /* Icon.png */; };
 		735D0CF414D1C56E000E83FA /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 735D0CF214D1C56E000E83FA /* Icon@2x.png */; };
+		736BA7D714D81E0900AF88D9 /* GSStar.m in Sources */ = {isa = PBXBuildFile; fileRef = 736BA7D614D81E0900AF88D9 /* GSStar.m */; };
 		738701C114D7596400F196AF /* GSCircle.m in Sources */ = {isa = PBXBuildFile; fileRef = 738701C014D7596400F196AF /* GSCircle.m */; };
 		738BBCAE14994EA600EF9712 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 738BBCAD14994EA600EF9712 /* UIKit.framework */; };
 		738BBCB014994EA600EF9712 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 738BBCAF14994EA600EF9712 /* Foundation.framework */; };
@@ -49,6 +50,8 @@
 		734CBFF614D7F81B00546EAC /* GSShapes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSShapes.h; sourceTree = "<group>"; };
 		735D0CF114D1C56E000E83FA /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		735D0CF214D1C56E000E83FA /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
+		736BA7D514D81E0900AF88D9 /* GSStar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSStar.h; sourceTree = "<group>"; };
+		736BA7D614D81E0900AF88D9 /* GSStar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSStar.m; sourceTree = "<group>"; };
 		738701BF14D7596400F196AF /* GSCircle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSCircle.h; sourceTree = "<group>"; };
 		738701C014D7596400F196AF /* GSCircle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSCircle.m; sourceTree = "<group>"; };
 		738BBCA914994EA600EF9712 /* graphicscore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = graphicscore.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -130,6 +133,8 @@
 				734CBFEE14D7EB4600546EAC /* GSQuadrilateral.m */,
 				734CBFF114D7F3A200546EAC /* GSTriangle.h */,
 				734CBFF214D7F3A200546EAC /* GSTriangle.m */,
+				736BA7D514D81E0900AF88D9 /* GSStar.h */,
+				736BA7D614D81E0900AF88D9 /* GSStar.m */,
 			);
 			name = Lib;
 			sourceTree = "<group>";
@@ -325,6 +330,7 @@
 				738701C114D7596400F196AF /* GSCircle.m in Sources */,
 				734CBFEF14D7EB4600546EAC /* GSQuadrilateral.m in Sources */,
 				734CBFF314D7F3A200546EAC /* GSTriangle.m in Sources */,
+				736BA7D714D81E0900AF88D9 /* GSStar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

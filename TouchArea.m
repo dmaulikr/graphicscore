@@ -18,6 +18,7 @@ CGImageRef UIGetScreenImage(void);
 	[circle setLocal:palette];
 	[quad	setLocal:palette];
 	[tri	setLocal:palette];
+	[star	setLocal:palette];	
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -44,16 +45,19 @@ CGImageRef UIGetScreenImage(void);
 		circle	= [[GSCircle alloc] init];
 		quad	= [[GSQuadrilateral alloc] init];
 		tri		= [[GSTriangle alloc] init];
+		star	= [[GSStar alloc] init];
 		
 		//	Set shape index
 		[circle setIndex:0];
 		[quad	setIndex:1];
 		[tri	setIndex:2];
+		[star	setIndex:3];
 		
 		//	Add to view
 		[self addSubview:circle];
 		[self addSubview:quad];
 		[self addSubview:tri];
+		[self addSubview:star];
     }
     return self;
 }
@@ -133,6 +137,7 @@ CGImageRef UIGetScreenImage(void);
 		case 0:		[self processPointsForShapeOne];	break;
 		case 1:		[self processPointsForShapeTwo];	break;
 		case 2:		[self processPointsForShapeThree];	break;			
+		case 3:		[self processPointsForShapeFour];	break;			
 		default:	break;
 	}
 }
@@ -141,7 +146,7 @@ CGImageRef UIGetScreenImage(void);
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 -(void) processPointsForShapeOne	{
-	[circle setColor:[palette.colors objectAtIndex:0]];
+//	[circle setColor:[palette.colors objectAtIndex:0]];
 	
 	if (points_one.count>1)	{
 		int minX, minY, maxX, maxY;
@@ -178,8 +183,8 @@ CGImageRef UIGetScreenImage(void);
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 -(void) processPointsForShapeTwo	{
-	UIColor* c = [palette.colors objectAtIndex:1];
-	[quad setColor:c];	
+//	UIColor* c = [palette.colors objectAtIndex:1];
+//	[quad setColor:c];	
 	
 	if (points_two.count>1)	{
 		int minX, minY, maxX, maxY;
@@ -219,7 +224,7 @@ CGImageRef UIGetScreenImage(void);
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 -(void) processPointsForShapeThree	{
-	[tri setColor:[palette.colors objectAtIndex:2]];	
+//	[tri setColor:[palette.colors objectAtIndex:2]];	
 	
 	if (points_three.count>1)	{
 		int minX, minY, maxX, maxY;
@@ -257,4 +262,35 @@ CGImageRef UIGetScreenImage(void);
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
+-(void) processPointsForShapeFour	{
+//	[star setColor:[palette.colors objectAtIndex:3]];	
+	
+	if (points_four.count>1)	{
+		int minX, minY, maxX, maxY;
+		minX = minY = 10000;
+		maxX = maxY = 0;
+		
+		int i_max = points_four.count;
+		
+		for (int i = 0; i < i_max; i++)	{
+			NSPoint* a = [points_four objectAtIndex:i];			
+			if (a.x < minX)
+				minX = a.x;
+			if (a.y < minY)
+				minY = a.y;
+			if (a.x > maxX)
+				maxX = a.x;
+			if (a.y > maxY)
+				maxY = a.y;
+		}
+		star.frame = CGRectMake(minX, minY, maxX-minX, maxY-minY);
+		[star setAlpha:star.alpha*0.99];
+		[star setNeedsDisplay];
+	}
+	
+	if (points_four.count<=5)	{
+		[star setAlpha:1];
+		//[tri setTransform:CGAffineTransformMakeRotation(0)];
+	}
+}
 @end

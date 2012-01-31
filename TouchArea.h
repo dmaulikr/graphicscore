@@ -50,6 +50,7 @@
 	GSCircle*			circle;
 	GSQuadrilateral*	quad;
 	GSTriangle*			tri;
+	GSStar*				star;
 }
 
 -(void) getPointsFromCurrentDrawnLines;

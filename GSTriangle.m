@@ -15,8 +15,8 @@
     self = [super initWithFrame:frame];
     if (self)	{
 		[self setBackgroundColor:[UIColor clearColor]];
-		color		= [[UIColor alloc] init];
-		[self setColor:[UIColor redColor]];
+//		color		= [[UIColor alloc] init];
+//		[self setColor:[UIColor redColor]];
 		peakPoint	= 1.0f;
 		lowerLeft	= self.frame.size.height;
 		lowerRight	= self.frame.size.width;
@@ -38,8 +38,6 @@
 	angleOfRotation+=0.05;
 	
 	[[[local colors] objectAtIndex:index]setFill];
-	
-	[color setFill];
 	
 	lowerRight	+=lowerRightMod;
 	lowerLeft	-=lowerLeftMod;

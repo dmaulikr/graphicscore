@@ -10,9 +10,12 @@
 #define graphicscore_GSShapes_h
 
 #import "Palette.h"
+
 #import "GSTriangle.h"
 #import "GSCircle.h"
 #import "GSQuadrilateral.h"
+#import "GSStar.h"
+
 #import <QuartzCore/QuartzCore.h>
 
 #endif
