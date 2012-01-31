@@ -9,19 +9,24 @@
 #import "GSQuadrilateral.h"
 
 @implementation GSQuadrilateral
-@synthesize color, angleOfRotation;
+@synthesize color, angleOfRotation, index, local;
 
-- (id)initWithFrame:(CGRect)frame
-{
+- (id)initWithFrame:(CGRect)frame	{
     self = [super initWithFrame:frame];
     if (self) {
 		self.userInteractionEnabled = NO;
 		self.layer.cornerRadius = 15.0f;
-		color = [UIColor colorWithRed:0.8 green:0.4 blue:0.0 alpha:1];
+		color = [[UIColor alloc] init];
+		[self setColor:[UIColor blueColor]];
 		[self setBackgroundColor:color];
 		angleOfRotation=1;
     }
     return self;
+}
+
+-(void)drawRect:(CGRect)rect	{
+	//[[[local colors] objectAtIndex:index]setFill];
+	[self setBackgroundColor:[[local colors] objectAtIndex:index]];
 }
 
 @end

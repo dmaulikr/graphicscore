@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <QuartzCore/QuartzCore.h>
-
+#import "GSShapes.h"
 @interface GSQuadrilateral : UIView
 @property (strong) UIColor *color;
 @property CGFloat angleOfRotation;
+@property int index;
+@property Palette *local;
 @end

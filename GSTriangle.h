@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "GSShapes.h"
 @interface GSTriangle : UIView	{
 	CGFloat lowerLeftMod, 
 			lowerRightMod, 
@@ -18,4 +18,6 @@
 @property CGFloat lowerLeft;
 @property CGFloat lowerRight;
 @property CGFloat angleOfRotation;
+@property int index;
+@property Palette *local;
 @end

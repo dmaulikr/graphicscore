@@ -6,7 +6,10 @@
 //  Copyright (c) 2012 zebpedersen. All rights reserved.
 //
 #import <UIKit/UIKit.h>
+#import "GSShapes.h"
 @interface GSCircle : UIView
 @property (strong) UIColor *color;
 @property CGFloat angleOfRotation;
+@property int index;
+@property Palette *local;
 @end

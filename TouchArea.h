@@ -11,8 +11,6 @@
 #import <CoreFoundation/CoreFoundation.h>
 #import "NSPoint.h"
 #import "Palette.h"
-
-//	Import vector graphics views
 #import "GSShapes.h"
 
 @protocol TouchAreaDelegate <NSObject>
@@ -55,7 +53,7 @@
 }
 
 -(void) getPointsFromCurrentDrawnLines;
-
+-(void) assignPalette:(Palette*)p;
 
 @property			int	pathToDraw;
 @property (strong)	NSMutableArray	*points_one;
@@ -65,6 +63,6 @@
 @property (strong)	NSMutableArray	*points_five;
 @property (strong)	id <TouchAreaDelegate> delegate;
 @property (strong)	NSString	*mode;
-@property (strong)	Palette		*palette;
+//@property (strong)	Palette		*palette;
 
 @end

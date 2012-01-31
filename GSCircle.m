@@ -9,7 +9,7 @@
 #import "GSCircle.h"
 
 @implementation GSCircle
-@synthesize color, angleOfRotation;
+@synthesize color, angleOfRotation, index, local;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -17,14 +17,17 @@
     if (self) {
 		self.backgroundColor = [UIColor clearColor];
 		self.userInteractionEnabled = NO;
-		color = [UIColor colorWithRed:0.5 green:0.5 blue:0.1 alpha:1];
+		color = [[UIColor alloc] init];
+		[self setColor:[UIColor orangeColor]];
+		//color = [UIColor colorWithRed:0.5 green:0.5 blue:0.1 alpha:1];
 		angleOfRotation = 0.1;
     }
     return self;
 }
 
 - (void)drawRect:(CGRect)rect	{
-	[color setFill];
+//	[color setFill];
+	[[[local colors] objectAtIndex:index]setFill];	
 	CGContextRef ref = UIGraphicsGetCurrentContext();
 	CGMutablePathRef path = CGPathCreateMutable();
 	CGPathAddEllipseInRect(path, NULL, CGRectMake(0, 0, self.frame.size.width, self.frame.size.height));

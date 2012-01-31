@@ -104,49 +104,23 @@
 /*
 	Selection methods for colors / controls
 */
--(void)selectColor1	{
-	[touchpad setPathToDraw:0];
-	NSLog(@"BROWN");
-}
+//	ADD ID VALS TO BUTTONS AND USE SENDER TO CONDENSE THIS TO ONE METHOD
 
--(void)selectColor2	{
-	[touchpad setPathToDraw:1];
-	NSLog(@"BLUE");
-}
-
--(void)selectColor3	{
-	[touchpad setPathToDraw:2];
-	NSLog(@"YELLOW");
-}
-
--(void)selectColor4	{
-	[touchpad setPathToDraw:3];
-	NSLog(@"RED");
-}
-
--(void)selectColor5	{
-	[touchpad setPathToDraw:4];
-	NSLog(@"GREEN");
-}
+-(void)selectColor1	{	[touchpad setPathToDraw:0];	}
+-(void)selectColor2	{	[touchpad setPathToDraw:1];	}
+-(void)selectColor3	{	[touchpad setPathToDraw:2];	}
+-(void)selectColor4	{	[touchpad setPathToDraw:3];	}
+-(void)selectColor5	{	[touchpad setPathToDraw:4];	}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////
 
--(void) fillWithColor:(int)i	{
-	//	ADD LOGIC HERE FOR WHICH COLOR IS SELECTED
-	NSLog(@"Fill received");
-	[self.view setBackgroundColor:[[userPalette colors]objectAtIndex:i]];
+-(void) fillWithColor:(int)i	{	
+	[self.view setBackgroundColor:[[userPalette colors]objectAtIndex:i]];	
 }
 
--(void) fillModeSelect	{
-	[touchpad setMode:@"Fill"];
-	NSLog(@"FILL");
-}
-
--(void) drawModeSelect	{
-	[touchpad setMode:@"Draw"];
-	NSLog(@"DRAW");
-}
+-(void) fillModeSelect	{	[touchpad setMode:@"Fill"];	}
+-(void) drawModeSelect	{	[touchpad setMode:@"Draw"];	}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -180,7 +154,8 @@
 		userPalette = [[Palette alloc] init];
 		[userPalette create];
 		remotePalette = [userPalette createOpposite];
-		[touchpad setPalette:userPalette];
+//		[touchpad setPalette:userPalette];
+		[touchpad assignPalette:userPalette];
 		
 		/*		
 				Add buttons to the screen
@@ -246,7 +221,6 @@
 		selectColor5.layer.cornerRadius = 15.0f;	
 		selectColor5.alpha = 0.0;
 		[self.view addSubview:selectColor5];		
-		
 		
 		//	EXIT
 		exitButton = [UIButton buttonWithType:UIButtonTypeCustom];
