@@ -38,8 +38,13 @@ CGImageRef UIGetScreenImage(void);
 		
 		
 		//	Init GSShapes
-		circle = [[GSCircle alloc] init];
+		circle	= [[GSCircle alloc] init];
+		quad	= [[GSQuadrilateral alloc] init];
+		tri		= [[GSTriangle alloc] init];
+		
 		[self addSubview:circle];
+		[self addSubview:quad];
+		[self addSubview:tri];
     }
     return self;
 }
@@ -264,7 +269,20 @@ CGImageRef UIGetScreenImage(void);
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 -(void) getPointsFromCurrentDrawnLines	{
-	//	Only process lines with > 5 points
+	switch (pathToDraw) {
+		case 0:		[self processPointsForShapeOne];	break;
+		case 1:		[self processPointsForShapeTwo];	break;
+		case 2:		[self processPointsForShapeThree];	break;			
+		default:	break;
+	}
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+-(void) processPointsForShapeOne	{
+	[circle setColor:[palette.colors objectAtIndex:0]];
+	
 	if (points_one.count>1)	{
 		int minX, minY, maxX, maxY;
 		minX = minY = 10000;
@@ -284,14 +302,94 @@ CGImageRef UIGetScreenImage(void);
 				maxY = a.y;
 		}
 		circle.frame = CGRectMake(minX, minY, maxX-minX, maxY-minY);
-		[circle setAlpha:circle.alpha*0.975];
+		[circle setAlpha:circle.alpha*0.99];
+		[circle setAngleOfRotation:circle.angleOfRotation+0.05];
+		[circle setTransform:CGAffineTransformMakeRotation(circle.angleOfRotation)];				
 		[circle setNeedsDisplay];
 	}
-	if (points_one.count<=5)
-		[circle setAlpha:1];	
+	
+	if (points_one.count<=5)	{
+		[circle setAlpha:1];
+		[circle setTransform:CGAffineTransformMakeRotation(0)];
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
+
+-(void) processPointsForShapeTwo	{
+	[quad setColor:[palette.colors objectAtIndex:1]];	
+	
+	if (points_two.count>1)	{
+		int minX, minY, maxX, maxY;
+		minX = minY = 10000;
+		maxX = maxY = 0;
+		
+		int i_max = points_two.count;
+		
+		for (int i = 0; i < i_max; i++)	{
+			NSPoint* a = [points_two objectAtIndex:i];			
+			if (a.x < minX)
+				minX = a.x;
+			if (a.y < minY)
+				minY = a.y;
+			if (a.x > maxX)
+				maxX = a.x;
+			if (a.y > maxY)
+				maxY = a.y;
+		}
+		quad.frame = CGRectMake(minX, minY, maxX-minX, maxY-minY);
+		[quad setAlpha:quad.alpha*0.98];
+		if (quad.layer.cornerRadius<200)
+			[quad.layer setCornerRadius:quad.layer.cornerRadius*1.095];
+		[quad setAngleOfRotation: quad.angleOfRotation+0.05];
+		[quad setTransform:CGAffineTransformMakeRotation([quad angleOfRotation])];
+		[quad setNeedsDisplay];
+	}
+	
+	if (points_two.count<=5)	{
+		[quad setAlpha:1];
+		[quad.layer setCornerRadius:5.0f];
+		[quad setTransform:CGAffineTransformMakeRotation(0)];
+	}
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+-(void) processPointsForShapeThree	{
+	[tri setColor:[palette.colors objectAtIndex:2]];	
+	
+	if (points_three.count>1)	{
+		int minX, minY, maxX, maxY;
+		minX = minY = 10000;
+		maxX = maxY = 0;
+		
+		int i_max = points_three.count;
+		
+		for (int i = 0; i < i_max; i++)	{
+			NSPoint* a = [points_three objectAtIndex:i];			
+			if (a.x < minX)
+				minX = a.x;
+			if (a.y < minY)
+				minY = a.y;
+			if (a.x > maxX)
+				maxX = a.x;
+			if (a.y > maxY)
+				maxY = a.y;
+		}
+		tri.frame = CGRectMake(minX, minY, maxX-minX, maxY-minY);
+		[tri setAlpha:tri.alpha*0.99];
+		[tri setNeedsDisplay];
+	}
+	
+	if (points_three.count<=5)	{
+		[tri setAlpha:1];
+		[tri setPeakPoint:1.0f];
+		[tri setLowerRight:tri.frame.size.width];
+		[tri setLowerLeft:tri.frame.size.height];
+		[tri setTransform:CGAffineTransformMakeRotation(0)];
+	}
+}
 
 @end

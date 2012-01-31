@@ -13,6 +13,8 @@
 		7323739D149A062000D86DFC /* logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 73237399149A062000D86DFC /* logo@2x.png */; };
 		732373A1149A0B9F00D86DFC /* TouchArea.m in Sources */ = {isa = PBXBuildFile; fileRef = 732373A0149A0B9F00D86DFC /* TouchArea.m */; };
 		732373A5149A0C5C00D86DFC /* NSPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 732373A4149A0C5C00D86DFC /* NSPoint.m */; };
+		734CBFEF14D7EB4600546EAC /* GSQuadrilateral.m in Sources */ = {isa = PBXBuildFile; fileRef = 734CBFEE14D7EB4600546EAC /* GSQuadrilateral.m */; };
+		734CBFF314D7F3A200546EAC /* GSTriangle.m in Sources */ = {isa = PBXBuildFile; fileRef = 734CBFF214D7F3A200546EAC /* GSTriangle.m */; };
 		735D0CF314D1C56E000E83FA /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 735D0CF114D1C56E000E83FA /* Icon.png */; };
 		735D0CF414D1C56E000E83FA /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 735D0CF214D1C56E000E83FA /* Icon@2x.png */; };
 		738701C114D7596400F196AF /* GSCircle.m in Sources */ = {isa = PBXBuildFile; fileRef = 738701C014D7596400F196AF /* GSCircle.m */; };
@@ -40,6 +42,11 @@
 		732373A0149A0B9F00D86DFC /* TouchArea.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TouchArea.m; sourceTree = "<group>"; };
 		732373A3149A0C5C00D86DFC /* NSPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSPoint.h; sourceTree = "<group>"; };
 		732373A4149A0C5C00D86DFC /* NSPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSPoint.m; sourceTree = "<group>"; };
+		734CBFED14D7EB4600546EAC /* GSQuadrilateral.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSQuadrilateral.h; sourceTree = "<group>"; };
+		734CBFEE14D7EB4600546EAC /* GSQuadrilateral.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSQuadrilateral.m; sourceTree = "<group>"; };
+		734CBFF114D7F3A200546EAC /* GSTriangle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSTriangle.h; sourceTree = "<group>"; };
+		734CBFF214D7F3A200546EAC /* GSTriangle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSTriangle.m; sourceTree = "<group>"; };
+		734CBFF614D7F81B00546EAC /* GSShapes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSShapes.h; sourceTree = "<group>"; };
 		735D0CF114D1C56E000E83FA /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		735D0CF214D1C56E000E83FA /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		738701BF14D7596400F196AF /* GSCircle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSCircle.h; sourceTree = "<group>"; };
@@ -97,6 +104,8 @@
 			isa = PBXGroup;
 			children = (
 				732373A2149A0C4F00D86DFC /* NSPoint */,
+				738BBCDB1499605900EF9712 /* UserScreen.h */,
+				738BBCDC1499605900EF9712 /* UserScreen.m */,
 				7323739F149A0B9F00D86DFC /* TouchArea.h */,
 				732373A0149A0B9F00D86DFC /* TouchArea.m */,
 			);
@@ -112,11 +121,24 @@
 			name = NSPoint;
 			sourceTree = "<group>";
 		};
-		738701BE14D7564A00F196AF /* GSShapes */ = {
+		734CBFF714D7F94600546EAC /* Lib */ = {
 			isa = PBXGroup;
 			children = (
 				738701BF14D7596400F196AF /* GSCircle.h */,
 				738701C014D7596400F196AF /* GSCircle.m */,
+				734CBFED14D7EB4600546EAC /* GSQuadrilateral.h */,
+				734CBFEE14D7EB4600546EAC /* GSQuadrilateral.m */,
+				734CBFF114D7F3A200546EAC /* GSTriangle.h */,
+				734CBFF214D7F3A200546EAC /* GSTriangle.m */,
+			);
+			name = Lib;
+			sourceTree = "<group>";
+		};
+		738701BE14D7564A00F196AF /* GSShapes */ = {
+			isa = PBXGroup;
+			children = (
+				734CBFF614D7F81B00546EAC /* GSShapes.h */,
+				734CBFF714D7F94600546EAC /* Lib */,
 			);
 			name = GSShapes;
 			sourceTree = "<group>";
@@ -207,8 +229,6 @@
 				738701BE14D7564A00F196AF /* GSShapes */,
 				73B3563E14D1B45F00EC9EE3 /* Palette */,
 				7323739E149A0B7E00D86DFC /* Touch Area */,
-				738BBCDB1499605900EF9712 /* UserScreen.h */,
-				738BBCDC1499605900EF9712 /* UserScreen.m */,
 			);
 			name = "Player Screen";
 			path = ..;
@@ -303,6 +323,8 @@
 				732373A5149A0C5C00D86DFC /* NSPoint.m in Sources */,
 				73B3564214D1B48C00EC9EE3 /* Palette.m in Sources */,
 				738701C114D7596400F196AF /* GSCircle.m in Sources */,
+				734CBFEF14D7EB4600546EAC /* GSQuadrilateral.m in Sources */,
+				734CBFF314D7F3A200546EAC /* GSTriangle.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

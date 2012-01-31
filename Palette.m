@@ -50,17 +50,17 @@
 
 	colorToSelect = 4+rand()%2;
 	colorsTaken[2] = colorToSelect;	
-	NSLog(@"Color Added:	%i", colorToSelect);	
+//	NSLog(@"Color Added:	%i", colorToSelect);	
 	[colors addObject:[availableRangeOfColors objectAtIndex:colorToSelect]];
 	
 	colorToSelect = 6+rand()%2;
 	colorsTaken[3] = colorToSelect;	
-	NSLog(@"Color Added:	%i", colorToSelect);	
+//	NSLog(@"Color Added:	%i", colorToSelect);	
 	[colors addObject:[availableRangeOfColors objectAtIndex:colorToSelect]];
 	
 	colorToSelect = 8+rand()%2;
 	colorsTaken[4] = colorToSelect;	
-	NSLog(@"Color Added:	%i", colorToSelect);
+	//NSLog(@"Color Added:	%i", colorToSelect);
 	[colors addObject:[availableRangeOfColors objectAtIndex:colorToSelect]];
 }
 
@@ -73,8 +73,8 @@
 				break;
 			if (j==4)	{
 				[p.colors addObject:[availableRangeOfColors objectAtIndex:i]];
-				NSLog(@"Color Opposite Added:	%i", i);
-				NSLog(@"Opposite Count: %i", [p.colors count]);
+//				NSLog(@"Color Opposite Added:	%i", i);
+//				NSLog(@"Opposite Count: %i", [p.colors count]);
 			}
 		}
 	}

@@ -13,7 +13,7 @@
 #import "Palette.h"
 
 //	Import vector graphics views
-#import "GSCircle.h"
+#import "GSShapes.h"
 
 @protocol TouchAreaDelegate <NSObject>
 
@@ -49,7 +49,9 @@
 	Palette	*palette;
 	
 	//	GSShapes
-	GSCircle*	circle;
+	GSCircle*			circle;
+	GSQuadrilateral*	quad;
+	GSTriangle*			tri;
 }
 
 -(void) getPointsFromCurrentDrawnLines;
