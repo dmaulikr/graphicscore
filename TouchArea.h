@@ -11,7 +11,7 @@
 #import <CoreFoundation/CoreFoundation.h>
 #import "NSPoint.h"
 #import "Palette.h"
-#import "GSShapes.h"
+#import "Shapes.h"
 
 @protocol TouchAreaDelegate <NSObject>
 

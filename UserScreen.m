@@ -41,10 +41,7 @@
 	selectColor5.alpha	= 1.0;
 
 	exitButton.alpha	= 1.0;	
-	
-	selectFillMode.alpha= 1.0;
-	selectDrawMode.alpha= 1.0;
-	
+
 	[UIView commitAnimations];
 }
 
@@ -75,9 +72,6 @@
 	selectColor5.alpha	= 0.0;
 	
 	exitButton.alpha = 0.0;	
-	
-	selectFillMode.alpha= 0.0;
-	selectDrawMode.alpha= 0.0;
 	
 	[UIView commitAnimations];
 }
@@ -119,9 +113,6 @@
 	[self.view setBackgroundColor:[[userPalette colors]objectAtIndex:i]];	
 }
 
--(void) fillModeSelect	{	[touchpad setMode:@"Fill"];	}
--(void) drawModeSelect	{	[touchpad setMode:@"Draw"];	}
-
 ////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -154,7 +145,6 @@
 		userPalette = [[Palette alloc] init];
 		[userPalette create];
 		remotePalette = [userPalette createOpposite];
-//		[touchpad setPalette:userPalette];
 		[touchpad assignPalette:userPalette];
 		
 		/*		
@@ -231,24 +221,7 @@
 		exitButton.alpha = 0.0;
 		[self.view addSubview:exitButton];		
 		
-		//	SELECT DRAW
-		selectDrawMode = [UIButton buttonWithType:UIButtonTypeCustom];
-		selectDrawMode.backgroundColor = [UIColor purpleColor];
-		[selectDrawMode addTarget:self action:@selector(drawModeSelect) forControlEvents:UIControlEventTouchUpInside];
-		[selectDrawMode setFrame:CGRectMake(3, 3, 44, 44)];
-		selectDrawMode.layer.cornerRadius = 15.0f;
-		selectDrawMode.alpha = 0.0;
-		[self.view addSubview:selectDrawMode];
-		
-		//	SELECT DRAW
-		selectFillMode = [UIButton buttonWithType:UIButtonTypeCustom];
-		selectFillMode.backgroundColor = [UIColor orangeColor];
-		[selectFillMode addTarget:self action:@selector(fillModeSelect) forControlEvents:UIControlEventTouchUpInside];
-		[selectFillMode setFrame:CGRectMake(83, 3, 44, 44)];
-		selectFillMode.layer.cornerRadius = 15.0f;
-		selectFillMode.alpha = 0.0;
-		[self.view addSubview:selectFillMode];		
-		
+
 		//	Fade in UI elements
 		[self fadeViewToScreen];
     }

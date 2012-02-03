@@ -9,20 +9,16 @@
 #import "GSTriangle.h"
 
 @implementation GSTriangle
-@synthesize color, peakPoint, lowerLeft, lowerRight, angleOfRotation, index, local;
+@synthesize peakPoint, lowerLeft, lowerRight, peakMod, lowerLeftMod, lowerRightMod;
 
 - (id)initWithFrame:(CGRect)frame	{
     self = [super initWithFrame:frame];
     if (self)	{
-		[self setBackgroundColor:[UIColor clearColor]];
-//		color		= [[UIColor alloc] init];
-//		[self setColor:[UIColor redColor]];
 		peakPoint	= 1.0f;
 		lowerLeft	= self.frame.size.height;
 		lowerRight	= self.frame.size.width;
 		lowerLeftMod = lowerRightMod = peakMod = 2.5;
 		[self setUserInteractionEnabled:NO];
-		angleOfRotation = 0.1;
 	}
     return self;
 }
@@ -35,8 +31,7 @@
 	if (peakPoint<1||peakPoint>self.frame.size.width)
 		peakMod*=-1;	
 	
-	angleOfRotation+=0.05;
-	
+	[self setAlpha:self.alpha*0.99];		
 	[[[local colors] objectAtIndex:index]setFill];
 	
 	lowerRight	+=lowerRightMod;
@@ -50,8 +45,13 @@
 	CGPathAddLineToPoint(path, NULL, lowerRight, self.frame.size.height);
 	CGContextAddPath	(ref, path);
 	CGContextDrawPath	(ref, kCGPathFill);
-	
-	//[self setTransform:CGAffineTransformMakeRotation(angleOfRotation)];
+}
+
+-(void) reset	{
+	[self setAlpha:1];
+	[self setPeakPoint:1.0f];
+	[self setLowerRight:self.frame.size.width];
+	[self setLowerLeft:self.frame.size.height];
 }
 
 @end

@@ -6,18 +6,12 @@
 //  Copyright (c) 2012 zebpedersen. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import "GSShapes.h"
-@interface GSTriangle : UIView	{
-	CGFloat lowerLeftMod, 
-			lowerRightMod, 
-			peakMod;
-}
-@property (strong) UIColor *color;
+#import "Shapes.h"
+@interface GSTriangle : GSShape
 @property CGFloat peakPoint;
 @property CGFloat lowerLeft;
 @property CGFloat lowerRight;
-@property CGFloat angleOfRotation;
-@property int index;
-@property Palette *local;
+@property CGFloat lowerLeftMod;
+@property CGFloat lowerRightMod;
+@property CGFloat peakMod;
 @end

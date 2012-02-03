@@ -41,10 +41,6 @@
 	
 	//	Exit
 	UIButton	*exitButton;
-	
-	//	Mode selection
-	UIButton	*selectDrawMode;
-	UIButton	*selectFillMode;
 }
 
 @property (strong) id delegate;

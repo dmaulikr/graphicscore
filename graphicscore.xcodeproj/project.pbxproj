@@ -33,6 +33,7 @@
 		738BBCD91499593D00EF9712 /* start_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 738BBCD71499593D00EF9712 /* start_pressed@2x.png */; };
 		738BBCDD1499605900EF9712 /* UserScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 738BBCDC1499605900EF9712 /* UserScreen.m */; };
 		73B3564214D1B48C00EC9EE3 /* Palette.m in Sources */ = {isa = PBXBuildFile; fileRef = 73B3564114D1B48C00EC9EE3 /* Palette.m */; };
+		73CB2EFC14DC46F300D4709E /* GSShape.m in Sources */ = {isa = PBXBuildFile; fileRef = 73CB2EFB14DC46F300D4709E /* GSShape.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,7 +49,6 @@
 		734CBFEE14D7EB4600546EAC /* GSQuadrilateral.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSQuadrilateral.m; sourceTree = "<group>"; };
 		734CBFF114D7F3A200546EAC /* GSTriangle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSTriangle.h; sourceTree = "<group>"; };
 		734CBFF214D7F3A200546EAC /* GSTriangle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSTriangle.m; sourceTree = "<group>"; };
-		734CBFF614D7F81B00546EAC /* GSShapes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSShapes.h; sourceTree = "<group>"; };
 		735D0CF114D1C56E000E83FA /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		735D0CF214D1C56E000E83FA /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		736BA7D514D81E0900AF88D9 /* GSStar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSStar.h; sourceTree = "<group>"; };
@@ -77,6 +77,9 @@
 		738BBCDC1499605900EF9712 /* UserScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserScreen.m; sourceTree = "<group>"; };
 		73B3564014D1B48C00EC9EE3 /* Palette.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Palette.h; sourceTree = "<group>"; };
 		73B3564114D1B48C00EC9EE3 /* Palette.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Palette.m; sourceTree = "<group>"; };
+		73CB2EFA14DC46F300D4709E /* GSShape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSShape.h; sourceTree = "<group>"; };
+		73CB2EFB14DC46F300D4709E /* GSShape.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSShape.m; sourceTree = "<group>"; };
+		73CB2EFD14DC4A0300D4709E /* Shapes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Shapes.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +133,8 @@
 		734CBFF714D7F94600546EAC /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				73CB2EFA14DC46F300D4709E /* GSShape.h */,
+				73CB2EFB14DC46F300D4709E /* GSShape.m */,
 				738701BF14D7596400F196AF /* GSCircle.h */,
 				738701C014D7596400F196AF /* GSCircle.m */,
 				734CBFED14D7EB4600546EAC /* GSQuadrilateral.h */,
@@ -142,15 +147,6 @@
 				736BA7DA14D82B5300AF88D9 /* GSExpandingPolygon.m */,
 			);
 			name = Lib;
-			sourceTree = "<group>";
-		};
-		738701BE14D7564A00F196AF /* GSShapes */ = {
-			isa = PBXGroup;
-			children = (
-				734CBFF614D7F81B00546EAC /* GSShapes.h */,
-				734CBFF714D7F94600546EAC /* Lib */,
-			);
-			name = GSShapes;
 			sourceTree = "<group>";
 		};
 		738BBC9E14994EA600EF9712 = {
@@ -236,7 +232,7 @@
 		738BBCDA1499602700EF9712 /* Player Screen */ = {
 			isa = PBXGroup;
 			children = (
-				738701BE14D7564A00F196AF /* GSShapes */,
+				73CB2EF814DC46D400D4709E /* GSShapes */,
 				73B3563E14D1B45F00EC9EE3 /* Palette */,
 				7323739E149A0B7E00D86DFC /* Touch Area */,
 			);
@@ -251,6 +247,15 @@
 				73B3564114D1B48C00EC9EE3 /* Palette.m */,
 			);
 			name = Palette;
+			sourceTree = "<group>";
+		};
+		73CB2EF814DC46D400D4709E /* GSShapes */ = {
+			isa = PBXGroup;
+			children = (
+				734CBFF714D7F94600546EAC /* Lib */,
+				73CB2EFD14DC4A0300D4709E /* Shapes.h */,
+			);
+			name = GSShapes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -337,6 +342,7 @@
 				734CBFF314D7F3A200546EAC /* GSTriangle.m in Sources */,
 				736BA7D714D81E0900AF88D9 /* GSStar.m in Sources */,
 				736BA7DB14D82B5300AF88D9 /* GSExpandingPolygon.m in Sources */,
+				73CB2EFC14DC46F300D4709E /* GSShape.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

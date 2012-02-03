@@ -9,23 +9,10 @@
 #import "GSStar.h"
 
 @implementation GSStar
-@synthesize index, local, angleOfRotation;
-
-- (id)initWithFrame:(CGRect)frame	{
-    self = [super initWithFrame:frame];
-    if (self) {
-		self.userInteractionEnabled = NO;
-		[self setBackgroundColor:[UIColor clearColor]];
-		angleOfRotation=0.4;
-    }
-    return self;
-}
 
 - (void)drawRect:(CGRect)rect	{
 	[[[local colors] objectAtIndex:index]setFill];
-	angleOfRotation+=0.05;
-	[self setTransform:CGAffineTransformMakeRotation(angleOfRotation)];
-//	[[UIColor redColor]setFill];
+	[self setAlpha:self.alpha*0.99];	
 	CGContextRef		ref		= UIGraphicsGetCurrentContext();
 	CGMutablePathRef	path	= CGPathCreateMutable();
 	CGPathMoveToPoint	(path, NULL, self.frame.size.width*0.5, 0);									//	A
@@ -40,6 +27,10 @@
 	CGPathAddLineToPoint(path, NULL, self.frame.size.width*0.4,		self.frame.size.height*0.33);	//	J
 	CGContextAddPath	(ref, path);
 	CGContextDrawPath	(ref, kCGPathFill);
+}
+
+-(void) reset	{
+	[self setAlpha:1];
 }
 
 @end

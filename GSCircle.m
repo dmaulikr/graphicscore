@@ -9,24 +9,11 @@
 #import "GSCircle.h"
 
 @implementation GSCircle
-@synthesize color, angleOfRotation, index, local;
 
-- (id)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-		self.backgroundColor = [UIColor clearColor];
-		self.userInteractionEnabled = NO;
-		color = [[UIColor alloc] init];
-		[self setColor:[UIColor orangeColor]];
-		//color = [UIColor colorWithRed:0.5 green:0.5 blue:0.1 alpha:1];
-		angleOfRotation = 0.1;
-    }
-    return self;
-}
+- (id)initWithFrame:(CGRect)frame	{	return self = [super initWithFrame:frame];	}
 
 - (void)drawRect:(CGRect)rect	{
-//	[color setFill];
+	[self setAlpha:self.alpha*0.99];
 	[[[local colors] objectAtIndex:index]setFill];	
 	CGContextRef ref = UIGraphicsGetCurrentContext();
 	CGMutablePathRef path = CGPathCreateMutable();
@@ -35,5 +22,8 @@
 	CGContextDrawPath(ref, kCGPathFill);
 }
 
+-(void) reset	{
+	[self setAlpha:1];
+}
 
 @end

@@ -101,7 +101,6 @@ CGImageRef UIGetScreenImage(void);
 		NSLog(@"Fill");
 	}
 	
-	
 	if ([mode isEqualToString:@"Draw"])	{
 		//	When a touch event begins, first remove all
 		//	of the points currently drawn to the screen
@@ -167,25 +166,17 @@ CGImageRef UIGetScreenImage(void);
 				maxY = a.y;
 		}
 		circle.frame = CGRectMake(minX, minY, maxX-minX, maxY-minY);
-		[circle setAlpha:circle.alpha*0.99];
-		[circle setAngleOfRotation:circle.angleOfRotation+0.05];
-//		[circle setTransform:CGAffineTransformMakeRotation(circle.angleOfRotation)];				
 		[circle setNeedsDisplay];
 	}
 	
-	if (points_one.count<=5)	{
-		[circle setAlpha:1];
-//		[circle setTransform:CGAffineTransformMakeRotation(0)];
-	}
+	if (points_one.count<=5)
+		[circle reset];
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
--(void) processPointsForShapeTwo	{
-//	UIColor* c = [palette.colors objectAtIndex:1];
-//	[quad setColor:c];	
-	
+-(void) processPointsForShapeTwo	{	
 	if (points_two.count>1)	{
 		int minX, minY, maxX, maxY;
 		minX = minY = 10000;
@@ -205,19 +196,11 @@ CGImageRef UIGetScreenImage(void);
 				maxY = a.y;
 		}
 		quad.frame = CGRectMake(minX, minY, maxX-minX, maxY-minY);
-		[quad setAlpha:quad.alpha*0.98];
-		if (quad.layer.cornerRadius<200)
-			[quad.layer setCornerRadius:quad.layer.cornerRadius*1.095];
-		[quad setAngleOfRotation: quad.angleOfRotation+0.05];
-		[quad setTransform:CGAffineTransformMakeRotation([quad angleOfRotation])];
 		[quad setNeedsDisplay];
 	}
 	
-	if (points_two.count<=5)	{
-		[quad setAlpha:1];
-		[quad.layer setCornerRadius:5.0f];
-		[quad setTransform:CGAffineTransformMakeRotation(0)];
-	}
+	if (points_two.count<=5)
+		[quad reset];
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -245,17 +228,11 @@ CGImageRef UIGetScreenImage(void);
 				maxY = a.y;
 		}
 		tri.frame = CGRectMake(minX, minY, maxX-minX, maxY-minY);
-		[tri setAlpha:tri.alpha*0.99];
 		[tri setNeedsDisplay];
 	}
 	
-	if (points_three.count<=5)	{
-		[tri setAlpha:1];
-		[tri setPeakPoint:1.0f];
-		[tri setLowerRight:tri.frame.size.width];
-		[tri setLowerLeft:tri.frame.size.height];
-		//[tri setTransform:CGAffineTransformMakeRotation(0)];
-	}
+	if (points_three.count<=5)
+		[tri reset];
 }
 
 
@@ -284,13 +261,10 @@ CGImageRef UIGetScreenImage(void);
 				maxY = a.y;
 		}
 		star.frame = CGRectMake(minX, minY, maxX-minX, maxY-minY);
-		[star setAlpha:star.alpha*0.99];
 		[star setNeedsDisplay];
 	}
 	
-	if (points_four.count<=5)	{
-		[star setAlpha:1];
-		//[tri setTransform:CGAffineTransformMakeRotation(0)];
-	}
+	if (points_four.count<=5)
+		[star reset];
 }
 @end

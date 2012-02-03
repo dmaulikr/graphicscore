@@ -9,17 +9,14 @@
 #import "GSExpandingPolygon.h"
 
 @implementation GSExpandingPolygon
-
-- (id)initWithFrame:(CGRect)frame	{
-    self = [super initWithFrame:frame];
-    if (self) {
-		
-    }
-    return self;
-}
+@synthesize		numSides;
 
 - (void)drawRect:(CGRect)rect	{
 
+}
+
+- (void) reset	{
+	
 }
 
 @end
