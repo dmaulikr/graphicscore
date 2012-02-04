@@ -46,8 +46,10 @@
 	
 	//	Exit
 	UIButton	*exitButton;
+	UIImageView	*exitButtonImage;
 }
 
 @property (strong) id delegate;
+@property UIImageView *exitButtonImage;
 
 @end

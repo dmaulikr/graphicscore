@@ -9,7 +9,7 @@
 #import "UserScreen.h"
 
 @implementation UserScreen
-@synthesize delegate;
+@synthesize delegate, exitButtonImage;
 
 /*
 	View dismissal / init animation
@@ -31,7 +31,8 @@
 	[selectColorToDraw4	setFrame:CGRectMake(258, 258, 44, 44)];
 	[selectColorToDraw5	setFrame:CGRectMake(338, 258, 44, 44)];
 	
-	[exitButton		setFrame:CGRectMake(418, 15, 44, 44)];
+	[exitButton			setFrame:CGRectMake(418, 15, 44, 44)];
+	[exitButtonImage	setFrame:CGRectMake(418, 15, 44, 44)];	
 	
 	selectColorToDraw1.alpha	= 1.0;
 	selectColorToDraw2.alpha	= 1.0;
@@ -39,7 +40,7 @@
 	selectColorToDraw4.alpha	= 1.0;
 	selectColorToDraw5.alpha	= 1.0;
 
-	exitButton.alpha	= 1.0;	
+	exitButtonImage.alpha	= .6;	
 
 	[UIView commitAnimations];
 }
@@ -62,7 +63,8 @@
 	[selectColorToDraw4	setFrame:CGRectMake(258-15, 258, 44, 44)];
 	[selectColorToDraw5	setFrame:CGRectMake(338-15, 258, 44, 44)];
 	
-	[exitButton setFrame:CGRectMake(418-15, 18, 44, 44)];	
+	[exitButton			setFrame:CGRectMake(418-15, 18, 44, 44)];	
+	[exitButtonImage	setFrame:CGRectMake(418-15, 18, 44, 44)];		
 	
 	selectColorToDraw1.alpha	= 0.0;
 	selectColorToDraw2.alpha	= 0.0;
@@ -70,7 +72,7 @@
 	selectColorToDraw4.alpha		= 0.0;
 	selectColorToDraw5.alpha	= 0.0;
 	
-	exitButton.alpha = 0.0;	
+	exitButtonImage.alpha	= 0.0;	
 	
 	[UIView commitAnimations];
 }
@@ -186,13 +188,17 @@
 //		[self.view addSubview:selectShapeToDraw5];
 		
 		//	EXIT
-		exitButton = [UIButton buttonWithType:UIButtonTypeCustom];
-		exitButton.backgroundColor = [UIColor colorWithRed:1 green:0 blue:00 alpha:0.2];
+		exitButton = [UIButton buttonWithType:UIButtonTypeCustom];	
 		[exitButton addTarget:self action:@selector(triggerDismissalProcedure) forControlEvents:UIControlEventTouchUpInside];
 		[exitButton setFrame:CGRectMake(418-15, 18, 44, 44)];
-		exitButton.layer.cornerRadius = 15.0f;
 		exitButton.alpha = 0.0;
-		[self.view addSubview:exitButton];		
+		[self.view addSubview:exitButton];	
+		exitButtonImage = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"exit_button" ofType:@"png"]]];
+		[exitButtonImage setFrame:CGRectMake(418-15, 18, 44, 44)];
+		exitButtonImage.alpha = 0.0;		
+		[exitButtonImage.layer setMasksToBounds:YES];
+		exitButtonImage.layer.cornerRadius = 24.0f;
+		[self.view addSubview:exitButtonImage];
 
 		//	Fade in UI elements
 		[self fadeViewToScreen];
