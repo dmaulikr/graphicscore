@@ -13,10 +13,14 @@
 @interface GSShape : UIView	{
 	int			index;
 	Palette		*local;
+	NSString	*label;
+	int			shape_index;
 }	
 
 @property int index;
-@property Palette *local;
+@property Palette	*local;
+@property NSString	*label;	
+@property int shape_index;
 
 -(void) reset;
 

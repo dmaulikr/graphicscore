@@ -14,11 +14,13 @@
 - (id)initWithFrame:(CGRect)frame	{
     self = [super initWithFrame:frame];
     if (self)	{
+		label = @"Triangle";
 		peakPoint	= 1.0f;
 		lowerLeft	= self.frame.size.height;
 		lowerRight	= self.frame.size.width;
 		lowerLeftMod = lowerRightMod = peakMod = 2.5;
 		[self setUserInteractionEnabled:NO];
+		shape_index = 4;
 	}
     return self;
 }

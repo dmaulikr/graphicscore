@@ -10,7 +10,14 @@
 
 @implementation GSCircle
 
-- (id)initWithFrame:(CGRect)frame	{	return self = [super initWithFrame:frame];	}
+- (id)initWithFrame:(CGRect)frame	{	
+	self = [super initWithFrame:frame];
+	if (self)	{
+		label = @"Circle";
+		shape_index = 2;
+	}
+	return self;
+}
 
 - (void)drawRect:(CGRect)rect	{
 	[self setAlpha:self.alpha*0.99];
@@ -27,3 +34,6 @@
 }
 
 @end
+
+
+

@@ -17,5 +17,6 @@
 
 -(Palette*)createOpposite;
 -(void)create;
+-(void)createPaletteOfBlack;
 
 @end

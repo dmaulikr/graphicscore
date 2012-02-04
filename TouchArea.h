@@ -12,58 +12,25 @@
 #import "NSPoint.h"
 #import "Palette.h"
 #import "Shapes.h"
-
-@protocol TouchAreaDelegate <NSObject>
-
-//	DELEGATE METHODS HERE
--(void)fillWithColor:(int) i;
-
-@end
+#import "GSShapePalette.h"
 
 @interface TouchArea : UIView	{
-	id <TouchAreaDelegate> delegate;
-	//	Path index
-	int				pathToDraw;
-	
-	//	First path
-	NSMutableArray	*points_one;
-	
-	//	Second path
-	NSMutableArray	*points_two;
-	
-	//	Third path
-	NSMutableArray	*points_three;
-	
-	//	Fourth path
-	NSMutableArray	*points_four;
-	
-	//	Fifth
-	NSMutableArray	*points_five;
-	
-	//	Mode (blur / paint / fill)
-	NSString *mode;
+	//	Points incoming from user
+	NSMutableArray	*incoming_points;
 	
 	//	Palette (from parent)
 	Palette	*palette;
 	
-	//	GSShapes
-	GSCircle*			circle;
-	GSQuadrilateral*	quad;
-	GSTriangle*			tri;
-	GSStar*				star;
+	//	Track shapes on screen
+	NSMutableArray	*shapesOnScreen;	
 }
 
--(void) getPointsFromCurrentDrawnLines;
 -(void) assignPalette:(Palette*)p;
 
-@property			int	pathToDraw;
-@property (strong)	NSMutableArray	*points_one;
-@property (strong)	NSMutableArray	*points_two;
-@property (strong)	NSMutableArray	*points_three;
-@property (strong)	NSMutableArray	*points_four;
-@property (strong)	NSMutableArray	*points_five;
-@property (strong)	id <TouchAreaDelegate> delegate;
-@property (strong)	NSString	*mode;
-//@property (strong)	Palette		*palette;
+@property	NSMutableArray	*incoming_points;
+@property	int				shape_index;
+@property	int				color_index;
+@property	GSShape			*currentShape;
+@property	GSShapePalette	*shapePalette;
 
 @end

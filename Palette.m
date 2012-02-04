@@ -82,5 +82,10 @@
 	return p;
 }
 
+-(void)createPaletteOfBlack	{
+	for (int i = 0; i < 5; i++)
+		[colors addObject:[UIColor blackColor]];
+}
+
 
 @end

@@ -11,17 +11,22 @@
 @implementation GSQuadrilateral
 @synthesize angleOfRotation;
 
-- (id)initWithFrame:(CGRect)frame	{
+- (id)initWithFrame:(CGRect)frame andLocal:(Palette*)l	{
     self = [super initWithFrame:frame];
     if (self) {
 //		self.layer.cornerRadius = 15.0f;
+		label = @"Quadrilateral";
+		index = 2;
+		local = l;
+		[self setBackgroundColor:[[local colors] objectAtIndex:index]];
 		angleOfRotation=1;
+		shape_index = 1;
     }
     return self;
 }
 
 -(void)drawRect:(CGRect)rect	{
-	[self setBackgroundColor:[[local colors] objectAtIndex:index]];	
+		[self setBackgroundColor:[[local colors] objectAtIndex:index]];	
 	[self setAlpha:self.alpha*0.98];
 //	if (self.layer.cornerRadius<200)
 //		[self.layer setCornerRadius:self.layer.cornerRadius*1.095];

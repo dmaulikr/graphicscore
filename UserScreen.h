@@ -9,15 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "TouchArea.h"
 #import "Palette.h"
-#import <QuartzCore/QuartzCore.h>
+#import "GSShapePalette.h"
 
 @protocol UserScreenDelegate <NSObject>
-
 -(void)restoreMainScreenFromUserSession;
-
 @end
 
-@interface UserScreen : UIViewController <TouchAreaDelegate>	{
+@interface UserScreen : UIViewController	{
 	//	Delegate
 	id <UserScreenDelegate> delegate;
 	
@@ -28,16 +26,23 @@
 	//	Touch control area
 	TouchArea	*touchpad;
 	
-	//	Palette
-	Palette		*userPalette;
-	Palette		*remotePalette;
+	//	Palettes
+	Palette			*userPalette;
+	Palette			*remotePalette;
 	
-	//	Palette buttons
-	UIButton	*selectColor1;
-	UIButton	*selectColor2;
-	UIButton	*selectColor3;
-	UIButton	*selectColor4;
-	UIButton	*selectColor5;
+	//	Shape palette buttons
+	UIButton	*selectShapeToDraw1;
+	UIButton	*selectShapeToDraw2;
+	UIButton	*selectShapeToDraw3;
+	UIButton	*selectShapeToDraw4;
+	UIButton	*selectShapeToDraw5;
+	
+	//	Color palette buttons
+	UIButton	*selectColorToDraw1;
+	UIButton	*selectColorToDraw2;
+	UIButton	*selectColorToDraw3;
+	UIButton	*selectColorToDraw4;
+	UIButton	*selectColorToDraw5;	
 	
 	//	Exit
 	UIButton	*exitButton;

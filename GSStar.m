@@ -10,6 +10,15 @@
 
 @implementation GSStar
 
+-(id) initWithFrame:(CGRect)frame	{
+	self = [super initWithFrame:frame];
+	if (self)	{
+		label = @"Star";
+		shape_index = 3;
+	}
+	return self;
+}
+
 - (void)drawRect:(CGRect)rect	{
 	[[[local colors] objectAtIndex:index]setFill];
 	[self setAlpha:self.alpha*0.99];	

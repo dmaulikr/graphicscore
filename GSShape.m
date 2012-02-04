@@ -9,14 +9,16 @@
 #import "GSShape.h"
 
 @implementation GSShape
-@synthesize index, local;
+@synthesize index, local, label, shape_index;
 
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
+		label = @"Generic";
 		self.backgroundColor = [UIColor clearColor];
 		self.userInteractionEnabled = NO;
+		shape_index = 0;
     }
     return self;
 }
@@ -25,3 +27,4 @@
 -(void) reset	{	}
 
 @end
+
