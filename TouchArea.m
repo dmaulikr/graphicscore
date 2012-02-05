@@ -19,9 +19,10 @@
 		[shapesOnScreen addObject:generic];
 }
 
-- (id)initWithFrame:(CGRect)frame	{
+- (id)initWithFrame:(CGRect)frame andDelegate:(id)_d	{
     self = [super initWithFrame:frame];
     if (self) {
+		delegate = _d;
 		shape_index = 0;
 		color_index = 0;
 		self.backgroundColor = [UIColor clearColor];
@@ -77,6 +78,9 @@
 	[currentShape removeFromSuperview];	
 	[shapesOnScreen replaceObjectAtIndex:color_index withObject:currentShape];
 	[self addSubview:(GSShape*)[shapesOnScreen objectAtIndex:color_index]];
+	
+	
+	[delegate touchAreaHasBeenUpatedWithShapesOnScreen:shapesOnScreen];
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////

@@ -9,7 +9,7 @@
 #import "UserScreen.h"
 
 @implementation UserScreen
-@synthesize delegate, exitButtonImage, audioController;
+@synthesize delegate, exitButtonImage, audioController, parameteriser;
 
 /*
 	View dismissal / init animation
@@ -149,20 +149,11 @@
 		[self.view addSubview:userBackground_imageView];
 		
 		/*
-				Create & add touchpad
-		*/
-		touchpad = [[TouchArea alloc] init];
-		[touchpad setFrame:CGRectMake(0, 0, self.view.frame.size.height, self.view.frame.size.width)];
-		touchpad.alpha = 0.0;
-		[self.view addSubview:touchpad];
-		
-		/*
 				Create palettes
 		 */
 		userPalette = [[Palette alloc] init];
 		[userPalette create];
 		remotePalette = [userPalette createOpposite];
-		[touchpad assignPalette:userPalette];
 		
 		/*
 				Create audio controller
@@ -170,6 +161,19 @@
 		audioController = [[CAController alloc] init];
 		[audioController initAudioController];
 		[audioController startAudioUnit];
+		
+		/*
+				Create parameteriser
+		 */
+		parameteriser = [[Parameteriser alloc] initWithDelegate:audioController];
+		
+		/*
+		 Create & add touchpad
+		 */
+		touchpad = [[TouchArea alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.height, self.view.frame.size.width) andDelegate:parameteriser];
+		[touchpad assignPalette:userPalette];		
+		touchpad.alpha = 0.0;
+		[self.view addSubview:touchpad];
 		
 		/*		
 				Add buttons to the screen

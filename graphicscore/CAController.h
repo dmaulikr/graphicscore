@@ -9,17 +9,19 @@
 #import <Foundation/Foundation.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import <AudioUnit/AudioUnit.h>
+#import "Parameteriser.h"
+#import "ParameteriserDelegateProtocol.h"
 
-OSStatus renderAudioOutput (void *inRefCon,AudioUnitRenderActionFlags *ioActionFlags,  const AudioTimeStamp *inTimeStamp,  UInt32 inBusNumber, UInt32 inNumberFrames,  AudioBufferList *ioData);
-
-float*	output	(void);
-
-@interface CAController : NSObject  {
+@interface CAController : NSObject <ParameteriserDelegate>  {
     AudioComponentInstance		outputUnit;
 }
 
 -(void)initAudioController;
 -(void)startAudioUnit;
 -(void)togglePlayback;
+
+OSStatus renderAudioOutput (void *inRefCon,AudioUnitRenderActionFlags *ioActionFlags,  const AudioTimeStamp *inTimeStamp,  UInt32 inBusNumber, UInt32 inNumberFrames,  AudioBufferList *ioData);
+
+float*	output	(void);
 
 @end

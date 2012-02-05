@@ -40,6 +40,7 @@
 		73DF0D1714DE9EF1002C169C /* CAController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 73DF0D1614DE9EF1002C169C /* CAController.mm */; };
 		73DF0D1B14DE9F2D002C169C /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73DF0D1814DE9F2D002C169C /* AudioToolbox.framework */; };
 		73DF0D1D14DE9F2D002C169C /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73DF0D1A14DE9F2D002C169C /* CoreAudio.framework */; };
+		73DF0D2214DEAA29002C169C /* Parameteriser.m in Sources */ = {isa = PBXBuildFile; fileRef = 73DF0D2114DEAA29002C169C /* Parameteriser.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -94,6 +95,9 @@
 		73DF0D1614DE9EF1002C169C /* CAController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CAController.mm; sourceTree = "<group>"; };
 		73DF0D1814DE9F2D002C169C /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
 		73DF0D1A14DE9F2D002C169C /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/CoreAudio.framework; sourceTree = "<absolute>"; };
+		73DF0D2014DEAA29002C169C /* Parameteriser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Parameteriser.h; sourceTree = "<group>"; };
+		73DF0D2114DEAA29002C169C /* Parameteriser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Parameteriser.m; sourceTree = "<group>"; };
+		73FEF27C14DEAF6C0099B1D9 /* ParameteriserDelegateProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParameteriserDelegateProtocol.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +134,7 @@
 		7323739E149A0B7E00D86DFC /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				73DF0D1F14DEA9EA002C169C /* Parameteriser */,
 				73CB2F0214DC600000D4709E /* User Display */,
 				73CB2F0314DC600B00D4709E /* Touch Handling */,
 			);
@@ -314,6 +319,16 @@
 			name = "Audio Interface";
 			sourceTree = "<group>";
 		};
+		73DF0D1F14DEA9EA002C169C /* Parameteriser */ = {
+			isa = PBXGroup;
+			children = (
+				73FEF27C14DEAF6C0099B1D9 /* ParameteriserDelegateProtocol.h */,
+				73DF0D2014DEAA29002C169C /* Parameteriser.h */,
+				73DF0D2114DEAA29002C169C /* Parameteriser.m */,
+			);
+			name = Parameteriser;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -403,6 +418,7 @@
 				73CB2EFC14DC46F300D4709E /* GSShape.m in Sources */,
 				73CB2F0114DC52FD00D4709E /* GSShapePalette.m in Sources */,
 				73DF0D1714DE9EF1002C169C /* CAController.mm in Sources */,
+				73DF0D2214DEAA29002C169C /* Parameteriser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

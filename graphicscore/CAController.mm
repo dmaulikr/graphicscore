@@ -71,6 +71,13 @@ OSStatus renderAudioOutput  (
 
 ////////////////////////////////////////////////////////////
 
+-(void)updatedParameters:(NSMutableArray*)parameters	{
+	NSLog(@"Parameters received by audio controller");
+}
+
+
+////////////////////////////////////////////////////////////
+
 -(void)initAudioController	{
 	AudioComponentDescription defaultOutputDescription;
     defaultOutputDescription.componentType          =   kAudioUnitType_Output;

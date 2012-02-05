@@ -14,6 +14,10 @@
 #import "Shapes.h"
 #import "GSShapePalette.h"
 
+@protocol TouchAreaDelegate <NSObject>
+-(void)touchAreaHasBeenUpatedWithShapesOnScreen:(NSMutableArray*)s;
+@end
+
 @interface TouchArea : UIView	{
 	//	Points incoming from user
 	NSMutableArray	*incoming_points;
@@ -23,7 +27,11 @@
 	
 	//	Track shapes on screen
 	NSMutableArray	*shapesOnScreen;	
+	
+	id <TouchAreaDelegate> delegate;
 }
+
+- (id)initWithFrame:(CGRect)frame andDelegate:(id)_d;
 
 -(void) assignPalette:(Palette*)p;
 

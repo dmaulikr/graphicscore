@@ -11,6 +11,7 @@
 #import "Palette.h"
 #import "GSShapePalette.h"
 #import "CAController.h"
+#import "Parameteriser.h"
 
 @protocol UserScreenDelegate <NSObject>
 -(void)restoreMainScreenFromUserSession;
@@ -52,7 +53,7 @@
 
 @property (strong) id delegate;
 @property UIImageView *exitButtonImage;
-
+@property Parameteriser	*parameteriser;
 @property CAController* audioController;
 
 @end
