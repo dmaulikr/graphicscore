@@ -10,6 +10,7 @@
 #import "TouchArea.h"
 #import "Palette.h"
 #import "GSShapePalette.h"
+#import "CAController.h"
 
 @protocol UserScreenDelegate <NSObject>
 -(void)restoreMainScreenFromUserSession;
@@ -51,5 +52,7 @@
 
 @property (strong) id delegate;
 @property UIImageView *exitButtonImage;
+
+@property CAController* audioController;
 
 @end
