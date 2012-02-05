@@ -9,51 +9,55 @@
 #import "GSTriangle.h"
 
 @implementation GSTriangle
-@synthesize peakPoint, lowerLeft, lowerRight, peakMod, lowerLeftMod, lowerRightMod;
+@synthesize left, right, peak, peakMod, leftMod, rightMod;
 
 - (id)initWithFrame:(CGRect)frame	{
     self = [super initWithFrame:frame];
     if (self)	{
 		label = @"Triangle";
-		peakPoint	= 1.0f;
-		lowerLeft	= self.frame.size.height;
-		lowerRight	= self.frame.size.width;
-		lowerLeftMod = lowerRightMod = peakMod = 2.5;
-		[self setUserInteractionEnabled:NO];
+		peak	= 1;
+		left	= self.frame.size.height+1;
+		right	= self.frame.size.width+1;
+		
+		peakMod	= 4.5;
+		leftMod	= 2;
+		rightMod = -1.5 ;
 		shape_index = 4;
 	}
     return self;
 }
 
 - (void)drawRect:(CGRect)rect	{
-	if (lowerLeft<1||lowerLeft>self.frame.size.height)
-		lowerLeftMod*=-1;
-	if (lowerRight<1||lowerRight>self.frame.size.width)
-		lowerRightMod*=-1;
-	if (peakPoint<1||peakPoint>self.frame.size.width)
+	if (left<-1.0f||left>self.frame.size.height)
+		leftMod*=-1;
+	if (right<-1.0f||right>self.frame.size.width)
+		rightMod*=-1;
+	if (peak<-1.0f||peak>self.frame.size.width)
 		peakMod*=-1;	
 	
 	[self setAlpha:self.alpha*0.99];		
 	[[[local colors] objectAtIndex:index]setFill];
 	
-	lowerRight	+=lowerRightMod;
-	lowerLeft	-=lowerLeftMod;
-	peakPoint	+=peakMod;
+	right+=rightMod;
+	left +=leftMod;
+	peak +=peakMod;
 	
 	CGContextRef		ref		= UIGraphicsGetCurrentContext();
 	CGMutablePathRef	path	= CGPathCreateMutable();
-	CGPathMoveToPoint	(path, NULL, 0, lowerLeft);
-	CGPathAddLineToPoint(path, NULL, peakPoint, 0);
-	CGPathAddLineToPoint(path, NULL, lowerRight, self.frame.size.height);
+	
+	CGPathMoveToPoint	(path, NULL, 0,			left);
+	CGPathAddLineToPoint(path, NULL, peak,		0);
+	CGPathAddLineToPoint(path, NULL, right,		self.frame.size.height);
+	
 	CGContextAddPath	(ref, path);
 	CGContextDrawPath	(ref, kCGPathFill);
 }
 
 -(void) reset	{
 	[self setAlpha:1];
-	[self setPeakPoint:1.0f];
-	[self setLowerRight:self.frame.size.width];
-	[self setLowerLeft:self.frame.size.height];
+	[self setPeak:1.0f];
+	[self setRight:self.frame.size.width];
+	[self setLeft:self.frame.size.height];
 }
 
 @end

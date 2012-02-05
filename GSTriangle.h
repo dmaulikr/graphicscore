@@ -8,10 +8,10 @@
 
 #import "Shapes.h"
 @interface GSTriangle : GSShape
-@property CGFloat peakPoint;
-@property CGFloat lowerLeft;
-@property CGFloat lowerRight;
-@property CGFloat lowerLeftMod;
-@property CGFloat lowerRightMod;
+@property CGFloat peak;
+@property CGFloat left;
+@property CGFloat right;
+@property CGFloat leftMod;
+@property CGFloat rightMod;
 @property CGFloat peakMod;
 @end

@@ -14,7 +14,7 @@
 - (id)initWithFrame:(CGRect)frame andLocal:(Palette*)l	{
     self = [super initWithFrame:frame];
     if (self) {
-//		self.layer.cornerRadius = 15.0f;
+		self.layer.cornerRadius = 15.0f;
 		label = @"Quadrilateral";
 		index = 2;
 		local = l;
@@ -28,15 +28,15 @@
 -(void)drawRect:(CGRect)rect	{
 		[self setBackgroundColor:[[local colors] objectAtIndex:index]];	
 	[self setAlpha:self.alpha*0.98];
-//	if (self.layer.cornerRadius<200)
-//		[self.layer setCornerRadius:self.layer.cornerRadius*1.095];
+	if (self.layer.cornerRadius<200)
+		[self.layer setCornerRadius:self.layer.cornerRadius*1.095];
 	[self setAngleOfRotation: self.angleOfRotation+0.05];
 	[self setTransform:CGAffineTransformMakeRotation([self angleOfRotation])];
 }
 
 -(void) reset	{
 	[self setAlpha:1];
-//	[self.layer setCornerRadius:5.0f];
+	[self.layer setCornerRadius:5.0f];
 	[self setTransform:CGAffineTransformMakeRotation(0)];
 }
 
