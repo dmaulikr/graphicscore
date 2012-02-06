@@ -41,6 +41,7 @@
 		73DF0D1B14DE9F2D002C169C /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73DF0D1814DE9F2D002C169C /* AudioToolbox.framework */; };
 		73DF0D1D14DE9F2D002C169C /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73DF0D1A14DE9F2D002C169C /* CoreAudio.framework */; };
 		73DF0D2214DEAA29002C169C /* Parameteriser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 73DF0D2114DEAA29002C169C /* Parameteriser.mm */; };
+		73E95E3C14E0007A009360AD /* maximilian.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73E95E3A14E0007A009360AD /* maximilian.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -97,6 +98,8 @@
 		73DF0D1A14DE9F2D002C169C /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/System/Library/Frameworks/CoreAudio.framework; sourceTree = "<absolute>"; };
 		73DF0D2014DEAA29002C169C /* Parameteriser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Parameteriser.h; sourceTree = "<group>"; };
 		73DF0D2114DEAA29002C169C /* Parameteriser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Parameteriser.mm; sourceTree = "<group>"; };
+		73E95E3A14E0007A009360AD /* maximilian.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = maximilian.cpp; sourceTree = "<group>"; };
+		73E95E3B14E0007A009360AD /* maximilian.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = maximilian.h; sourceTree = "<group>"; };
 		73FEF27C14DEAF6C0099B1D9 /* ParameteriserDelegateProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParameteriserDelegateProtocol.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -172,6 +175,7 @@
 		738BBC9E14994EA600EF9712 = {
 			isa = PBXGroup;
 			children = (
+				73E95E3814E0005F009360AD /* Maximilian */,
 				738BBCB314994EA600EF9712 /* graphicscore */,
 				738BBCAC14994EA600EF9712 /* Frameworks */,
 				738BBCAA14994EA600EF9712 /* Products */,
@@ -329,6 +333,15 @@
 			name = Parameteriser;
 			sourceTree = "<group>";
 		};
+		73E95E3814E0005F009360AD /* Maximilian */ = {
+			isa = PBXGroup;
+			children = (
+				73E95E3A14E0007A009360AD /* maximilian.cpp */,
+				73E95E3B14E0007A009360AD /* maximilian.h */,
+			);
+			name = Maximilian;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -419,6 +432,7 @@
 				73CB2F0114DC52FD00D4709E /* GSShapePalette.m in Sources */,
 				73DF0D1714DE9EF1002C169C /* CAController.mm in Sources */,
 				73DF0D2214DEAA29002C169C /* Parameteriser.mm in Sources */,
+				73E95E3C14E0007A009360AD /* maximilian.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
