@@ -42,6 +42,7 @@
 		73DF0D1D14DE9F2D002C169C /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73DF0D1A14DE9F2D002C169C /* CoreAudio.framework */; };
 		73DF0D2214DEAA29002C169C /* Parameteriser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 73DF0D2114DEAA29002C169C /* Parameteriser.mm */; };
 		73E95E3C14E0007A009360AD /* maximilian.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73E95E3A14E0007A009360AD /* maximilian.cpp */; };
+		73E9608314E00E2E009360AD /* voice_one.wav in Resources */ = {isa = PBXBuildFile; fileRef = 73E9608214E00E2E009360AD /* voice_one.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -100,6 +101,7 @@
 		73DF0D2114DEAA29002C169C /* Parameteriser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Parameteriser.mm; sourceTree = "<group>"; };
 		73E95E3A14E0007A009360AD /* maximilian.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = maximilian.cpp; sourceTree = "<group>"; };
 		73E95E3B14E0007A009360AD /* maximilian.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = maximilian.h; sourceTree = "<group>"; };
+		73E9608214E00E2E009360AD /* voice_one.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = voice_one.wav; sourceTree = "<group>"; };
 		73FEF27C14DEAF6C0099B1D9 /* ParameteriserDelegateProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParameteriserDelegateProtocol.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -175,7 +177,6 @@
 		738BBC9E14994EA600EF9712 = {
 			isa = PBXGroup;
 			children = (
-				73E95E3814E0005F009360AD /* Maximilian */,
 				738BBCB314994EA600EF9712 /* graphicscore */,
 				738BBCAC14994EA600EF9712 /* Frameworks */,
 				738BBCAA14994EA600EF9712 /* Products */,
@@ -205,6 +206,7 @@
 		738BBCB314994EA600EF9712 /* graphicscore */ = {
 			isa = PBXGroup;
 			children = (
+				73E95E3814E0005F009360AD /* Maximilian */,
 				73DF0D1314DE9E6D002C169C /* Audio Interface */,
 				73237394149A060900D86DFC /* Core Assets */,
 				738BBCCB14994FC500EF9712 /* Main Screen */,
@@ -336,10 +338,12 @@
 		73E95E3814E0005F009360AD /* Maximilian */ = {
 			isa = PBXGroup;
 			children = (
+				73E9608214E00E2E009360AD /* voice_one.wav */,
 				73E95E3A14E0007A009360AD /* maximilian.cpp */,
 				73E95E3B14E0007A009360AD /* maximilian.h */,
 			);
 			name = Maximilian;
+			path = ..;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -406,6 +410,7 @@
 				735D0CF414D1C56E000E83FA /* Icon@2x.png in Resources */,
 				73A43B1B14DD5C700019A213 /* exit_button.png in Resources */,
 				73A43B1C14DD5C700019A213 /* exit_button@2x.png in Resources */,
+				73E9608314E00E2E009360AD /* voice_one.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

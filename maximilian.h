@@ -39,7 +39,6 @@
 //#include "ofMain.h"
 //#include "ofUtils.h"
 
-
 #include <iostream>
 #include <fstream>
 #include <string.h>

@@ -20,6 +20,18 @@
 	int		numshapes;
 	int		numcurves;
 	float	alpha_average;
+	
+	NSMutableArray*	curves_w;
+	NSMutableArray*	points_w;
+	
+	NSMutableArray*	curves_x;
+	NSMutableArray*	points_x;
+	
+	NSMutableArray*	curves_y;
+	NSMutableArray*	points_y;
+	
+	NSMutableArray*	curves_z;
+	NSMutableArray*	points_z;
 }
 
 @property	float			alpha_total;

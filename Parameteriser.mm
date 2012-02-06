@@ -25,72 +25,64 @@
 		numshapes		= 0;
 		numcurves		= 0;
 		alpha_average	= 0.0f;
+		
+		curves_w = [[NSMutableArray alloc] init];
+		points_w = [[NSMutableArray alloc] init];
+		curves_x = [[NSMutableArray alloc] init];
+		points_x = [[NSMutableArray alloc] init];
+		curves_y = [[NSMutableArray alloc] init];
+		points_y = [[NSMutableArray alloc] init];
+		curves_z = [[NSMutableArray alloc] init];
+		points_z = [[NSMutableArray alloc] init];
 	}
 	return self;
 }
 
--(void)printTriangle:(GSTriangle*)t	{
+-(void)addPointsFromArrayToParameterData:(NSMutableArray*)a	{
+	for (NSPoint* p in a)	{
+		if (p.y<=80.0f)
+			[points_w addObject:p];
+		if (p.y<=160.0f&&p.y>80.0f)
+			[points_x addObject:p];
+		if (p.y<=240.0f&&p.y>160.0f)
+			[points_y addObject:p];
+		if (p.y>240.0f)
+			[points_z addObject:p];
+	}
+}
+
+-(void)processTriangle:(GSTriangle*)t	{
 	CGRect	r		= t.frame;
 	CGFloat	height	= r.size.height;
-	CGFloat	width	= r.size.width;
+//	CGFloat	width	= r.size.width;
 	CGFloat	originX = r.origin.x;
 	CGFloat	originY = r.origin.y;
 	
-	CGFloat	topPointX,	 topPointY;
-	CGFloat	leftPointX,	 leftPointY;
-	CGFloat	rightPointX, rightPointY;
-	
-	leftPointX	= originX;
-	leftPointY	= t.left;
-	
-	topPointX	= t.peak;
-	topPointY	= originY;
-	
-	rightPointX	= t.right;
-	rightPointY	= originY + height;
+	NSPoint*	left	= [[NSPoint alloc] initWithCGPoint:CGPointMake(originX, t.left)];
+	NSPoint*	top		= [[NSPoint alloc] initWithCGPoint:CGPointMake(t.peak, originY)];
+	NSPoint*	right	= [[NSPoint alloc] initWithCGPoint:CGPointMake(t.right, originY+height)];	
 	
 	const float* RGB = CGColorGetComponents([(UIColor*)[[[t local] colors] objectAtIndex:[t index]] CGColor]);
-	
-	NSLog(@"%@: \n"
-		  "The size is			(%f * %f)	\n"
-		  "and it starts at		(%f , %f)	\n"
-		  "The points are at: \n"
-		  "(%f, %f) \n"
-		  "(%f, %f) \n"
-		  "(%f, %f)	\n"
-		  "The alpha channel is	%f \n"
-		  "and the color is %f | %f | %f \n"
-		  , t.label,
-		  width, height,
-		  originX, originY,
-		  
-		  leftPointX,	leftPointY,
-		  topPointX,	topPointY,
-		  rightPointX,	rightPointY,
-		  
-		  t.alpha,
-		  RGB[0], RGB[1], RGB[2]
-		  );
 	
 	alpha_total		+=	t.alpha;
 	sc_red_total	+=	RGB[0];
 	sc_green_total	+=	RGB[1];
 	sc_blue_total	+=	RGB[2];
+
+	NSMutableArray*	trianglePoints = [[NSMutableArray alloc] initWithObjects:left, top, right, nil];
 	
-	points	[(int)leftPointX]	= 1.0f;
-	points	[(int)topPointX]	= 1.0f;
-	points	[(int)rightPointX]	= 1.0f;
+	[self addPointsFromArrayToParameterData:trianglePoints];
 }
 
--(void)printQuadrilateral:(GSQuadrilateral*)q	{
+-(void)processQuadrilateral:(GSQuadrilateral*)q	{
 	CGRect	r		= q.frame;
-	CGFloat	height	= r.size.height;
+//	CGFloat	height	= r.size.height;
 	CGFloat	width	= r.size.width;
 	CGFloat	originX = r.origin.x;
-	CGFloat	originY = r.origin.y;
+//	CGFloat	originY = r.origin.y;
 
 	const float* RGB = CGColorGetComponents([(UIColor*)[[[q local] colors] objectAtIndex:[q index]] CGColor]);
-										
+		/*								
 	NSLog(@"%@: \n"
 		  "The size is			(%f * %f)	\n"
 		  "and it starts at		(%f , %f)	\n"
@@ -104,6 +96,7 @@
 		  q.alpha,
 		  RGB[0], RGB[1], RGB[2]
 		  );
+		 */
 	
 	alpha_total		+=	q.alpha;
 	sc_red_total	+=	RGB[0];
@@ -115,29 +108,39 @@
 }
 
 
--(void)printStar:(GSStar*)s	{
+-(void)processStar:(GSStar*)s	{
 	CGRect r = s.frame;
 	
 	CGFloat	height	= r.size.height;
 	CGFloat	width	= r.size.width;
 	CGFloat	originX = r.origin.x;
 	CGFloat	originY = r.origin.y;
-	CGPoint one, two, three, four, five, six, seven, eight, nine, ten;
 
-	//	Get the points of the star
-	one.x = originX+width*0.5;		one.y = originY;
-	two.x = originX+width*0.6;		two.y = originY+height*0.33;
-	three.x = originX+width*0.9;	three.y = originY+height*0.33;
-	four.x = originX+width*0.66;	four.y = originY+height*0.55;
-	five.x = originX+width*0.75;	five.y = originY+height*0.88;
-	six.x = originX+width*0.5;		six.y = originY+height*0.66;	
-	seven.x = originX+width*0.25;	seven.y = originY+height*0.88;		
-	eight.x = originX+width*0.33;	eight.y = originY+height*0.52;
-	nine.x = originX+width*0.1;		nine.y = originY+height*0.33;
-	ten.x = originX+width*0.4;		ten.y = originY+height*0.33;
+	NSPoint* one	= [[NSPoint alloc] initWithCGPoint:CGPointMake(originX+width*0.5,	originY)];
+	NSPoint* two	= [[NSPoint alloc] initWithCGPoint:CGPointMake(originX+width*0.6,	originY+height*0.33)];
+	NSPoint* three	= [[NSPoint alloc] initWithCGPoint:CGPointMake(originX+width*0.9,	originY+height*0.33)];
+	NSPoint* four	= [[NSPoint alloc] initWithCGPoint:CGPointMake(originX+width*0.66,	originY+height*0.55)];
+	NSPoint* five	= [[NSPoint alloc] initWithCGPoint:CGPointMake(originX+width*0.75,	originY+height*0.88)];
+	NSPoint* six	= [[NSPoint alloc] initWithCGPoint:CGPointMake(originX+width*0.5,	originY+height*0.66)];
+	NSPoint* seven	= [[NSPoint alloc] initWithCGPoint:CGPointMake(originX+width*0.25,	originY+height*0.88)];
+	NSPoint* eight	= [[NSPoint alloc] initWithCGPoint:CGPointMake(originX+width*0.33,	originY+height*0.52)];
+	NSPoint* nine	= [[NSPoint alloc] initWithCGPoint:CGPointMake(originX+width*0.1,	originY+height*0.33)];
+	NSPoint* ten	= [[NSPoint alloc] initWithCGPoint:CGPointMake(originX+width*0.4,	originY+height*0.33)];
+	
+	NSMutableArray* starPoints = [[NSMutableArray alloc] init];	
+	[starPoints addObject:one];
+	[starPoints addObject:two];
+	[starPoints addObject:three];
+	[starPoints addObject:four];
+	[starPoints addObject:five];
+	[starPoints addObject:six];
+	[starPoints addObject:seven];
+	[starPoints addObject:eight];
+	[starPoints addObject:nine];
+	[starPoints addObject:ten];	
 	
 	const float* RGB = CGColorGetComponents([(UIColor*)[[[s local] colors] objectAtIndex:[s index]] CGColor]);	
-	
+	/*
 	NSLog(@"%@:	\n"
 		  "The size is		(%f * %f)	\n"
 		  "and it starts at	(%f , %f)	\n"
@@ -156,32 +159,24 @@
 		  nine.x, nine.y, ten.x, ten.y,
 		  RGB[0], RGB[1], RGB[2]		  
 		  );
+	 */
 	alpha_total		+=	s.alpha;
 	sc_red_total	+=	RGB[0];
 	sc_green_total	+=	RGB[1];
 	sc_blue_total	+=	RGB[2];		
 	
-	points [(int)one.x]		= 1;
-	points [(int)two.x]		= 1;	
-	points [(int)three.x]	= 1;
-	points [(int)four.x]	= 1;
-	points [(int)five.x]	= 1;
-	points [(int)six.x]		= 1;
-	points [(int)seven.x]	= 1;
-	points [(int)eight.x]	= 1;
-	points [(int)nine.x]	= 1;
-	points [(int)ten.x]		= 1;	
+	[self addPointsFromArrayToParameterData:starPoints];
 }
 
--(void)printCircle:(GSCircle*)c	{
+-(void)processCircle:(GSCircle*)c	{
 	CGRect	r		= c.frame;
 	CGFloat	height	= r.size.height;
 	CGFloat	width	= r.size.width;
 	CGFloat	originX = r.origin.x;
-	CGFloat	originY = r.origin.y;
+//	CGFloat	originY = r.origin.y;
 
 	const float* RGB = CGColorGetComponents([(UIColor*)[[[c local] colors] objectAtIndex:[c index]] CGColor]);
-	
+	/*
 	NSLog(@"%@: \n"
 		  "The size is			(%f * %f)	\n"
 		  "and it starts at		(%f , %f)	\n"
@@ -193,6 +188,7 @@
 		  c.alpha,
 		  RGB[0], RGB[1], RGB[2]
 		  );
+	 */
 	alpha_total		+=	c.alpha;
 	sc_red_total	+=	RGB[0];
 	sc_green_total	+=	RGB[1];
@@ -209,34 +205,7 @@
 	}
 }
 
--(void)touchAreaHasBeenUpatedWithShapesOnScreen:(NSMutableArray*)s	{
-	for (GSShape* g in s)	{
-		switch (g.shape_index) {
-			case 0:		break;
-			case 1:		[self printQuadrilateral:(GSQuadrilateral*)g];	numshapes++;	break;
-			case 2:		[self printCircle:(GSCircle*)g];				numshapes++;	break;
-			case 3:		[self printStar:(GSStar*)g];					numshapes++;	break;
-			case 4:		[self printTriangle:(GSTriangle*)g];			numshapes++;	break;
-			default:	break;
-		}
-	}
-	
-	for (int i = 0; i < 480; i++)	{
-		if (points[i]>0.0f)	{
-			NSLog(@"Points at %i:		%f", i, points[i]);
-			numpoints++;
-		}
-	}
-	
-	NSLog(@"There are %i points and %i shapes", numpoints, numshapes);
-	
-	NSLog(@"There are %i curves", numcurves);	
-	
-	NSLog(@"\nColor totals for		R:	%f		G:	%f		B:	%f		A:	%f", sc_red_total, sc_green_total, sc_blue_total, alpha_total);
-
-	alpha_average = alpha_total/numshapes;
-	NSLog(@"\nAlpha average: %f", alpha_average);
-	
+-(void)resetLocalVariables	{
 	//	Reset values
 	sc_red_total = sc_green_total = sc_blue_total = alpha_total = 0.0f;
 	for (int i = 0; i < 480; i++)	{
@@ -246,10 +215,34 @@
 	numpoints		= 0;
 	numshapes		= 0;
 	numcurves		= 0;
-	alpha_average	= 0.0f;	
+	alpha_average	= 0.0f;
+	
+	[points_w removeAllObjects];
+	[points_x removeAllObjects];
+	[points_y removeAllObjects];
+	[points_z removeAllObjects];
+}
+
+-(void)touchAreaHasBeenUpatedWithShapesOnScreen:(NSMutableArray*)s	{
+	for (GSShape* g in s)	{
+		switch (g.shape_index) {
+			case 0:		break;
+			case 1:		[self processQuadrilateral:(GSQuadrilateral*)g];	numshapes++;	break;
+			case 2:		[self processCircle:(GSCircle*)g];					numshapes++;	break;
+			case 3:		[self processStar:(GSStar*)g];						numshapes++;	break;
+			case 4:		[self processTriangle:(GSTriangle*)g];				numshapes++;	break;
+			default:	break;
+		}
+	}
 	
 	NSMutableArray* parameters = [[NSMutableArray alloc] init];
+	[parameters addObject:points_w];
+	[parameters addObject:points_x];
+	[parameters addObject:points_y];
+	[parameters addObject:points_z];
 	[delegate updatedParameters:parameters];
+	
+	[self resetLocalVariables];	
 }
 
 @end
