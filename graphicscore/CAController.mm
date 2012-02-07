@@ -7,7 +7,7 @@
 //
 
 #import "CAController.h"
-#import "maximilian.h"
+#import "FXLibrary.h"
 
 ////////////////////////////////////////////////////////////
 const		Float64		sampleRate = 44100.0;
@@ -115,107 +115,21 @@ inline void readTriggers	(int i)	{
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 
-maxiFilter high_pass;
-maxiFilter low_pass;
-
-maxiSample samplePlayer;
-
-maxiDelayline delay_one;
-maxiDelayline delay_two;
-maxiDelayline delay_three;
-maxiDelayline delay_four;
-
-maxiDelayline	flanger;
-maxiOsc			flangerCTL;
-
-maxiOsc am;
-
-////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////
-
-inline double	distortion		(double input, double amount)	{
-	input*=floor(24*amount);
-	input = input > 1 ? 1	: input;
-	input = input < -1 ? -1 : input;
-	return input * 0.6;	
-}
-
-////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////
-
-int		crushCounter = 0;
-double	previousInput = 0.0f;
-inline double	bitcrusher		(double input, double amount)	{
-	if (crushCounter>=floor(16*amount))
-		crushCounter = 0;
-	else	input = previousInput;
-	crushCounter++;	
-	previousInput = input;
-	return input;	
-}
-
-////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////
-
-inline double	lowpass		(double input, double res)	{
-	input = low_pass.lores(input, 100+(2000*res), 0.95-res);	
-	return input;	
-}
-
-//	HIPASS
-inline double	highpass	(double input, double res)	{
-	input = high_pass.hires(input, 100+(3000*res), 0.95-res);
-	return input;	
-}
-
-
-////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////
-
-double	i;
-inline double	delay	(double input, double amount, double mix)	{
-	i = input;
-	input = delay_one.dl	(input, (.25*amount) * sampleRate, amount);
-	input = delay_two.dl	(input, (0.5*amount) * sampleRate, amount);	
-	input = delay_three.dl	(input, (0.75*amount)* sampleRate, amount);
-	input = delay_four.dl	(input, (0.1*amount) * sampleRate, amount);	
-	return (input*mix)+(i*(1.0f-mix));	
-}
-
-////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////
-
-inline double	amp_mod		(double input, double amount)	{
-	return input*(0.5*(1+(am.sinewave(amount*8))));
-}
-
-////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////
-
-double controlSignal = 0.0f;
-double flangedOut = 0.0f;
-double flangeFeedback = 0.1f;
-
-inline double	flange	(double input, double amount)	{
-	controlSignal	= 0.5*(1+flangerCTL.sinewave(0.25*amount));
-	flangeFeedback	= amount > 0.95 ? 0.95 : amount;
-	flangeFeedback	= flangeFeedback < 0.01 ? 0.01 : flangeFeedback;
-	flangedOut		= flanger.dl(input, (882*controlSignal)+10, flangeFeedback);
-	return sqrt(0.5)*(flangedOut+input);
-}
-
-////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////
-
 double monoOut = 0.0f;
 
 maxiOsc delayMixer;
 maxiOsc flangeFeedbackMod;
 
+FXDistortion	dist;
+FXFlanger		fxflanger;
+FXTremolo		tremolo;
+FXDelay			delay;
+FXFilter		filter1;
+FXBitcrusher	bitcrusher;
+
 #pragma mark USER RENDERING METHOD
 float*	output	()	{
     render_output[0] = render_output[1] = monoOut = 0.0f;
-	
 	if ((int)metro.phasor(metroSpeed)>=1.0)	{
 		metroCount++;
 		if (metroCount>480)
@@ -227,11 +141,11 @@ float*	output	()	{
 		testVol-=0.0001;
 
 	monoOut = testVol*sample.playOnce(sampleSpeed);
-	monoOut = bitcrusher(monoOut, 0.2);
-	monoOut = distortion(monoOut, 0.5);
-	monoOut = amp_mod(monoOut, 0.1);
-	monoOut = flange(monoOut, 0.5*(1+flangeFeedbackMod.sinewave(0.55)));
-	monoOut = delay(monoOut, 0.5*(1+delayMixer.sinewave(0.5)), 0.5);
+	monoOut = bitcrusher.bitcrusher(monoOut, 0.5);
+	monoOut = dist.distortion(monoOut, 0.5);
+	monoOut = tremolo.tremolo(monoOut, 0.1);
+	monoOut = fxflanger.flange(monoOut, 0.5*(1+flangeFeedbackMod.sinewave(0.55)));
+	monoOut = delay.delay(monoOut, 0.5*(1+delayMixer.sinewave(0.5)), 0.5);
 
 	render_output	[0] = monoOut;
 	render_output	[1] = monoOut;
