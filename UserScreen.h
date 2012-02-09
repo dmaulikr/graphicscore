@@ -12,6 +12,7 @@
 #import "GSShapePalette.h"
 #import "CAController.h"
 #import "Parameteriser.h"
+#import "GSNetworkController.h"
 
 @protocol UserScreenDelegate <NSObject>
 -(void)restoreMainScreenFromUserSession;
@@ -55,5 +56,8 @@
 @property UIImageView *exitButtonImage;
 @property Parameteriser	*parameteriser;
 @property CAController* audioController;
+
+@property NSTimer *updateRemote;
+@property GSNetworkController *networkController;
 
 @end

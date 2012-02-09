@@ -9,7 +9,7 @@
 #import "UserScreen.h"
 
 @implementation UserScreen
-@synthesize delegate, exitButtonImage, audioController, parameteriser;
+@synthesize delegate, exitButtonImage, audioController, parameteriser, networkController, updateRemote;
 
 /*
 	View dismissal / init animation
@@ -174,6 +174,13 @@
 		[touchpad assignPalette:userPalette];		
 		touchpad.alpha = 0.0;
 		[self.view addSubview:touchpad];
+		
+		/*
+		 Create network controller
+		 */
+		
+		networkController = [[GSNetworkController alloc] init];
+		updateRemote = [NSTimer scheduledTimerWithTimeInterval:10.0 target:networkController selector:@selector(ping) userInfo:nil repeats:YES];
 		
 		/*		
 				Add buttons to the screen
