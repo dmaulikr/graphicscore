@@ -19,7 +19,9 @@
 @end
 
 @protocol TouchAreaNetworkConnection <NSObject>
+-(int)fetchMemberIdForSession;
 -(void)submitData:(NSMutableArray*)data;
+-(NSMutableArray*)requestData;
 @end
 
 @interface TouchArea : UIView	{
@@ -47,5 +49,6 @@
 @property	GSShape				*currentShape;
 @property	GSShapePalette		*shapePalette;
 
+@property	int					member_id;
 
 @end

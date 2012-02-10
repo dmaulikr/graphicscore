@@ -9,7 +9,7 @@
 #import "TouchArea.h"
 
 @implementation TouchArea
-@synthesize incoming_points, shape_index, color_index, currentShape, shapePalette;
+@synthesize incoming_points, shape_index, color_index, currentShape, shapePalette, member_id;
 
 -(void) assignPalette:(Palette*)p	{
 	palette = p;
@@ -31,6 +31,7 @@
 		shapesOnScreen	= [[NSMutableArray alloc] initWithCapacity:10];
 		currentShape = [[GSShape alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
 		[self addSubview:currentShape];
+		member_id = [network fetchMemberIdForSession];
     }
     return self;
 }
@@ -77,12 +78,76 @@
 
 -(void)touchesEnded:(NSSet*)touches		withEvent:(UIEvent*)event	{		
 	[currentShape removeFromSuperview];	
-	[shapesOnScreen replaceObjectAtIndex:color_index withObject:currentShape];
-	[self addSubview:(GSShape*)[shapesOnScreen objectAtIndex:color_index]];
-	
-	
+	[shapesOnScreen replaceObjectAtIndex:color_index+(5*member_id) withObject:currentShape];
+	[self addSubview:(GSShape*)[shapesOnScreen objectAtIndex:color_index+(5*member_id)]];
 	[delegate touchAreaHasBeenUpatedWithShapesOnScreen:shapesOnScreen];
+	
 	[network submitData:shapesOnScreen];
+	[self processIncomingDataFromNetwork:[network requestData]];
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+-(id)createShapeUsingParameters:(NSMutableArray*)incoming withIndex:(int)index	{
+	GSShape* g = [[GSShape alloc] init];
+
+	int offset = 10 * index;
+
+	int shape_id = [[incoming objectAtIndex:offset]intValue];
+	
+	CGFloat originX = [[incoming objectAtIndex:offset+1]floatValue];
+	CGFloat originY = [[incoming objectAtIndex:offset+2]floatValue];
+
+	CGFloat	width	= [[incoming objectAtIndex:offset+3]floatValue];
+	CGFloat	height	= [[incoming objectAtIndex:offset+3]floatValue];
+
+	CGRect	def = CGRectMake(originX, originY, width, height);
+
+	switch (shape_id)	{
+		case 1:
+			g = [[GSQuadrilateral alloc]	initWithFrame:def	andLocal:palette]; 
+			float angle = [[incoming objectAtIndex:7]floatValue];
+			[(GSQuadrilateral*)g setAngleOfRotation:angle];
+		break;
+
+		case 2:	g = [[GSCircle alloc]			initWithFrame:def]; break;			
+			
+		case 3:	g = [[GSStar alloc]				initWithFrame:def]; break;
+			
+		case 4:	
+			g = [[GSTriangle alloc]			initWithFrame:def]; 
+			float l = [[incoming objectAtIndex:7]floatValue];
+			float p = [[incoming objectAtIndex:8]floatValue];
+			float r = [[incoming objectAtIndex:9]floatValue];
+			[(GSTriangle*)g setLeft: l];
+			[(GSTriangle*)g setPeak: p];
+			[(GSTriangle*)g setRight:r];
+		break;			
+		default:	break;
+	}
+
+	g.index = [[incoming objectAtIndex:5]intValue];
+	g.alpha = 0.01f * [[incoming objectAtIndex:6] floatValue];
+
+	return g;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+-(void)processIncomingDataFromNetwork:(NSMutableArray*)incoming	{
+	NSLog(@"Received data!");
+	NSMutableArray*	shapesFromNetwork = [[NSMutableArray alloc] init];
+
+	for (int i = 0; i < 10; i++)	{
+		[shapesFromNetwork addObject:[self createShapeUsingParameters:incoming withIndex:i]];
+	}
+	
+	for (GSShape* g in shapesFromNetwork)	{
+		NSLog(@"%@", [g label]);
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////

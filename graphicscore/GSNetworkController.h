@@ -11,12 +11,16 @@
 
 @interface GSNetworkController : NSObject	<TouchAreaNetworkConnection>
 
+//	Touch area network connection methods
 -(void)submitData:(NSMutableArray*)data;
+-(NSMutableArray*)requestData;
+-(int)fetchMemberIdForSession;
+
 -(void)request_id;
--(void)requestUpdate;
 
 -(id)init;
 
-@property int session_id;
+@property int	session_id;
+@property int	member_id;
 
 @end
