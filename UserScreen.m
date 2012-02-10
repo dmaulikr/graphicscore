@@ -11,6 +11,13 @@
 @implementation UserScreen
 @synthesize delegate, exitButtonImage, audioController, parameteriser, networkController, updateRemote;
 
+//	Alert view delegate methods
+
+-(void)alertView:(UIAlertView*)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex	{
+	[self triggerDismissalProcedure];
+	NSLog(@"Connection unavailable");
+}
+
 /*
 	View dismissal / init animation
 */
@@ -149,81 +156,89 @@
 		[self.view addSubview:userBackground_imageView];
 		
 		/*
-				Create palettes
-		 */
-		userPalette = [[Palette alloc] init];
-		[userPalette create];
-		remotePalette = [userPalette createOpposite];
-		
-		/*
-				Create audio controller
-		 */
-		audioController = [[CAController alloc] init];
-		[audioController initAudioController];
-		[audioController startAudioUnit];
-		
-		/*
-				Create parameteriser
-		 */
-		parameteriser = [[Parameteriser alloc] initWithDelegate:audioController];
-		
-		/*
-		 Create & add touchpad
-		 */
-		touchpad = [[TouchArea alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.height, self.view.frame.size.width) andDelegate:parameteriser];
-		[touchpad assignPalette:userPalette];		
-		touchpad.alpha = 0.0;
-		[self.view addSubview:touchpad];
-		
-		/*
 		 Create network controller
 		 */
-		
 		networkController = [[GSNetworkController alloc] init];
-		updateRemote = [NSTimer scheduledTimerWithTimeInterval:10.0 target:networkController selector:@selector(ping) userInfo:nil repeats:YES];
+		//		updateRemote = [NSTimer scheduledTimerWithTimeInterval:10.0 target:networkController selector:@selector(ping) userInfo:nil repeats:YES];
 		
-		/*		
-				Add buttons to the screen
-		*/
-		selectColorToDraw1 = [self createNewColorButtonWithFrame:CGRectMake(18-15, 258, 44, 44)		andID:0];
-		selectColorToDraw2 = [self createNewColorButtonWithFrame:CGRectMake(98-15, 258, 44, 44)		andID:1];
-		selectColorToDraw3 = [self createNewColorButtonWithFrame:CGRectMake(178-15, 258, 44, 44)	andID:2];
-		selectColorToDraw4 = [self createNewColorButtonWithFrame:CGRectMake(258-15, 258, 44, 44)	andID:3];
-		selectColorToDraw5 = [self createNewColorButtonWithFrame:CGRectMake(338-15, 258, 44, 44)	andID:4];
+		if ([networkController session_id]!=0)	{
+			
+			/*
+					Create palettes
+			 */
+			userPalette = [[Palette alloc] init];
+			[userPalette create];
+			remotePalette = [userPalette createOpposite];
 		
-		[self.view addSubview:selectColorToDraw1];		
-		[self.view addSubview:selectColorToDraw2];		
-		[self.view addSubview:selectColorToDraw3];
-		[self.view addSubview:selectColorToDraw4];
-		[self.view addSubview:selectColorToDraw5];
+			/*
+					Create audio controller
+			 */
+			audioController = [[CAController alloc] init];
+			[audioController initAudioController];
+			[audioController startAudioUnit];
+			
+			/*
+					Create parameteriser
+			 */
+			parameteriser = [[Parameteriser alloc] initWithDelegate:audioController];
+		
+			/*
+					Create & add touchpad
+			 */	
+			touchpad = [[TouchArea alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.height, self.view.frame.size.width) andDelegate:parameteriser andNetworkController:networkController];
+			[touchpad assignPalette:userPalette];		
+			touchpad.alpha = 0.0;
+			[self.view addSubview:touchpad];
+		
+		
+			/*		
+					Add buttons to the screen
+			 */
+			selectColorToDraw1 = [self createNewColorButtonWithFrame:CGRectMake(18-15, 258, 44, 44)		andID:0];
+			selectColorToDraw2 = [self createNewColorButtonWithFrame:CGRectMake(98-15, 258, 44, 44)		andID:1];
+			selectColorToDraw3 = [self createNewColorButtonWithFrame:CGRectMake(178-15, 258, 44, 44)	andID:2];
+			selectColorToDraw4 = [self createNewColorButtonWithFrame:CGRectMake(258-15, 258, 44, 44)	andID:3];
+			selectColorToDraw5 = [self createNewColorButtonWithFrame:CGRectMake(338-15, 258, 44, 44)	andID:4];
+		
+			[self.view addSubview:selectColorToDraw1];		
+			[self.view addSubview:selectColorToDraw2];		
+			[self.view addSubview:selectColorToDraw3];
+			[self.view addSubview:selectColorToDraw4];
+			[self.view addSubview:selectColorToDraw5];
 	
-		selectShapeToDraw1 = [self createNewShapeButtonWithFrame:CGRectMake(18, 18, 44, 44)		andID:0];
-		selectShapeToDraw2 = [self createNewShapeButtonWithFrame:CGRectMake(98, 18, 44, 44)		andID:1];
-		selectShapeToDraw3 = [self createNewShapeButtonWithFrame:CGRectMake(178, 18, 44, 44)	andID:2];
-		selectShapeToDraw4 = [self createNewShapeButtonWithFrame:CGRectMake(258, 18, 44, 44)	andID:3];
-//		selectShapeToDraw5 = [self createNewShapeButtonWithFrame:CGRectMake(338, 18, 44, 44)	andID:4];		
+			selectShapeToDraw1 = [self createNewShapeButtonWithFrame:CGRectMake(18, 18, 44, 44)		andID:0];
+			selectShapeToDraw2 = [self createNewShapeButtonWithFrame:CGRectMake(98, 18, 44, 44)		andID:1];
+			selectShapeToDraw3 = [self createNewShapeButtonWithFrame:CGRectMake(178, 18, 44, 44)	andID:2];
+			selectShapeToDraw4 = [self createNewShapeButtonWithFrame:CGRectMake(258, 18, 44, 44)	andID:3];
+//			selectShapeToDraw5 = [self createNewShapeButtonWithFrame:CGRectMake(338, 18, 44, 44)	andID:4];		
 		
-		[self.view addSubview:selectShapeToDraw1];		
-		[self.view addSubview:selectShapeToDraw2];
-		[self.view addSubview:selectShapeToDraw3];
-		[self.view addSubview:selectShapeToDraw4];
-//		[self.view addSubview:selectShapeToDraw5];
+			[self.view addSubview:selectShapeToDraw1];		
+			[self.view addSubview:selectShapeToDraw2];
+			[self.view addSubview:selectShapeToDraw3];
+			[self.view addSubview:selectShapeToDraw4];
+//			[self.view addSubview:selectShapeToDraw5];
 		
 		//	EXIT
-		exitButton = [UIButton buttonWithType:UIButtonTypeCustom];	
-		[exitButton addTarget:self action:@selector(triggerDismissalProcedure) forControlEvents:UIControlEventTouchUpInside];
-		[exitButton setFrame:CGRectMake(418, 18, 44, 44)];
-		[self.view addSubview:exitButton];
+			exitButton = [UIButton buttonWithType:UIButtonTypeCustom];	
+			[exitButton addTarget:self action:@selector(triggerDismissalProcedure) forControlEvents:UIControlEventTouchUpInside];
+			[exitButton setFrame:CGRectMake(418, 18, 44, 44)];
+			[self.view addSubview:exitButton];
 		
-		exitButtonImage = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"exit_button" ofType:@"png"]]];
-		[exitButtonImage setFrame:CGRectMake(418-15, 18, 44, 44)];
-		exitButtonImage.alpha = 0.0;		
-		[exitButtonImage.layer setMasksToBounds:YES];
-		exitButtonImage.layer.cornerRadius = 24.0f;
-		[self.view addSubview:exitButtonImage];
+			exitButtonImage = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"exit_button" ofType:@"png"]]];
+			[exitButtonImage setFrame:CGRectMake(418-15, 18, 44, 44)];
+			exitButtonImage.alpha = 0.0;		
+			[exitButtonImage.layer setMasksToBounds:YES];
+			exitButtonImage.layer.cornerRadius = 24.0f;
+			[self.view addSubview:exitButtonImage];
 
 		//	Fade in UI elements
-		[self fadeViewToScreen];
+			[self fadeViewToScreen];
+		}
+		
+		else {
+			UIAlertView* connectionError = [[UIAlertView alloc] initWithTitle:@"Connection error" message:@"The server is unreachable" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+			[connectionError show];
+		}
     }
     return self;
 }

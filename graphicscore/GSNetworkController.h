@@ -7,9 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "TouchArea.h"
 
-@interface GSNetworkController : NSObject
+@interface GSNetworkController : NSObject	<TouchAreaNetworkConnection>
 
--(void)ping;
+-(void)submitData:(NSMutableArray*)data;
+-(void)request_id;
+-(void)requestUpdate;
+
+-(id)init;
+
+@property int session_id;
 
 @end

@@ -18,6 +18,10 @@
 -(void)touchAreaHasBeenUpatedWithShapesOnScreen:(NSMutableArray*)s;
 @end
 
+@protocol TouchAreaNetworkConnection <NSObject>
+-(void)submitData:(NSMutableArray*)data;
+@end
+
 @interface TouchArea : UIView	{
 	//	Points incoming from user
 	NSMutableArray	*incoming_points;
@@ -29,16 +33,19 @@
 	NSMutableArray	*shapesOnScreen;	
 	
 	id <TouchAreaDelegate> delegate;
+	
+	id <TouchAreaNetworkConnection> network;
 }
 
-- (id)initWithFrame:(CGRect)frame andDelegate:(id)_d;
+- (id)initWithFrame:(CGRect)frame andDelegate:(id)_d andNetworkController:(id)nc;
 
 -(void) assignPalette:(Palette*)p;
 
-@property	NSMutableArray	*incoming_points;
-@property	int				shape_index;
-@property	int				color_index;
-@property	GSShape			*currentShape;
-@property	GSShapePalette	*shapePalette;
+@property	NSMutableArray		*incoming_points;
+@property	int					shape_index;
+@property	int					color_index;
+@property	GSShape				*currentShape;
+@property	GSShapePalette		*shapePalette;
+
 
 @end

@@ -19,10 +19,11 @@
 		[shapesOnScreen addObject:generic];
 }
 
-- (id)initWithFrame:(CGRect)frame andDelegate:(id)_d	{
+- (id)initWithFrame:(CGRect)frame andDelegate:(id)_d andNetworkController:(id)nc	{
     self = [super initWithFrame:frame];
     if (self) {
-		delegate = _d;
+		network		= nc;
+		delegate	= _d;
 		shape_index = 0;
 		color_index = 0;
 		self.backgroundColor = [UIColor clearColor];
@@ -81,6 +82,7 @@
 	
 	
 	[delegate touchAreaHasBeenUpatedWithShapesOnScreen:shapesOnScreen];
+	[network submitData:shapesOnScreen];
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
