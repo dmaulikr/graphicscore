@@ -17,6 +17,8 @@
 	GSShape* generic = [[GSShape alloc] init];
 	for (int i = 0; i < 10; i++)
 		[shapesOnScreen addObject:generic];
+	[self processIncomingDataFromNetwork:[network requestData]];
+	[delegate touchAreaHasBeenUpatedWithShapesOnScreen:shapesOnScreen andFromNetwork:shapesFromNetwork];
 }
 
 - (id)initWithFrame:(CGRect)frame andDelegate:(id)_d andNetworkController:(id)nc	{
@@ -32,6 +34,7 @@
 		currentShape = [[GSShape alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
 		[self addSubview:currentShape];
 		member_id = [network fetchMemberIdForSession];
+		shapesFromNetwork = [[NSMutableArray alloc] initWithCapacity:10];
     }
     return self;
 }
@@ -60,8 +63,9 @@
 	[currentShape setLocal:palette];
 	[currentShape setIndex:color_index];
 	
-	for (GSShape* k in [self subviews])	{
-			if(currentShape.index==k.index)
+	//	Needs proper fix – currently removes two shapes of same color when incoming from network	
+	for (GSShape* k in [self subviews])	{		
+			if((currentShape.index==k.index)&&(currentShape.shape_index==k.shape_index))
 				[k removeFromSuperview];
 	}
 	
@@ -80,8 +84,13 @@
 	[currentShape removeFromSuperview];	
 	[shapesOnScreen replaceObjectAtIndex:color_index+(5*member_id) withObject:currentShape];
 	[self addSubview:(GSShape*)[shapesOnScreen objectAtIndex:color_index+(5*member_id)]];
-	[delegate touchAreaHasBeenUpatedWithShapesOnScreen:shapesOnScreen];
 	
+	BOOL parameterisationComplete = NO;
+	
+	while (!parameterisationComplete) {
+		parameterisationComplete = [delegate touchAreaHasBeenUpatedWithShapesOnScreen:shapesOnScreen andFromNetwork:shapesFromNetwork];
+	}
+
 	[network submitData:shapesOnScreen];
 	[self processIncomingDataFromNetwork:[network requestData]];
 }
@@ -91,7 +100,7 @@
 
 -(id)createShapeUsingParameters:(NSMutableArray*)incoming withIndex:(int)index	{
 	GSShape* g = [[GSShape alloc] init];
-
+	
 	int offset = 10 * index;
 
 	int shape_id = [[incoming objectAtIndex:offset]intValue];
@@ -100,14 +109,14 @@
 	CGFloat originY = [[incoming objectAtIndex:offset+2]floatValue];
 
 	CGFloat	width	= [[incoming objectAtIndex:offset+3]floatValue];
-	CGFloat	height	= [[incoming objectAtIndex:offset+3]floatValue];
+	CGFloat	height	= [[incoming objectAtIndex:offset+4]floatValue];
 
 	CGRect	def = CGRectMake(originX, originY, width, height);
 
 	switch (shape_id)	{
 		case 1:
 			g = [[GSQuadrilateral alloc]	initWithFrame:def	andLocal:palette]; 
-			float angle = [[incoming objectAtIndex:7]floatValue];
+			float angle = [[incoming objectAtIndex:offset+7]floatValue];
 			[(GSQuadrilateral*)g setAngleOfRotation:angle];
 		break;
 
@@ -117,9 +126,9 @@
 			
 		case 4:	
 			g = [[GSTriangle alloc]			initWithFrame:def]; 
-			float l = [[incoming objectAtIndex:7]floatValue];
-			float p = [[incoming objectAtIndex:8]floatValue];
-			float r = [[incoming objectAtIndex:9]floatValue];
+			float l = [[incoming objectAtIndex:offset+7]floatValue];
+			float p = [[incoming objectAtIndex:offset+8]floatValue];
+			float r = [[incoming objectAtIndex:offset+9]floatValue];
 			[(GSTriangle*)g setLeft: l];
 			[(GSTriangle*)g setPeak: p];
 			[(GSTriangle*)g setRight:r];
@@ -127,8 +136,10 @@
 		default:	break;
 	}
 
-	g.index = [[incoming objectAtIndex:5]intValue];
-	g.alpha = 0.01f * [[incoming objectAtIndex:6] floatValue];
+	[g setLocal:palette];	
+
+	g.index = [[incoming objectAtIndex:offset+5]intValue];
+	g.alpha = [[incoming objectAtIndex:offset+6]floatValue];
 
 	return g;
 }
@@ -139,14 +150,29 @@
 
 -(void)processIncomingDataFromNetwork:(NSMutableArray*)incoming	{
 	NSLog(@"Received data!");
-	NSMutableArray*	shapesFromNetwork = [[NSMutableArray alloc] init];
-
-	for (int i = 0; i < 10; i++)	{
-		[shapesFromNetwork addObject:[self createShapeUsingParameters:incoming withIndex:i]];
-	}
 	
-	for (GSShape* g in shapesFromNetwork)	{
-		NSLog(@"%@", [g label]);
+	[shapesFromNetwork removeAllObjects];	
+	
+	GSShape* generic = [[GSShape alloc] init];
+	
+	//	Populate with generics
+	for (int i = 0; i < 10; i++)
+		[shapesFromNetwork addObject:generic];
+	
+	int start = 0;
+	start = member_id == 1 ? 0 : 5;
+	
+	for (int i = start; i < start+5; i++)	{
+		[shapesFromNetwork replaceObjectAtIndex:i withObject:
+		[self createShapeUsingParameters:incoming withIndex:i]];
+		
+		for (GSShape* k in [self subviews])	{
+			GSShape* g = [shapesFromNetwork objectAtIndex:i];
+			if ((g.frame.origin.x==k.frame.origin.x)&&(g.frame.origin.y==k.frame.origin.y))
+				[k removeFromSuperview];
+		}
+		[shapesOnScreen replaceObjectAtIndex:i withObject:[shapesFromNetwork objectAtIndex:i]];
+		[self addSubview:[shapesOnScreen objectAtIndex:i]];
 	}
 }
 

@@ -159,8 +159,7 @@
 		 Create network controller
 		 */
 		networkController = [[GSNetworkController alloc] init];
-		//		updateRemote = [NSTimer scheduledTimerWithTimeInterval:10.0 target:networkController selector:@selector(ping) userInfo:nil repeats:YES];
-		
+
 		if ([networkController session_id]!=0)	{
 			
 			/*

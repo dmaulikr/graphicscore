@@ -223,8 +223,12 @@
 	[points_z removeAllObjects];
 }
 
--(void)touchAreaHasBeenUpatedWithShapesOnScreen:(NSMutableArray*)s	{
-	for (GSShape* g in s)	{
+-(BOOL)touchAreaHasBeenUpatedWithShapesOnScreen:(NSMutableArray*)s	andFromNetwork:(NSMutableArray*)n {
+	NSMutableArray* combo = [[NSMutableArray alloc] init];
+	[combo addObjectsFromArray:s];
+	[combo addObjectsFromArray:n];
+	
+	for (GSShape* g in combo)	{		
 		switch (g.shape_index) {
 			case 0:		break;
 			case 1:		[self processQuadrilateral:(GSQuadrilateral*)g];	numshapes++;	break;
@@ -243,6 +247,7 @@
 	[delegate updatedParameters:parameters];
 	
 	[self resetLocalVariables];	
+	return YES;
 }
 
 @end

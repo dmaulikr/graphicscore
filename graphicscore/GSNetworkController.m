@@ -33,20 +33,20 @@
 	
 	int offset = (i*10)+1;
 
-	int index_s		=	[g shape_index];
-	int originX		=	[g frame].origin.x;
-	int originY		=	[g frame].origin.y;
-	int width		=	[g frame].size.width;
-	int height		=	[g frame].size.height;
-	int index_c		=	[g index];
-	int alpha		=	(int)[g alpha]*100;
-	int	unique_1	=	0;
-	int	unique_2	=	0;
-	int	unique_3	=	0;
+	int		index_s		=	[g shape_index];
+	float	originX		=	[g frame].origin.x;
+	float	originY		=	[g frame].origin.y;
+	float	width		=	[g frame].size.width;
+	float	height		=	[g frame].size.height;
+	int		index_c		=	[g index];
+	float	alpha		=	[g alpha];
+	float	unique_1	=	0;
+	float	unique_2	=	0;
+	float	unique_3	=	0;
 
 	//	Quadrilateral
 	if (index_s==1)
-		unique_1 = [(GSQuadrilateral*)g angleOfRotation]*100.0f;
+		unique_1 = [(GSQuadrilateral*)g angleOfRotation];
 	//	Triangle
 	if (index_s==4)	{
 		unique_1 = [(GSTriangle*)g left];
@@ -54,8 +54,7 @@
 		unique_3 = [(GSTriangle*)g right];
 	}
 
-	
-	getString = [NSString stringWithFormat:@"&%i=%i&%i=%i&%i=%i&%i=%i&%i=%i&%i=%i&%i=%i&%i=%i&%i=%i&%i=%i"
+	getString = [NSString stringWithFormat:@"&%i=%i&%i=%f&%i=%f&%i=%f&%i=%f&%i=%i&%i=%f&%i=%f&%i=%f&%i=%f"
 				 ,offset, index_s, 
 				 offset+1, originX, 
 				 offset+2, originY,

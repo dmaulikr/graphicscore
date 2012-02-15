@@ -15,7 +15,7 @@
 #import "GSShapePalette.h"
 
 @protocol TouchAreaDelegate <NSObject>
--(void)touchAreaHasBeenUpatedWithShapesOnScreen:(NSMutableArray*)s;
+-(BOOL)touchAreaHasBeenUpatedWithShapesOnScreen:(NSMutableArray*)s	andFromNetwork:(NSMutableArray*)n;
 @end
 
 @protocol TouchAreaNetworkConnection <NSObject>
@@ -33,6 +33,9 @@
 	
 	//	Track shapes on screen
 	NSMutableArray	*shapesOnScreen;	
+	
+	//	Receive from the network
+	NSMutableArray*	shapesFromNetwork;
 	
 	id <TouchAreaDelegate> delegate;
 	
