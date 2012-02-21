@@ -11,6 +11,14 @@
 @implementation TouchArea
 @synthesize incoming_points, shape_index, color_index, currentShape, shapePalette, member_id;
 
+-(void)fadeElementsFromScreen	{
+	for (GSShape* g in [self subviews])	{
+		g.alpha = [g alpha]*0.999;
+		if (g.alpha<0.01)
+			[g removeFromSuperview];
+	}
+}
+
 -(void) assignPalette:(Palette*)p	{
 	palette = p;
 	shapePalette = [[GSShapePalette alloc] initWithFrame:CGRectMake(0, 0, 0, 0) andColorPalette:p];
@@ -35,6 +43,7 @@
 		[self addSubview:currentShape];
 		member_id = [network fetchMemberIdForSession];
 		shapesFromNetwork = [[NSMutableArray alloc] initWithCapacity:10];
+		[NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(fadeElementsFromScreen) userInfo:nil repeats:YES];
     }
     return self;
 }
