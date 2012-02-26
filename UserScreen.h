@@ -38,7 +38,6 @@
 	UIButton	*selectShapeToDraw2;
 	UIButton	*selectShapeToDraw3;
 	UIButton	*selectShapeToDraw4;
-	UIButton	*selectShapeToDraw5;
 	
 	//	Color palette buttons
 	UIButton	*selectColorToDraw1;

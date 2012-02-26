@@ -30,6 +30,7 @@
 	
 	//	Palette (from parent)
 	Palette	*palette;
+	Palette *remotePalette;
 	
 	//	Track shapes on screen
 	NSMutableArray	*shapesOnScreen;	
@@ -44,7 +45,9 @@
 
 - (id)initWithFrame:(CGRect)frame andDelegate:(id)_d andNetworkController:(id)nc;
 
--(void) assignPalette:(Palette*)p;
+//-(void) assignPalette:(Palette*)p;
+-(void) assignPaletteForLocal:(Palette*)p andRemote:(Palette*)r;
+
 
 @property	NSMutableArray		*incoming_points;
 @property	int					shape_index;

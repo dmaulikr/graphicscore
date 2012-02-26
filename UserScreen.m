@@ -128,9 +128,9 @@
 
 -(UIButton*)createNewShapeButtonWithFrame:(CGRect)f andID:(NSUInteger)ident	{
 	//	Need to tie these together with fade in animations
-	Palette *p = [[Palette alloc] init];
-	[p createPaletteOfBlack];
-	GSShapePalette* shapePalette = [[GSShapePalette alloc]initWithFrame:f andColorPalette:p];
+//	Palette *p = [[Palette alloc] init];
+//	[p createPaletteOfBlack];
+	GSShapePalette* shapePalette = [[GSShapePalette alloc]initWithFrame:f andColorPalette:[Palette createBlack]];
 	[self.view addSubview:[[shapePalette shapes] objectAtIndex:ident]];
 	UIButton* shapeButton = [UIButton buttonWithType:UIButtonTypeCustom];
 	[shapeButton addTarget:self action:@selector(setShape:) forControlEvents:UIControlEventTouchUpInside];
@@ -165,10 +165,17 @@
 			/*
 					Create palettes
 			 */
-			userPalette = [[Palette alloc] init];
-			[userPalette create];
-			remotePalette = [userPalette createOpposite];
-		
+			
+			if ([networkController member_id]==1)	{
+				userPalette		= [Palette	createPlayerOne];
+				remotePalette	= [Palette	createPlayerTwo];			
+			}
+			else if ([networkController member_id]==2)	{
+				remotePalette	= [Palette	createPlayerOne];
+				userPalette		= [Palette	createPlayerTwo];			
+			}
+			
+			
 			/*
 					Create audio controller
 			 */
@@ -185,7 +192,7 @@
 					Create & add touchpad
 			 */	
 			touchpad = [[TouchArea alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.height, self.view.frame.size.width) andDelegate:parameteriser andNetworkController:networkController];
-			[touchpad assignPalette:userPalette];		
+			[touchpad assignPaletteForLocal:userPalette andRemote:remotePalette];		
 			touchpad.alpha = 0.0;
 			[self.view addSubview:touchpad];
 		
@@ -209,13 +216,11 @@
 			selectShapeToDraw2 = [self createNewShapeButtonWithFrame:CGRectMake(98, 18, 44, 44)		andID:1];
 			selectShapeToDraw3 = [self createNewShapeButtonWithFrame:CGRectMake(178, 18, 44, 44)	andID:2];
 			selectShapeToDraw4 = [self createNewShapeButtonWithFrame:CGRectMake(258, 18, 44, 44)	andID:3];
-//			selectShapeToDraw5 = [self createNewShapeButtonWithFrame:CGRectMake(338, 18, 44, 44)	andID:4];		
 		
 			[self.view addSubview:selectShapeToDraw1];		
 			[self.view addSubview:selectShapeToDraw2];
 			[self.view addSubview:selectShapeToDraw3];
 			[self.view addSubview:selectShapeToDraw4];
-//			[self.view addSubview:selectShapeToDraw5];
 		
 		//	EXIT
 			exitButton = [UIButton buttonWithType:UIButtonTypeCustom];	

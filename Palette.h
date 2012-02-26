@@ -8,15 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface Palette : NSObject	{
-	NSArray* availableRangeOfColors;
-	int colorsTaken [5];
-}
-
-@property (strong) NSMutableArray *colors;
-
--(Palette*)createOpposite;
--(void)create;
--(void)createPaletteOfBlack;
-
+@interface Palette : NSObject
+@property NSArray *colors;
++(Palette*)createPlayerOne;
++(Palette*)createPlayerTwo;
++(Palette*)createBlack;
 @end

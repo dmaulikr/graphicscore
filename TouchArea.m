@@ -19,8 +19,9 @@
 	}
 }
 
--(void) assignPalette:(Palette*)p	{
+-(void) assignPaletteForLocal:(Palette*)p andRemote:(Palette*)r	{
 	palette = p;
+	remotePalette = r;
 	shapePalette = [[GSShapePalette alloc] initWithFrame:CGRectMake(0, 0, 0, 0) andColorPalette:p];
 	GSShape* generic = [[GSShape alloc] init];
 	for (int i = 0; i < 10; i++)
@@ -124,7 +125,7 @@
 
 	switch (shape_id)	{
 		case 1:
-			g = [[GSQuadrilateral alloc]	initWithFrame:def	andLocal:palette]; 
+			g = [[GSQuadrilateral alloc]	initWithFrame:def	andLocal:remotePalette]; 
 			float angle = [[incoming objectAtIndex:offset+7]floatValue];
 			[(GSQuadrilateral*)g setAngleOfRotation:angle];
 		break;
@@ -145,7 +146,7 @@
 		default:	break;
 	}
 
-	[g setLocal:palette];	
+	[g setLocal:remotePalette];	
 
 	g.index = [[incoming objectAtIndex:offset+5]intValue];
 	g.alpha = [[incoming objectAtIndex:offset+6]floatValue];

@@ -54,7 +54,6 @@
 -(void)processTriangle:(GSTriangle*)t	{
 	CGRect	r		= t.frame;
 	CGFloat	height	= r.size.height;
-//	CGFloat	width	= r.size.width;
 	CGFloat	originX = r.origin.x;
 	CGFloat	originY = r.origin.y;
 	
@@ -76,27 +75,10 @@
 
 -(void)processQuadrilateral:(GSQuadrilateral*)q	{
 	CGRect	r		= q.frame;
-//	CGFloat	height	= r.size.height;
 	CGFloat	width	= r.size.width;
 	CGFloat	originX = r.origin.x;
-//	CGFloat	originY = r.origin.y;
 
 	const float* RGB = CGColorGetComponents([(UIColor*)[[[q local] colors] objectAtIndex:[q index]] CGColor]);
-		/*								
-	NSLog(@"%@: \n"
-		  "The size is			(%f * %f)	\n"
-		  "and it starts at		(%f , %f)	\n"
-		  "It is rotated at %f radians \n"
-		  "The alpha channel is	%f \n"
-		  "and the color is %f | %f | %f \n"
-		  , q.label,
-		  width, height,
-		  originX, originY,
-		  q.angleOfRotation, 
-		  q.alpha,
-		  RGB[0], RGB[1], RGB[2]
-		  );
-		 */
 	
 	alpha_total		+=	q.alpha;
 	sc_red_total	+=	RGB[0];
@@ -140,26 +122,6 @@
 	[starPoints addObject:ten];	
 	
 	const float* RGB = CGColorGetComponents([(UIColor*)[[[s local] colors] objectAtIndex:[s index]] CGColor]);	
-	/*
-	NSLog(@"%@:	\n"
-		  "The size is		(%f * %f)	\n"
-		  "and it starts at	(%f , %f)	\n"
-		  "The alpha channel is %f\n"
-		  "There are points at: \n"
-		  "(%f, %f),\n (%f, %f),\n (%f, %f),\n (%f, %f),\n (%f, %f),\n"
-		  "(%f, %f),\n (%f, %f),\n (%f, %f),\n (%f, %f),\n (%f, %f)\n"
-		  "The color is %f | %f | %f\n"
-		  "\n\n"
-		  , s.label, width, height, 
-		  originX, originY, s.alpha,
-		  one.x, one.y, two.x, two.y,
-		  three.x, three.y, four.x, four.y,
-		  five.x, five.y, six.x, six.y,
-		  seven.x, seven.y, eight.x, eight.y,
-		  nine.x, nine.y, ten.x, ten.y,
-		  RGB[0], RGB[1], RGB[2]		  
-		  );
-	 */
 	alpha_total		+=	s.alpha;
 	sc_red_total	+=	RGB[0];
 	sc_green_total	+=	RGB[1];
@@ -173,22 +135,8 @@
 	CGFloat	height	= r.size.height;
 	CGFloat	width	= r.size.width;
 	CGFloat	originX = r.origin.x;
-//	CGFloat	originY = r.origin.y;
 
 	const float* RGB = CGColorGetComponents([(UIColor*)[[[c local] colors] objectAtIndex:[c index]] CGColor]);
-	/*
-	NSLog(@"%@: \n"
-		  "The size is			(%f * %f)	\n"
-		  "and it starts at		(%f , %f)	\n"
-		  "The alpha channel is	%f \n"
-		  "and the color is %f | %f | %f \n"
-		  , c.label,
-		  width, height,
-		  originX, originY,
-		  c.alpha,
-		  RGB[0], RGB[1], RGB[2]
-		  );
-	 */
 	alpha_total		+=	c.alpha;
 	sc_red_total	+=	RGB[0];
 	sc_green_total	+=	RGB[1];

@@ -146,7 +146,6 @@
 		7323739E149A0B7E00D86DFC /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				73DF0D1F14DEA9EA002C169C /* Parameteriser */,
 				73CB2F0214DC600000D4709E /* User Display */,
 				73CB2F0314DC600B00D4709E /* Touch Handling */,
 			);
@@ -291,6 +290,7 @@
 		738BBCDA1499602700EF9712 /* Player Screen */ = {
 			isa = PBXGroup;
 			children = (
+				73DF0D1F14DEA9EA002C169C /* Parameteriser */,
 				73CB2EF814DC46D400D4709E /* GSShapes */,
 				73B3563E14D1B45F00EC9EE3 /* Palette */,
 				7323739E149A0B7E00D86DFC /* UI */,

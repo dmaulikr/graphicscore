@@ -145,11 +145,11 @@ float*	output	()	{
 		testVol-=0.0001;
 
 	monoOut = testVol*sample.playOnce(sampleSpeed);
-	monoOut = bitcrusher.bitcrusher(monoOut, 0.5);
-	monoOut = dist.distortion(monoOut, 0.5);
-	monoOut = tremolo.tremolo(monoOut, 3);
-	monoOut = fxflanger.flange(monoOut, 0.5*(1+flangeFeedbackMod.sinewave(0.55)));
-	monoOut = delay.delay(monoOut, 0.5*(1+delayMixer.sinewave(0.5)), 0.5);
+//	monoOut = bitcrusher.bitcrusher(monoOut, 0.5);
+//	monoOut = dist.distortion(monoOut, 0.5);
+//	monoOut = fxflanger.flange(monoOut, 0.5);
+	monoOut = delay.delay(monoOut, 0.8, 0.8);
+	monoOut = tremolo.tremolo(monoOut, 0.2);
 
 	render_output	[0] = monoOut;
 	render_output	[1] = monoOut;
@@ -187,7 +187,7 @@ OSStatus renderAudioOutput  (
 
 ////////////////////////////////////////////////////////////
 
--(void)updatedParameters:(NSMutableArray*)parameters	{
+-(void)updatedParameters:(NSArray*)parameters	{
 	initLocalVariables();
 	
 	NSArray*	points_w = [NSArray arrayWithArray:[parameters objectAtIndex:0]];

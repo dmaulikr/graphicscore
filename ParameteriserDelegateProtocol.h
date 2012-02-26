@@ -11,7 +11,7 @@
 
 @protocol ParameteriserDelegate <NSObject>
 
--(void)updatedParameters:(NSMutableArray*)parameters;
+-(void)updatedParameters:(NSArray*)parameters;
 
 @end
 
