@@ -13,7 +13,6 @@
 #import "GSQuadrilateral.h"
 #import "GSStar.h"
 #import "GSCircle.h"
-#import "GSExpandingPolygon.h"
 #import "GSTriangle.h"
 
 #endif
