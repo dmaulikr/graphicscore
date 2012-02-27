@@ -43,10 +43,8 @@
 	id <TouchAreaNetworkConnection> network;
 }
 
-- (id)initWithFrame:(CGRect)frame andDelegate:(id)_d andNetworkController:(id)nc;
-
-//-(void) assignPalette:(Palette*)p;
--(void) assignPaletteForLocal:(Palette*)p andRemote:(Palette*)r;
+- (id)	initWithFrame:(CGRect)frame andDelegate:(id)_d andNetworkController:(id)nc;
+- (void)assignPaletteForLocal:(Palette*)p andRemote:(Palette*)r;
 
 
 @property	NSMutableArray		*incoming_points;

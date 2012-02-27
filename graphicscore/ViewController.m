@@ -25,7 +25,11 @@
 	
 	//	Restore the start button
 	startButton.alpha = 1.0;
-	[startButton setFrame:CGRectMake(190, 160, 100, 40)];
+	[startButton setFrame:CGRectMake(140, 160, 100, 40)];	
+	
+	//	Restore the listen button
+	[listenModeButton setFrame:CGRectMake(240, 210, 100, 40)];
+	listenModeButton.alpha = 1.0;
 
 	//	Restore the view
 	self.view.alpha = 1.0;
@@ -54,11 +58,11 @@
 	[UIView commitAnimations];
 }
 
--(void)dismissButtonFromView:(UIButton*)buttonToMove withDuration:(NSTimeInterval)duration andWait:(NSTimeInterval)wait	{
+-(void)dismissButtonFromView:(UIButton*)buttonToMove withDuration:(NSTimeInterval)duration andWait:(NSTimeInterval)wait withTargetPosition:(CGPoint)t	{
 	[UIView beginAnimations:@"Dismiss Start Button" context:nil];
 	[UIView setAnimationDelay:wait];
 	[UIView setAnimationDuration:duration];
-	buttonToMove.frame = CGRectMake(-50, 160, 100, 40);
+	buttonToMove.frame = CGRectMake(t.x, t.y, 100, 40);
 	buttonToMove.alpha = 0.0;
 	[UIView commitAnimations];
 }
@@ -71,23 +75,37 @@
 
 -(void)beginNewSession	{
 	[self fadeImage:mainScreenBackground_ImageView withDuration:1.15 andWait:0.0];
-	[self dismissButtonFromView:startButton withDuration:1.0 andWait:0.15];
+	[self dismissButtonFromView:startButton withDuration:1.0 andWait:0.15 withTargetPosition:CGPointMake(-50, 160)];
+	[self dismissButtonFromView:listenModeButton withDuration:1.0 andWait:0.15 withTargetPosition:CGPointMake(530, 220)];
 	[self performSelector:@selector(presentUserSession) withObject:Nil afterDelay:1.15];
 }
 
+//	LISTENING SESSION
+
+-(void)presentListeningSession	{
+//	ListenerUI* listenerScreen	= [[ListenerUI alloc] init];
+//	listenerScreen.delegate		= self;
+//	[self presentModalViewController:listenerScreen animated:YES];
+}
+
+-(void)beginNewListeningSession	{
+	NSLog(@"Present listening session!");
+	[self fadeImage:mainScreenBackground_ImageView withDuration:1.15 andWait:0.0];
+	[self dismissButtonFromView:startButton withDuration:1.0 andWait:0.15 withTargetPosition:CGPointMake(-50, 160)];
+	[self dismissButtonFromView:listenModeButton withDuration:1.0 andWait:0.15 withTargetPosition:CGPointMake(530, 220)];
+	[self performSelector:@selector(presentListeningSession) withObject:Nil afterDelay:1.15];
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning	{
     [super didReceiveMemoryWarning];
     // Release any cached data, images, etc that aren't in use.
 }
 
 #pragma mark - View lifecycle
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad	{
  	[super viewDidLoad];
 
 	//	Init background transparent for fade in
@@ -127,7 +145,7 @@
 	//	2:	Init the button as custom type
 	startButton = [UIButton buttonWithType:UIButtonTypeCustom];
 	//	3:	Set position on screen
-	[startButton setFrame:CGRectMake(190, 160, 100, 40)];
+	[startButton setFrame:CGRectMake(140, 160, 100, 40)];
 	
 	//	4:	Add the images for states
 	[startButton setImage:startButtonImageDefault forState:UIControlStateNormal];
@@ -136,6 +154,18 @@
 	[startButton addTarget:self action:@selector(beginNewSession) forControlEvents:UIControlEventTouchUpInside];
 	//	6:	Add the button to the main view
 	[self.view addSubview:startButton];
+	
+	
+	//	Listening mode
+	UIImage *listenButtonImageDefault = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"listen" ofType:@"png"]];
+	UIImage *listenButtonImagePressed = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"listen_pressed" ofType:@"png"]];
+
+	listenModeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+	[listenModeButton setImage:listenButtonImageDefault forState:UIControlStateNormal];
+	[listenModeButton setImage:listenButtonImagePressed forState:UIControlStateHighlighted];
+	[listenModeButton setFrame:CGRectMake(240, 210, 100, 40)];
+	[listenModeButton addTarget:self action:@selector(beginNewListeningSession) forControlEvents:UIControlEventTouchUpInside];
+	[self.view addSubview:listenModeButton];
 	
 	//	Commit animations
 	[self restoreMainScreenFromUserSession];

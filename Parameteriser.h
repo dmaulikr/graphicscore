@@ -14,24 +14,23 @@
 
 @interface Parameteriser : NSObject <TouchAreaDelegate>	{
 	id <ParameteriserDelegate> delegate;
-	float* points;
-	float* curves;
+
 	int		numpoints;
 	int		numshapes;
 	int		numcurves;
 	float	alpha_average;
 	
-	NSMutableArray*	curves_w;
-	NSMutableArray*	points_w;
+	NSMutableArray*	points_w;	
+	int		curves_w;
 	
-	NSMutableArray*	curves_x;
 	NSMutableArray*	points_x;
+	int		curves_x;	
 	
-	NSMutableArray*	curves_y;
 	NSMutableArray*	points_y;
+	int		curves_y;	
 	
-	NSMutableArray*	curves_z;
 	NSMutableArray*	points_z;
+	int		curves_z;	
 }
 
 @property	float			alpha_total;

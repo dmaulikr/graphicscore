@@ -15,10 +15,7 @@
 	self = [super init];
 	if (self)	{
 		delegate	 = _delegate;
-		points		 = new float[480];
-		memset(points, 0, sizeof(float)*480);
-		curves		 = new float[480];
-		memset(curves, 0, sizeof(float)*480);
+
 		sc_red_total = sc_green_total = sc_blue_total = 0.0f;
 		
 		numpoints		= 0;
@@ -26,19 +23,17 @@
 		numcurves		= 0;
 		alpha_average	= 0.0f;
 		
-		curves_w = [[NSMutableArray alloc] init];
 		points_w = [[NSMutableArray alloc] init];
-		curves_x = [[NSMutableArray alloc] init];
 		points_x = [[NSMutableArray alloc] init];
-		curves_y = [[NSMutableArray alloc] init];
 		points_y = [[NSMutableArray alloc] init];
-		curves_z = [[NSMutableArray alloc] init];
 		points_z = [[NSMutableArray alloc] init];
+		
+		curves_w = curves_x = curves_y = curves_z = 0;
 	}
 	return self;
 }
 
--(void)addPointsFromArrayToParameterData:(NSMutableArray*)a	{
+-(void)addPointsFromArrayToParameterData:(NSArray*)a	{
 	for (NSPoint* p in a)	{
 		if (p.y<=80.0f)
 			[points_w addObject:p];
@@ -68,7 +63,7 @@
 	sc_green_total	+=	RGB[1];
 	sc_blue_total	+=	RGB[2];
 
-	NSMutableArray*	trianglePoints = [[NSMutableArray alloc] initWithObjects:left, top, right, nil];
+	NSArray*	trianglePoints = [[NSArray alloc] initWithObjects:left, top, right, nil];
 	
 	[self addPointsFromArrayToParameterData:trianglePoints];
 }
@@ -76,7 +71,9 @@
 -(void)processQuadrilateral:(GSQuadrilateral*)q	{
 	CGRect	r		= q.frame;
 	CGFloat	width	= r.size.width;
+	CGFloat height	= r.size.height;
 	CGFloat	originX = r.origin.x;
+	CGFloat	originY = r.origin.y;	
 
 	const float* RGB = CGColorGetComponents([(UIColor*)[[[q local] colors] objectAtIndex:[q index]] CGColor]);
 	
@@ -85,8 +82,16 @@
 	sc_green_total	+=	RGB[1];
 	sc_blue_total	+=	RGB[2];
 	
-	points	[(int)originX]				= 1.0f;
-	points	[(int)originX+(int)width]	= 1.0f;	
+	numpoints+=4;
+	
+	NSPoint* point_1 = [[NSPoint alloc] initWithCGPoint:CGPointMake(originX,		originY)];
+	NSPoint* point_2 = [[NSPoint alloc] initWithCGPoint:CGPointMake(originX,		originY+height)];
+	NSPoint* point_3 = [[NSPoint alloc] initWithCGPoint:CGPointMake(originX+width,	originY)];
+	NSPoint* point_4 = [[NSPoint alloc] initWithCGPoint:CGPointMake(originX+width,	originY+height)];
+	
+	NSArray* quadPoints = [[NSArray alloc] initWithObjects:point_1, point_2, point_3, point_4, nil];
+	
+	[self addPointsFromArrayToParameterData:quadPoints];
 }
 
 
@@ -135,6 +140,7 @@
 	CGFloat	height	= r.size.height;
 	CGFloat	width	= r.size.width;
 	CGFloat	originX = r.origin.x;
+	CGFloat	originY = r.origin.y;
 
 	const float* RGB = CGColorGetComponents([(UIColor*)[[[c local] colors] objectAtIndex:[c index]] CGColor]);
 	alpha_total		+=	c.alpha;
@@ -142,28 +148,32 @@
 	sc_green_total	+=	RGB[1];
 	sc_blue_total	+=	RGB[2];
 	
-	int		j	= (int)width  * 0.5;
-	int		k	= (int)height * 0.5;
-	float	inc	= 2.0f / (float)j;
-	
-	for (int i = 0; i < k; i++)	{
-		curves	[i+(int)originX] = i * inc;
-		curves	[((int)width+(int)originX)-i] = i * inc;
-		numcurves++;
+	for (int i = originY; i < originY+height; i++){
+		//	Calculate curve occurrence in each frequency band
+		if (i<=80)
+			curves_w++;
+		if (i<=160&&i>80)
+			curves_x++;
+		if (i<=240&&i>160)
+			curves_y++;
+		if (i>240)
+			curves_z++;
 	}
+	
+	for (int i = originX; i < originX+width; i++)
+		numcurves++;
 }
 
 -(void)resetLocalVariables	{
 	//	Reset values
 	sc_red_total = sc_green_total = sc_blue_total = alpha_total = 0.0f;
-	for (int i = 0; i < 480; i++)	{
-		points[i] = 0.0f;
-		curves[i] =	0.0f;
-	}
+	
 	numpoints		= 0;
 	numshapes		= 0;
 	numcurves		= 0;
 	alpha_average	= 0.0f;
+	
+	curves_w = curves_x = curves_y = curves_z = 0;	
 	
 	[points_w removeAllObjects];
 	[points_x removeAllObjects];
@@ -178,7 +188,7 @@
 	
 	for (GSShape* g in combo)	{		
 		switch (g.shape_index) {
-			case 0:		break;
+			case 0:		break;	//GSShape generic id
 			case 1:		[self processQuadrilateral:(GSQuadrilateral*)g];	numshapes++;	break;
 			case 2:		[self processCircle:(GSCircle*)g];					numshapes++;	break;
 			case 3:		[self processStar:(GSStar*)g];						numshapes++;	break;
@@ -186,12 +196,39 @@
 			default:	break;
 		}
 	}
+
+	//	Prevent /0 error
+	if (numshapes!=0)
+		alpha_average = alpha_total/numshapes;
 	
-	NSMutableArray* parameters = [[NSMutableArray alloc] init];
-	[parameters addObject:points_w];
-	[parameters addObject:points_x];
-	[parameters addObject:points_y];
-	[parameters addObject:points_z];
+	//	Overall
+	NSNumber	*NSNumShapes	= [[NSNumber alloc] initWithInt:numshapes];
+	NSNumber	*NSNumCurves	= [[NSNumber alloc] initWithInt:numcurves];
+	
+	//	Alpha stats
+	NSNumber	*NSAlphaAverage = [[NSNumber alloc] initWithFloat:alpha_average];
+	NSNumber	*NSAlphaTotal	= [[NSNumber alloc] initWithFloat:alpha_total];
+	
+	//	Segmented curves
+	NSNumber	*NSNumCurves_w	= [[NSNumber alloc] initWithInt:curves_w];
+	NSNumber	*NSNumCurves_x	= [[NSNumber alloc] initWithInt:curves_x];
+	NSNumber	*NSNumCurves_y	= [[NSNumber alloc] initWithInt:curves_y];
+	NSNumber	*NSNumCurves_z	= [[NSNumber alloc] initWithInt:curves_z];
+	
+	
+	//	Colors
+	NSNumber	*NSTotalR		= [[NSNumber alloc] initWithFloat:sc_red_total];
+	NSNumber	*NSTotalG		= [[NSNumber alloc] initWithFloat:sc_red_total];
+	NSNumber	*NSTotalB		= [[NSNumber alloc] initWithFloat:sc_red_total];	
+	
+	NSArray		*parameters	 = [NSArray arrayWithObjects: 
+								points_w, points_x, points_y, points_z,
+								NSNumCurves, NSNumShapes,
+								NSAlphaAverage, NSAlphaTotal,
+								NSNumCurves_w, NSNumCurves_x, NSNumCurves_y, NSNumCurves_z,
+								NSTotalR, NSTotalG, NSTotalB,
+								nil];
+	
 	[delegate updatedParameters:parameters];
 	
 	[self resetLocalVariables];	

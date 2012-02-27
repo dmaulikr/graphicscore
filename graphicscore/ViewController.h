@@ -17,6 +17,7 @@
 	UIImage			*logo_Image;
 	
 	UIButton		*startButton;
+	UIButton		*listenModeButton;
 }
 
 @end

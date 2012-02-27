@@ -165,7 +165,6 @@
 			/*
 					Create palettes
 			 */
-			
 			if ([networkController member_id]==1)	{
 				userPalette		= [Palette	createPlayerOne];
 				remotePalette	= [Palette	createPlayerTwo];			
