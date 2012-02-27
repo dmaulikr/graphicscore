@@ -106,4 +106,19 @@
 	return member_id-1;
 }
 
+-(BOOL)pingServerForConnection	{
+	BOOL isConnected = NO;
+	
+	NSLog(@"Pinged");
+	NSURL*		ping_request	= [NSURL URLWithString:@"http://109.123.110.188/app/ping.php"];	
+	NSArray*	response		= [NSArray arrayWithContentsOfURL:ping_request];
+
+	isConnected = [response count]>0;
+	
+	if (isConnected)
+		NSLog(@"Connected");
+	
+	return isConnected;
+}
+
 @end

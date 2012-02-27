@@ -22,6 +22,7 @@
 -(int)fetchMemberIdForSession;
 -(void)submitData:(NSMutableArray*)data;
 -(NSMutableArray*)requestData;
+-(BOOL)pingServerForConnection;
 @end
 
 @interface TouchArea : UIView	{
@@ -41,6 +42,8 @@
 	id <TouchAreaDelegate> delegate;
 	
 	id <TouchAreaNetworkConnection> network;
+	
+	int	pollCountdown;
 }
 
 - (id)	initWithFrame:(CGRect)frame andDelegate:(id)_d andNetworkController:(id)nc;

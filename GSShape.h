@@ -15,12 +15,14 @@
 	Palette		*local;
 	NSString	*label;
 	int			shape_index;
+	int			origin;
 }	
 
 @property int index;
 @property Palette	*local;
 @property NSString	*label;	
 @property int shape_index;
+@property int origin;
 
 -(void) reset;
 

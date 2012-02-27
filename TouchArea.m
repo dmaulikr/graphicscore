@@ -11,6 +11,31 @@
 @implementation TouchArea
 @synthesize incoming_points, shape_index, color_index, currentShape, shapePalette, member_id;
 
+-(void)callForSync	{
+	[self processIncomingDataFromNetwork:[network requestData]];
+}
+
+-(void)callForPing	{
+	if ([network pingServerForConnection])
+		NSLog(@"Connection confirmed");
+	else
+		NSLog(@"Connection broken");
+}
+
+-(void)pollServerForUpdates	{
+	pollCountdown++;
+	
+	if (pollCountdown>=2)
+		[self performSelectorInBackground:@selector(callForSync) withObject:nil];
+	pollCountdown = 0;
+	
+	if (pollCountdown==0)
+		[self performSelectorInBackground:@selector(callForPing) withObject:nil];
+}
+
+////////////////////////////////////
+////////////////////////////////////
+
 -(void)fadeElementsFromScreen	{
 	for (GSShape* g in [self subviews])	{
 		g.alpha = [g alpha]*0.999;
@@ -24,6 +49,7 @@
 	remotePalette = r;
 	shapePalette = [[GSShapePalette alloc] initWithFrame:CGRectMake(0, 0, 0, 0) andColorPalette:p];
 	GSShape* generic = [[GSShape alloc] init];
+	[generic setOrigin:0];
 	for (int i = 0; i < 10; i++)
 		[shapesOnScreen addObject:generic];
 	[self processIncomingDataFromNetwork:[network requestData]];
@@ -45,16 +71,16 @@
 		member_id = [network fetchMemberIdForSession];
 		shapesFromNetwork = [[NSMutableArray alloc] initWithCapacity:10];
 		[NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(fadeElementsFromScreen) userInfo:nil repeats:YES];
+		[NSTimer scheduledTimerWithTimeInterval:0.4 target:self selector:@selector(pollServerForUpdates) userInfo:nil repeats:YES];
     }
     return self;
 }
-
 
 -(void)processTouches:(NSSet*)touches	{
 	UITouch *touch = [touches anyObject];
 	if (touch.view==self)	{
 		NSPoint *pp = [[NSPoint alloc] initWithCGPoint:[touch locationInView:self]];
-		[incoming_points addObject:pp];		
+		[incoming_points addObject:pp];
 	}
 }
 
@@ -70,14 +96,14 @@
 		default:	break;
 	}
 	
+	[currentShape setOrigin:0];
+	
 	[currentShape setLocal:palette];
 	[currentShape setIndex:color_index];
 	
-	//	Needs proper fix – currently removes two shapes of same color when incoming from network	
-	for (GSShape* k in [self subviews])	{		
-			if((currentShape.index==k.index)&&(currentShape.shape_index==k.shape_index))
+	for (GSShape* k in [self subviews])
+			if((currentShape.index==k.index)&&(currentShape.origin==k.origin))//&&(currentShape.shape_index==k.shape_index))
 				[k removeFromSuperview];
-	}
 	
 	[self addSubview:currentShape];
 	[self processTouches:touches];
@@ -148,6 +174,8 @@
 
 	[g setLocal:remotePalette];	
 
+	[g setOrigin:1];//	REMOTE
+	
 	g.index = [[incoming objectAtIndex:offset+5]intValue];
 	g.alpha = [[incoming objectAtIndex:offset+6]floatValue];
 
