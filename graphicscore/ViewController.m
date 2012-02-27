@@ -81,11 +81,11 @@
 }
 
 //	LISTENING SESSION
-
 -(void)presentListeningSession	{
-//	ListenerUI* listenerScreen	= [[ListenerUI alloc] init];
-//	listenerScreen.delegate		= self;
-//	[self presentModalViewController:listenerScreen animated:YES];
+	NSLog(@"Loading...");
+	ListenerUI* listenerScreen	= [[ListenerUI alloc] initWithDelegate:self];
+	[self presentModalViewController:listenerScreen animated:NO];
+	NSLog(@"...Done");
 }
 
 -(void)beginNewListeningSession	{

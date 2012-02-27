@@ -9,7 +9,7 @@
 #import "TouchArea.h"
 
 @implementation TouchArea
-@synthesize incoming_points, shape_index, color_index, currentShape, shapePalette, member_id;
+@synthesize incoming_points, shape_index, color_index, currentShape, shapePalette, member_id, pingTimer;
 
 -(void)callForSync	{
 	[self processIncomingDataFromNetwork:[network requestData]];
@@ -24,7 +24,6 @@
 
 -(void)pollServerForUpdates	{
 	pollCountdown++;
-	
 	if (pollCountdown>=2)
 		[self performSelectorInBackground:@selector(callForSync) withObject:nil];
 	pollCountdown = 0;
@@ -71,7 +70,7 @@
 		member_id = [network fetchMemberIdForSession];
 		shapesFromNetwork = [[NSMutableArray alloc] initWithCapacity:10];
 		[NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(fadeElementsFromScreen) userInfo:nil repeats:YES];
-		[NSTimer scheduledTimerWithTimeInterval:0.4 target:self selector:@selector(pollServerForUpdates) userInfo:nil repeats:YES];
+		pingTimer = [NSTimer scheduledTimerWithTimeInterval:0.4 target:self selector:@selector(pollServerForUpdates) userInfo:nil repeats:YES];
     }
     return self;
 }

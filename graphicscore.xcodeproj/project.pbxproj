@@ -21,6 +21,7 @@
 		734CBFF314D7F3A200546EAC /* GSTriangle.m in Sources */ = {isa = PBXBuildFile; fileRef = 734CBFF214D7F3A200546EAC /* GSTriangle.m */; };
 		735D0CF314D1C56E000E83FA /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 735D0CF114D1C56E000E83FA /* Icon.png */; };
 		735D0CF414D1C56E000E83FA /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 735D0CF214D1C56E000E83FA /* Icon@2x.png */; };
+		7360561014FC4671007413CF /* ListenerUI.m in Sources */ = {isa = PBXBuildFile; fileRef = 7360560F14FC4671007413CF /* ListenerUI.m */; };
 		736BA7D714D81E0900AF88D9 /* GSStar.m in Sources */ = {isa = PBXBuildFile; fileRef = 736BA7D614D81E0900AF88D9 /* GSStar.m */; };
 		7370DE6614E4273F00583DBA /* GSNetworkController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7370DE6514E4273F00583DBA /* GSNetworkController.m */; };
 		738701C114D7596400F196AF /* GSCircle.m in Sources */ = {isa = PBXBuildFile; fileRef = 738701C014D7596400F196AF /* GSCircle.m */; };
@@ -71,6 +72,8 @@
 		734CBFF214D7F3A200546EAC /* GSTriangle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSTriangle.m; sourceTree = "<group>"; };
 		735D0CF114D1C56E000E83FA /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		735D0CF214D1C56E000E83FA /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
+		7360560E14FC4671007413CF /* ListenerUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListenerUI.h; sourceTree = "<group>"; };
+		7360560F14FC4671007413CF /* ListenerUI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListenerUI.m; sourceTree = "<group>"; };
 		736BA7D514D81E0900AF88D9 /* GSStar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSStar.h; sourceTree = "<group>"; };
 		736BA7D614D81E0900AF88D9 /* GSStar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSStar.m; sourceTree = "<group>"; };
 		7370DE6414E4273F00583DBA /* GSNetworkController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSNetworkController.h; sourceTree = "<group>"; };
@@ -362,6 +365,8 @@
 		73CEF82B14FBBFA700712A58 /* Listen Display */ = {
 			isa = PBXGroup;
 			children = (
+				7360560E14FC4671007413CF /* ListenerUI.h */,
+				7360560F14FC4671007413CF /* ListenerUI.m */,
 			);
 			name = "Listen Display";
 			sourceTree = "<group>";
@@ -492,6 +497,7 @@
 				73DF0D2214DEAA29002C169C /* Parameteriser.mm in Sources */,
 				73E95E3C14E0007A009360AD /* maximilian.cpp in Sources */,
 				7370DE6614E4273F00583DBA /* GSNetworkController.m in Sources */,
+				7360561014FC4671007413CF /* ListenerUI.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

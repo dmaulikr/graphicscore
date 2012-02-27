@@ -100,7 +100,10 @@
 	
 	NSLog(@"DISMISSED");
 	
-	//	2:	Dismiss and destroy view after animations completed
+	//	2:	Invalidate ping timer
+	[[touchpad pingTimer] invalidate];
+	
+	//	3:	Dismiss and destroy view after animations completed
 	[self performSelector:@selector(dismissViewAfterAnimationCompletion) withObject:Nil afterDelay:1.15];
 }
 

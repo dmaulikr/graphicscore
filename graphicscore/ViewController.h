@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "UserScreen.h"
+#import "ListenerUI.h"
 
-@interface ViewController : UIViewController <UserScreenDelegate>	{
+@interface ViewController : UIViewController <UserScreenDelegate, ListenerUIDelegate>	{
 	UIImageView		*mainScreenBackground_ImageView;
 	UIImage			*mainScreenBackground_Image;
 	

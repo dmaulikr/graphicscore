@@ -43,7 +43,10 @@
 	
 	id <TouchAreaNetworkConnection> network;
 	
+	
+	//	Ping
 	int	pollCountdown;
+	NSTimer* pingTimer;
 }
 
 - (id)	initWithFrame:(CGRect)frame andDelegate:(id)_d andNetworkController:(id)nc;
@@ -55,6 +58,8 @@
 @property	int					color_index;
 @property	GSShape				*currentShape;
 @property	GSShapePalette		*shapePalette;
+
+@property	NSTimer*			pingTimer;
 
 @property	int					member_id;
 
