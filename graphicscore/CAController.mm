@@ -62,6 +62,8 @@ inline void initLocalVariables	(void)	{
 
 //	MAXI SETUP
 
+double w_out, x_out, y_out, z_out;
+
 inline void maxiSetup		(void)	{
 	initLocalVariables();
 	
@@ -74,6 +76,8 @@ inline void maxiSetup		(void)	{
 	metroSpeed	= 2.0f;
 	metroOut	= 0.0f;
 	metroCount	= 0;
+	
+	w_out = x_out = y_out = z_out = 0.0f;
 }
 
 ////////////////////////////////////////////////////////////
@@ -119,21 +123,25 @@ inline void readTriggers	(int i)	{
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 
-double monoOut = 0.0f;
+FXDistortion	dist_1,			dist_2,			dist_3,			dist_4;
+FXFlanger		fxflanger_1,	fxflanger_2,	fxflanger_3,	fxflanger_4;
+FXTremolo		tremolo_1,		tremolo_2,		tremolo_3,		tremolo_4;
+FXDelay			delay_1,		delay_2,		delay_3,		delay_4;
+FXFilter		filter_1,		filter_2,		filter_3,		filter_4;
+FXBitcrusher	bitcrusher_1,	bitcrusher_2,	bitcrusher_3,	bitcrusher_4;
 
-maxiOsc delayMixer;
-maxiOsc flangeFeedbackMod;
-
-FXDistortion	dist;
-FXFlanger		fxflanger;
-FXTremolo		tremolo;
-FXDelay			delay;
-FXFilter		filter1;
-FXBitcrusher	bitcrusher;
+//NSArray		*parameters	 = [NSArray arrayWithObjects: 
+//							points_w, points_x, points_y, points_z,		// trigger arrays
+//							NSNumCurves, NSNumShapes,					
+//							NSAlphaAverage, NSAlphaTotal,
+//							NSNumCurves_w, NSNumCurves_x, NSNumCurves_y, NSNumCurves_z,
+//							NSTotalR, NSTotalG, NSTotalB,
+//							nil];
 
 #pragma mark USER RENDERING METHOD
 float*	output	()	{
-    render_output[0] = render_output[1] = monoOut = 0.0f;
+    render_output[0] = render_output[1] = w_out = x_out = y_out = z_out = 0.0f;
+	
 	if ((int)metro.phasor(metroSpeed)>=1)	{
 		metroCount++;
 		if (metroCount>15)
@@ -144,15 +152,10 @@ float*	output	()	{
 	if (testVol>0.0f)
 		testVol-=0.0001;
 
-	monoOut = testVol*sample.playOnce(sampleSpeed);
-//	monoOut = bitcrusher.bitcrusher(monoOut, 0.5);
-//	monoOut = dist.distortion(monoOut, 0.5);
-//	monoOut = fxflanger.flange(monoOut, 0.5);
-	monoOut = delay.delay(monoOut, 0.8, 0.8);
-	monoOut = tremolo.tremolo(monoOut, 0.2);
+	w_out	= testVol*sample.playOnce(sampleSpeed);
 
-	render_output	[0] = monoOut;
-	render_output	[1] = monoOut;
+	render_output	[0] = w_out + x_out + y_out + z_out;
+	render_output	[1] = w_out + x_out + y_out + z_out;
 	
     return render_output;
 }
@@ -218,6 +221,8 @@ OSStatus renderAudioOutput  (
 		z_pitches[(int)p.x] = (int)floorf((320.0f-p.y)/8);
 		z_triggers[(int)p.x] = 1.0f;
 	}
+	
+	
 }
 
 

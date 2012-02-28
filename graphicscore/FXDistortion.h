@@ -12,11 +12,14 @@
 
 class FXDistortion {
 public:
-	double	distortion		(double input, double amount)	{
+	double	dry;
+	
+	double	distortion		(double input, double amount, double mix)	{
+		dry = input;
 		input*=floor(24*amount);
 		input = input > 1 ? 1	: input;
 		input = input < -1 ? -1 : input;
-		return input * 0.6;	
+		return (input*mix)+(dry*(1-mix));
 	}
 };
 

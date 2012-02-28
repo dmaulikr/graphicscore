@@ -12,8 +12,8 @@
 class FXTremolo {
 	maxiOsc am;	
 	public:
-		double	tremolo		(double input, double amount)	{
-			return input*(0.5*(1+(am.sinewave(amount*8))));
+		double	tremolo		(double input, double amount, double mix)	{
+			return ((input*(0.5*(1+(am.sinewave(amount*8))))*mix)+(input*(1-mix)));
 		}
 };
 
