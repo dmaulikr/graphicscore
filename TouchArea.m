@@ -23,13 +23,13 @@
 }
 
 -(void)pollServerForUpdates	{
-	pollCountdown++;
-	if (pollCountdown>=2)
-		[self performSelectorInBackground:@selector(callForSync) withObject:nil];
-	pollCountdown = 0;
-	
 	if (pollCountdown==0)
 		[self performSelectorInBackground:@selector(callForPing) withObject:nil];
+	
+	pollCountdown++;
+	
+	if (pollCountdown>=2)
+		[self performSelectorInBackground:@selector(callForSync) withObject:nil];
 }
 
 ////////////////////////////////////
@@ -69,8 +69,10 @@
 		[self addSubview:currentShape];
 		member_id = [network fetchMemberIdForSession];
 		shapesFromNetwork = [[NSMutableArray alloc] initWithCapacity:10];
-		[NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(fadeElementsFromScreen) userInfo:nil repeats:YES];
-		pingTimer = [NSTimer scheduledTimerWithTimeInterval:1.2 target:self selector:@selector(pollServerForUpdates) userInfo:nil repeats:YES];
+//		[NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(fadeElementsFromScreen) userInfo:nil repeats:YES];
+		pingTimer = [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(pollServerForUpdates) userInfo:nil repeats:YES];
+		
+		refreshLock = NO;
     }
     return self;
 }
@@ -198,18 +200,21 @@
 	
 	int start = 0;
 	start = member_id == 1 ? 0 : 5;
-	
-	for (int i = start; i < start+5; i++)	{
-		[shapesFromNetwork replaceObjectAtIndex:i withObject:
-		[self createShapeUsingParameters:incoming withIndex:i]];
-		
-		for (GSShape* k in [self subviews])	{
-			GSShape* g = [shapesFromNetwork objectAtIndex:i];
-			if ((g.frame.origin.x==k.frame.origin.x)&&(g.frame.origin.y==k.frame.origin.y))
-				[k removeFromSuperview];
+	if (!refreshLock)	{
+		refreshLock = YES;
+		for (int i = start; i < start+5; i++)	{
+			[shapesFromNetwork replaceObjectAtIndex:i withObject:
+			 [self createShapeUsingParameters:incoming withIndex:i]];
+			
+			for (GSShape* k in [self subviews])	{
+				GSShape* g = [shapesFromNetwork objectAtIndex:i];
+				if ((g.frame.origin.x==k.frame.origin.x)&&(g.frame.origin.y==k.frame.origin.y))
+					[k removeFromSuperview];
+			}
+			[shapesOnScreen replaceObjectAtIndex:i withObject:[shapesFromNetwork objectAtIndex:i]];
+			[self addSubview:[shapesOnScreen objectAtIndex:i]];
 		}
-		[shapesOnScreen replaceObjectAtIndex:i withObject:[shapesFromNetwork objectAtIndex:i]];
-		[self addSubview:[shapesOnScreen objectAtIndex:i]];
+		refreshLock = NO;
 	}
 }
 

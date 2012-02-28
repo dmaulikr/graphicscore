@@ -50,15 +50,17 @@
 		delegate	= _d;
 		network		= nc;
 		
-		[NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(fadeElementsFromScreen) userInfo:nil repeats:YES];
+//		[NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(fadeElementsFromScreen) userInfo:nil repeats:YES];
 		
 		//	Ping
 		pollCountdown = 0;
-		pingTimer = [NSTimer scheduledTimerWithTimeInterval:1.2 target:self selector:@selector(pollServerForUpdates) userInfo:nil repeats:YES];
+		pingTimer = [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(pollServerForUpdates) userInfo:nil repeats:YES];
 		NSLog(@"RemoteMonitor loaded");
 		
 		palette			= [Palette createPlayerOne];
 		remotePalette	= [Palette createPlayerTwo];
+		
+		refreshLock = NO;
     }
     return self;
 }
@@ -123,27 +125,38 @@
 -(void)processIncomingDataFromNetwork:(NSMutableArray*)incoming	{
 	NSLog(@"Received data!");
 	
+	if (!refreshLock)	{
+		refreshLock = YES;
+		for (GSShape* g in [self subviews])	{
+			if (g.shape_index)	{
+				[g removeFromSuperview];
+			}
+		}
+		refreshLock = NO;
+	}
+	
 	for (int i = 0; i < 5; i++)	{
 		GSShape* k = [self createShapeUsingParameters:incoming withIndex:i andOrigin:0];
-		
-		for (GSShape* g in [self subviews])
-			if ([g.label isEqualToString:k.label] && g.index==k.index) {
-				[k removeFromSuperview];
-			}
 		[self addSubview:k];
 	}
 	for (int i = 5; i < 10; i++)	{
 		GSShape* k = [self createShapeUsingParameters:incoming withIndex:i andOrigin:1];
-		
-		for (GSShape* g in [self subviews])
-			if ([g.label isEqualToString:k.label] && g.index==k.index) {
-				[k removeFromSuperview];
-			}
-		
 		[self addSubview:k];
 	}
 
-	NSLog(@"\n\n\n");
+	NSMutableArray* shapesOnScreen	= [[NSMutableArray alloc] init];	
+	NSMutableArray*	dummy			= [[NSMutableArray alloc] init];
+	
+	if (!refreshLock)	{
+		refreshLock = YES;
+		for (GSShape* g in [self subviews])	{
+			if (![g.label isEqualToString:@"Generic"])
+				[shapesOnScreen addObject:g];
+		}
+		refreshLock = NO;
+	}
+	
+	[delegate touchAreaHasBeenUpatedWithShapesOnScreen:shapesOnScreen andFromNetwork:dummy];
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////

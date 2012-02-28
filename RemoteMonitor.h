@@ -38,6 +38,8 @@
 	//	Ping
 	int			pollCountdown;
 	NSTimer*	pingTimer;
+	
+	BOOL		refreshLock;
 }
 
 - (id)	initWithFrame:(CGRect)frame andDelegate:(id)_d andNetworkController:(id)nc;

@@ -106,13 +106,6 @@
 		networkController = [[GSNetworkController alloc] initForListener];
 		
 		if ([networkController session_id]!=0)	{
-			
-			/*
-			 Create palettes
-			 */
-//			userPalette		= [Palette	createPlayerOne];
-//			remotePalette	= [Palette	createPlayerTwo];
-			
 			/*
 			 Create audio controller
 			 */
@@ -129,7 +122,7 @@
 			/*
 			 Create & add remoteMonitor
 			 */
-			remote = [[RemoteMonitor alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) andDelegate:self andNetworkController:networkController];
+			remote = [[RemoteMonitor alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) andDelegate:parameteriser andNetworkController:networkController];
 			remote.alpha = .0;
 			[self.view addSubview:remote];
 			
