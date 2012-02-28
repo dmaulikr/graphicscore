@@ -83,7 +83,8 @@
 //	LISTENING SESSION
 -(void)presentListeningSession	{
 	NSLog(@"Loading...");
-	ListenerUI* listenerScreen	= [[ListenerUI alloc] initWithDelegate:self];
+	ListenerUI* listenerScreen	= [[ListenerUI alloc] init];
+	[listenerScreen setDelegate:self];
 	[self presentModalViewController:listenerScreen animated:NO];
 	NSLog(@"...Done");
 }

@@ -55,8 +55,6 @@
 @property UIImageView *exitButtonImage;
 @property Parameteriser	*parameteriser;
 @property CAController* audioController;
-
-@property NSTimer *updateRemote;
 @property GSNetworkController *networkController;
 
 @end

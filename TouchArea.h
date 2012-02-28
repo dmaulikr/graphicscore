@@ -43,7 +43,6 @@
 	
 	id <TouchAreaNetworkConnection> network;
 	
-	
 	//	Ping
 	int	pollCountdown;
 	NSTimer* pingTimer;

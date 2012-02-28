@@ -70,7 +70,7 @@
 		member_id = [network fetchMemberIdForSession];
 		shapesFromNetwork = [[NSMutableArray alloc] initWithCapacity:10];
 		[NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(fadeElementsFromScreen) userInfo:nil repeats:YES];
-		pingTimer = [NSTimer scheduledTimerWithTimeInterval:0.4 target:self selector:@selector(pollServerForUpdates) userInfo:nil repeats:YES];
+		pingTimer = [NSTimer scheduledTimerWithTimeInterval:1.2 target:self selector:@selector(pollServerForUpdates) userInfo:nil repeats:YES];
     }
     return self;
 }

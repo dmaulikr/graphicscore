@@ -12,12 +12,40 @@
 -(void)restoreMainScreenFromUserSession;
 @end
 
+#import <UIKit/UIKit.h>
+#import "TouchArea.h"
+#import "Palette.h"
+#import "GSShapePalette.h"
+#import "CAController.h"
+#import "Parameteriser.h"
+#import "GSNetworkController.h"
+#import "RemoteMonitor.h"
+
 @interface ListenerUI : UIViewController	{
+	//	Delegate
 	id <ListenerUIDelegate> delegate;
+	
+	//	Backround image setup
+	UIImageView	*userBackground_imageView;
+	UIImage		*userBackground_image;
+	
+	//	Palettes
+	Palette			*userPalette;
+	Palette			*remotePalette;
+	
+	//	Exit
+	UIButton	*exitButton;
+	UIImageView	*exitButtonImage;
+	
+	RemoteMonitor* remote;
 }
 
--(id)initWithDelegate:(id)_d;
+@property (strong) id delegate;
+@property UIImageView *exitButtonImage;
+@property Parameteriser	*parameteriser;
+@property CAController* audioController;
 
-@property id <ListenerUIDelegate> delegate;
+@property NSTimer *updateRemote;
+@property GSNetworkController *networkController;
 
 @end

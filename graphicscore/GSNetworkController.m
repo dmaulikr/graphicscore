@@ -21,6 +21,15 @@
 	return self;
 }
 
+-(id)initForListener	{
+	self = [super init];
+	if (self)	{
+		[self requestListenID];
+		NSLog(@"Listen ID: %i", session_id);
+	}
+	return self;
+}
+
 -(NSMutableArray*)requestData	{	
 	NSURL* serverAddress = [NSURL URLWithString:[NSString stringWithFormat:@"http://109.123.110.188/app/request_data.php?id=%i", session_id]];
 	NSLog(@"Request from: %@", serverAddress);
@@ -107,18 +116,16 @@
 }
 
 -(BOOL)pingServerForConnection	{
-	BOOL isConnected = NO;
-	
-	NSLog(@"Pinged");
 	NSURL*		ping_request	= [NSURL URLWithString:@"http://109.123.110.188/app/ping.php"];	
-	NSArray*	response		= [NSArray arrayWithContentsOfURL:ping_request];
+	return [[NSArray arrayWithContentsOfURL:ping_request] count]>0;
+}
 
-	isConnected = [response count]>0;
-	
-	if (isConnected)
-		NSLog(@"Connected");
-	
-	return isConnected;
+-(void)requestListenID	{
+	NSURL*		listen_id_request	= [NSURL URLWithString:@"http://109.123.110.188/app/request_listen_id.php"];	
+	NSArray*	response		= [NSArray arrayWithContentsOfURL:listen_id_request];
+	session_id	= 0;
+	if ([response count]>0)
+		session_id = [[response objectAtIndex:0]intValue];
 }
 
 @end

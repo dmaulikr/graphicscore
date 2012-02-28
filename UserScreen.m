@@ -9,7 +9,7 @@
 #import "UserScreen.h"
 
 @implementation UserScreen
-@synthesize delegate, exitButtonImage, audioController, parameteriser, networkController, updateRemote;
+@synthesize delegate, exitButtonImage, audioController, parameteriser, networkController;
 
 //	Alert view delegate methods
 
@@ -131,8 +131,6 @@
 
 -(UIButton*)createNewShapeButtonWithFrame:(CGRect)f andID:(NSUInteger)ident	{
 	//	Need to tie these together with fade in animations
-//	Palette *p = [[Palette alloc] init];
-//	[p createPaletteOfBlack];
 	GSShapePalette* shapePalette = [[GSShapePalette alloc]initWithFrame:f andColorPalette:[Palette createBlack]];
 	[self.view addSubview:[[shapePalette shapes] objectAtIndex:ident]];
 	UIButton* shapeButton = [UIButton buttonWithType:UIButtonTypeCustom];

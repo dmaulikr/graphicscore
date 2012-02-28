@@ -11,8 +11,9 @@
 #import "CAController.h"
 #import "TouchArea.h"
 #import "ParameteriserDelegateProtocol.h"
+#import "RemoteMonitor.h"
 
-@interface Parameteriser : NSObject <TouchAreaDelegate>	{
+@interface Parameteriser : NSObject <TouchAreaDelegate, RemoteMonitorDelegate>	{
 	id <ParameteriserDelegate> delegate;
 
 	int		numpoints;

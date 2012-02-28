@@ -39,6 +39,7 @@
 		738BBCD81499593D00EF9712 /* start_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 738BBCD61499593D00EF9712 /* start_pressed.png */; };
 		738BBCD91499593D00EF9712 /* start_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 738BBCD71499593D00EF9712 /* start_pressed@2x.png */; };
 		738BBCDD1499605900EF9712 /* UserScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 738BBCDC1499605900EF9712 /* UserScreen.m */; };
+		738E99A814FCE73600EB9CF9 /* RemoteMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 738E99A714FCE73600EB9CF9 /* RemoteMonitor.m */; };
 		73A43B1B14DD5C700019A213 /* exit_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 73A43B1914DD5C700019A213 /* exit_button.png */; };
 		73A43B1C14DD5C700019A213 /* exit_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 73A43B1A14DD5C700019A213 /* exit_button@2x.png */; };
 		73B3564214D1B48C00EC9EE3 /* Palette.m in Sources */ = {isa = PBXBuildFile; fileRef = 73B3564114D1B48C00EC9EE3 /* Palette.m */; };
@@ -104,6 +105,8 @@
 		738BBCD71499593D00EF9712 /* start_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "start_pressed@2x.png"; sourceTree = "<group>"; };
 		738BBCDB1499605900EF9712 /* UserScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserScreen.h; sourceTree = "<group>"; };
 		738BBCDC1499605900EF9712 /* UserScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserScreen.m; sourceTree = "<group>"; };
+		738E99A614FCE73600EB9CF9 /* RemoteMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RemoteMonitor.h; sourceTree = "<group>"; };
+		738E99A714FCE73600EB9CF9 /* RemoteMonitor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RemoteMonitor.m; sourceTree = "<group>"; };
 		73A43B1914DD5C700019A213 /* exit_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = exit_button.png; sourceTree = "<group>"; };
 		73A43B1A14DD5C700019A213 /* exit_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "exit_button@2x.png"; sourceTree = "<group>"; };
 		73B3564014D1B48C00EC9EE3 /* Palette.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Palette.h; sourceTree = "<group>"; };
@@ -157,9 +160,8 @@
 		7323739E149A0B7E00D86DFC /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				73CEF82B14FBBFA700712A58 /* Listen Display */,
-				73CB2F0214DC600000D4709E /* User Display */,
-				73CB2F0314DC600B00D4709E /* Touch Handling */,
+				7329855E14FCE3FC00DF0DF8 /* Listen Mode */,
+				739F964714FCE3D500E34381 /* Multiplayer */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -171,6 +173,24 @@
 				732373A4149A0C5C00D86DFC /* NSPoint.m */,
 			);
 			name = NSPoint;
+			sourceTree = "<group>";
+		};
+		7329855E14FCE3FC00DF0DF8 /* Listen Mode */ = {
+			isa = PBXGroup;
+			children = (
+				7329856014FCE40900DF0DF8 /* Drawing */,
+				73CEF82B14FBBFA700712A58 /* Listen Display */,
+			);
+			name = "Listen Mode";
+			sourceTree = "<group>";
+		};
+		7329856014FCE40900DF0DF8 /* Drawing */ = {
+			isa = PBXGroup;
+			children = (
+				738E99A614FCE73600EB9CF9 /* RemoteMonitor.h */,
+				738E99A714FCE73600EB9CF9 /* RemoteMonitor.m */,
+			);
+			name = Drawing;
 			sourceTree = "<group>";
 		};
 		73477E7B14E140CB008C1F17 /* FX Library */ = {
@@ -313,6 +333,15 @@
 			);
 			name = "Player Screen";
 			path = ..;
+			sourceTree = "<group>";
+		};
+		739F964714FCE3D500E34381 /* Multiplayer */ = {
+			isa = PBXGroup;
+			children = (
+				73CB2F0214DC600000D4709E /* User Display */,
+				73CB2F0314DC600B00D4709E /* Touch Handling */,
+			);
+			name = Multiplayer;
 			sourceTree = "<group>";
 		};
 		73B3563E14D1B45F00EC9EE3 /* Palette */ = {
@@ -498,6 +527,7 @@
 				73E95E3C14E0007A009360AD /* maximilian.cpp in Sources */,
 				7370DE6614E4273F00583DBA /* GSNetworkController.m in Sources */,
 				7360561014FC4671007413CF /* ListenerUI.m in Sources */,
+				738E99A814FCE73600EB9CF9 /* RemoteMonitor.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
