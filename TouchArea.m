@@ -90,7 +90,7 @@
 	
 	CGRect def = CGRectMake(0, 0, 0, 0);
 	switch ([[[shapePalette shapes]objectAtIndex:shape_index]shape_index]) {
-		case 1:	currentShape = [[GSQuadrilateral alloc] initWithFrame:def andLocal:palette]; break;
+		case 1:	currentShape = [[GSQuadrilateral alloc] initWithFrame:def andLocal:palette andIndex:color_index]; break;
 		case 2:	currentShape = [[GSCircle alloc] initWithFrame:def]; break;
 		case 3:	currentShape = [[GSStar alloc] initWithFrame:def]; break;
 		case 4:	currentShape = [[GSTriangle alloc] initWithFrame:def]; break;			
@@ -152,33 +152,46 @@
 
 	switch (shape_id)	{
 		case 1:
-			g = [[GSQuadrilateral alloc]	initWithFrame:def	andLocal:remotePalette]; 
-			float angle = [[incoming objectAtIndex:offset+7]floatValue];
-			[(GSQuadrilateral*)g setAngleOfRotation:angle];
-		break;
+			g = [[GSQuadrilateral alloc]	initWithFrame:def	andLocal:remotePalette andIndex:[[incoming objectAtIndex:offset+5]intValue]]; 
+			[g setLocal:remotePalette];	
+			[g setOrigin:1];
+			g.index = [[incoming objectAtIndex:offset+5]intValue];
+			g.alpha = [[incoming objectAtIndex:offset+6]floatValue];
+//			float angle = [[incoming objectAtIndex:offset+7]floatValue];
+			break;
 
-		case 2:	g = [[GSCircle alloc]			initWithFrame:def]; break;			
+		case 2:
+			g = [[GSCircle alloc]			initWithFrame:def]; 
+			[g setLocal:remotePalette];	
+			[g setOrigin:1];
+			g.index = [[incoming objectAtIndex:offset+5]intValue];
+			g.alpha = [[incoming objectAtIndex:offset+6]floatValue];
+			break;			
 			
-		case 3:	g = [[GSStar alloc]				initWithFrame:def]; break;
+		case 3:	
+			g = [[GSStar alloc]				initWithFrame:def];
+			[g setLocal:remotePalette];	
+			[g setOrigin:1];
+			g.index = [[incoming objectAtIndex:offset+5]intValue];
+			g.alpha = [[incoming objectAtIndex:offset+6]floatValue];
+			break;
 			
 		case 4:	
 			g = [[GSTriangle alloc]			initWithFrame:def]; 
+			[g setLocal:remotePalette];	
+			[g setOrigin:1];
+			g.index = [[incoming objectAtIndex:offset+5]intValue];
+			g.alpha = [[incoming objectAtIndex:offset+6]floatValue];
 			float l = [[incoming objectAtIndex:offset+7]floatValue];
 			float p = [[incoming objectAtIndex:offset+8]floatValue];
 			float r = [[incoming objectAtIndex:offset+9]floatValue];
 			[(GSTriangle*)g setLeft: l];
 			[(GSTriangle*)g setPeak: p];
 			[(GSTriangle*)g setRight:r];
-		break;			
+			break;			
 		default:	break;
 	}
 
-	[g setLocal:remotePalette];	
-
-	[g setOrigin:1];//	REMOTE
-	
-	g.index = [[incoming objectAtIndex:offset+5]intValue];
-	g.alpha = [[incoming objectAtIndex:offset+6]floatValue];
 
 	return g;
 }

@@ -17,7 +17,7 @@
 		GSCircle			*circle = [[GSCircle alloc] initWithFrame:frame];
 		[circle setLocal:p];
 		
-		GSQuadrilateral		*quad	= [[GSQuadrilateral alloc] initWithFrame:frame andLocal:p];
+		GSQuadrilateral		*quad	= [[GSQuadrilateral alloc] initWithFrame:frame andLocal:p andIndex:2];
 		
 		GSStar				*star	= [[GSStar alloc] initWithFrame:frame];
 		[star setLocal:p];
