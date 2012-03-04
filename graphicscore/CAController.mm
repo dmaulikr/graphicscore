@@ -21,16 +21,16 @@ bool		playback;	//	YES if noise is desired
 ////////////////////////////////////////////////////////////
 
 float*	w_triggers	= new float [30];
-float*	w_pitches	= new float [480];
+//float*	w_pitches	= new float [480];
 
 float*	x_triggers	= new float [30];
-float*	x_pitches	= new float [480];
+//float*	x_pitches	= new float [480];
 
 float*	y_triggers	= new float [30];
-float*	y_pitches	= new float [480];
+//float*	y_pitches	= new float [480];
 
 float*	z_triggers	= new float [30];
-float*	z_pitches	= new float [480];
+//float*	z_pitches	= new float [480];
 
 //	MAXI OBJECT DECLARATION
 
@@ -39,24 +39,27 @@ int			metroCount;
 double		metroOut;
 double		metroSpeed;
 
-maxiSample	sample;
-double		sampleSpeed;
+//	Sample Players
+maxiSample	sample_w,
+			sample_x,
+			sample_y,
+			sample_z;
 
-maxiOsc		testOsc;
-double		testFreq	= 0.0f;
-double		testVol		= 0.0f;
+//	Sample output vols
+double		w_vol, x_vol, y_vol, z_vol;
+
+//	Sample sustain vals
+double		w_sus, x_sus, y_sus, z_sus;
+
+
 
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 
 inline void initLocalVariables	(void)	{	
-	memset(w_pitches,	0, sizeof(float)*480);
 	memset(w_triggers,	0, sizeof(float)*16);
-	memset(x_pitches,	0, sizeof(float)*480);
 	memset(x_triggers,	0, sizeof(float)*16);
-	memset(y_pitches,	0, sizeof(float)*480);
 	memset(y_triggers,	0, sizeof(float)*16);
-	memset(z_pitches,	0, sizeof(float)*480);
 	memset(z_triggers,	0, sizeof(float)*16);	
 }
 
@@ -67,17 +70,23 @@ double w_out, x_out, y_out, z_out;
 inline void maxiSetup		(void)	{
 	initLocalVariables();
 	
-	sampleSpeed = 0;
-	sample.load([[[NSBundle mainBundle] pathForResource:@"voice_one" ofType:@"wav"]cStringUsingEncoding:NSUTF8StringEncoding]);
+	//	Load samples
+	sample_w.load([[[NSBundle mainBundle] pathForResource:@"piano_4" ofType:@"wav"] cStringUsingEncoding:NSUTF8StringEncoding]);
+	sample_x.load([[[NSBundle mainBundle] pathForResource:@"evp_5ths_3" ofType:@"wav"] cStringUsingEncoding:NSUTF8StringEncoding]);
+	sample_y.load([[[NSBundle mainBundle] pathForResource:@"12st_odd_2" ofType:@"wav"] cStringUsingEncoding:NSUTF8StringEncoding]);
+	sample_z.load([[[NSBundle mainBundle] pathForResource:@"electric_1" ofType:@"wav"] cStringUsingEncoding:NSUTF8StringEncoding]);	
 	
-	testVol	 = 1.0f;
-	testFreq = 0.0f;
 	
 	metroSpeed	= 2.0f;
 	metroOut	= 0.0f;
 	metroCount	= 0;
+
 	
+	//	Sample outputs
 	w_out = x_out = y_out = z_out = 0.0f;
+	
+	//	Sustain values
+	w_sus = x_sus = y_sus = z_sus = .005f;	//	slower decay .004 is the minimum decay
 }
 
 ////////////////////////////////////////////////////////////
@@ -88,36 +97,39 @@ float	triggerIncrement = 0.0018;
 
 inline void readTriggers	(int i)	{	
 	if (w_triggers[i]>=0.01f)	{
-		sampleSpeed = 2.0f+(0.25f*w_pitches[i]);
-		sample.trigger();
-		testFreq	= 880.0f + (110.0f*w_pitches[i]);
-		testVol		= 1.0f;
+		w_vol = 1.0f;
+		sample_w.trigger();
 		NSLog(@"W");
 	}
 
 	if (x_triggers[i]>=0.01f)	{
-		sampleSpeed = 1.0f+(0.125*x_pitches[i]);
-		sample.trigger();
-		testFreq	= 440.0f + (55.0f*x_pitches[i]);
-		testVol = 1.0f;	
+		x_vol = 1.0f;		
+		sample_x.trigger();		
 		NSLog(@"X");
 	}
 
 	if (y_triggers[i]>=0.01f)	{
-		sampleSpeed = 0.5+(0.0625*y_pitches[i]);
-		sample.trigger();
-		testFreq	= 220.0f + (27.5f*y_pitches[i]);
-		testVol = 1.0f;		
+		sample_y.trigger();
+		y_vol = 1.0f;
 		NSLog(@"Y");	
 	}
 	
 	if (z_triggers[i]>=0.01f)	{
-		sampleSpeed = 0.25+(0.03125*z_pitches[i]);
-		sample.trigger();
-		testFreq	= 110.0f + (13.75f*z_pitches[i]);
-		testVol =	1.0f;
+		sample_z.trigger();
+		z_vol =	1.0f;
 		NSLog(@"Z");
 	}
+}
+
+inline void sustain	()	{
+	if (w_vol>0.0f)
+		w_vol-=(0.0009*w_sus);	//	Reduce volume by sustained amount
+	if (x_vol>0.0f)
+		x_vol-=(0.0009*x_sus);	//	Reduce volume by sustained amount
+	if (y_vol>0.0f)
+		y_vol-=(0.0009*y_sus);	//	Reduce volume by sustained amount
+	if (z_vol>0.0f)
+		z_vol-=(0.0009*z_sus);	//	Reduce volume by sustained amount
 }
 
 ////////////////////////////////////////////////////////////
@@ -138,9 +150,56 @@ FXBitcrusher	bitcrusher_1,	bitcrusher_2,	bitcrusher_3,	bitcrusher_4;
 //							NSTotalR, NSTotalG, NSTotalB,
 //							nil];
 
+
+inline double voice_w()	{
+	double output = .0f;
+
+	output = w_vol*sample_w.playOnce();
+	
+	output = fxflanger_1.flange(output, 0.5, 0.5);
+	
+	return output*w_vol;
+}
+
+inline double voice_x()	{
+	double output = .0f;
+
+	output = x_vol*sample_x.playOnce();
+	
+	output = delay_2.delay(output, 0.8, 0.8);
+	
+	return output*x_vol;
+}
+
+inline double voice_y()	{
+	double output = .0f;
+	
+	output = y_vol*sample_y.playOnce();
+	
+	output = tremolo_3.tremolo(output, 0.5, 0.5);
+	
+	return output;
+}
+
+inline double voice_z()	{
+	double output = .0f;
+	
+	output = z_vol*sample_z.playOnce();
+	
+	output = bitcrusher_4.bitcrusher(output, 0.5);
+	
+	output = dist_4.distortion(output, 0.5, 0.2);
+	
+	return output;
+}
+
+
+
 #pragma mark USER RENDERING METHOD
 float*	output	()	{
     render_output[0] = render_output[1] = w_out = x_out = y_out = z_out = 0.0f;
+	
+	sustain();
 	
 	if ((int)metro.phasor(metroSpeed)>=1)	{
 		metroCount++;
@@ -148,14 +207,14 @@ float*	output	()	{
 			metroCount = 0;
 		readTriggers(metroCount);
 	}
-	
-	if (testVol>0.0f)
-		testVol-=0.0001;
 
-	w_out	= testVol*sample.playOnce(sampleSpeed);
+	w_out = voice_w();
+	x_out = voice_x();
+	y_out = voice_y();
+	z_out = voice_z();
 
-	render_output	[0] = w_out + x_out + y_out + z_out;
-	render_output	[1] = w_out + x_out + y_out + z_out;
+	render_output	[0] = .25f*(w_out + x_out + y_out + z_out);
+	render_output	[1] = .25f*(w_out + x_out + y_out + z_out);
 	
     return render_output;
 }
@@ -200,25 +259,25 @@ OSStatus renderAudioOutput  (
 	
 	for (NSPoint* p in points_w)	{
 		p.x = p.x*0.03f;
-		w_pitches[(int)p.x] = (int)floorf((80.0f-p.y)/8);
+//		w_pitches[(int)p.x] = (int)floorf((80.0f-p.y)/8);
 		w_triggers[(int)p.x] = 1.0f;
 	}
 	
 	for (NSPoint* p in points_x)	{
 		p.x = p.x*0.03f;		
-		x_pitches[(int)p.x] = (int)floorf((160.0f-p.y)/8);
+//		x_pitches[(int)p.x] = (int)floorf((160.0f-p.y)/8);
 		x_triggers[(int)p.x] = 1.0f;
 	}
 	
 	for (NSPoint* p in points_y)	{
 		p.x = p.x*0.03f;		
-		y_pitches[(int)p.x] = (int)floorf((240.0f-p.y)/8);
+//		y_pitches[(int)p.x] = (int)floorf((240.0f-p.y)/8);
 		y_triggers[(int)p.x] = 1.0f;
 	}
 	
 	for (NSPoint* p in points_z)	{
 		p.x = p.x*0.03f;		
-		z_pitches[(int)p.x] = (int)floorf((320.0f-p.y)/8);
+//		z_pitches[(int)p.x] = (int)floorf((320.0f-p.y)/8);
 		z_triggers[(int)p.x] = 1.0f;
 	}
 	
