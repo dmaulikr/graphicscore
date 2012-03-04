@@ -53,9 +53,6 @@
 	float	unique_2	=	0;
 	float	unique_3	=	0;
 
-	//	Quadrilateral
-	if (index_s==1)
-		unique_1 = [(GSQuadrilateral*)g angleOfRotation];
 	//	Triangle
 	if (index_s==4)	{
 		unique_1 = [(GSTriangle*)g left];

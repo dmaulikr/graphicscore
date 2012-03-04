@@ -8,6 +8,5 @@
 
 #import "Shapes.h"
 @interface GSQuadrilateral : GSShape
-@property CGFloat angleOfRotation;
 - (id)initWithFrame:(CGRect)frame andLocal:(Palette*)l andIndex:(int)_i;
 @end

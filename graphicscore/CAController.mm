@@ -277,4 +277,11 @@ OSStatus renderAudioOutput  (
 
 ////////////////////////////////////////////////////////////
 
+-(void)closeAudioUnit	{
+	playback = false;
+	OSErr	err = AudioOutputUnitStop	(outputUnit);
+			err = AudioUnitUninitialize	(outputUnit);
+	NSLog(@"Audio unit closed");
+}
+
 @end

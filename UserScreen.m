@@ -87,6 +87,9 @@
 }
 
 -(void)dismissViewAfterAnimationCompletion	{
+	//	Kill audio controller
+	[audioController closeAudioUnit];
+	
 	//	Dismiss view
 	[self dismissModalViewControllerAnimated:NO];
 	

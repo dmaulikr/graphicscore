@@ -18,6 +18,7 @@
 
 -(void)initAudioController;
 -(void)startAudioUnit;
+-(void)closeAudioUnit;
 -(void)togglePlayback;
 
 OSStatus renderAudioOutput (void *inRefCon,AudioUnitRenderActionFlags *ioActionFlags,  const AudioTimeStamp *inTimeStamp,  UInt32 inBusNumber, UInt32 inNumberFrames,  AudioBufferList *ioData);
