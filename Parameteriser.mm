@@ -29,6 +29,9 @@
 		points_z = [[NSMutableArray alloc] init];
 		
 		curves_w = curves_x = curves_y = curves_z = 0;
+		
+		totalSize	= 0.0;	
+		averageSize = 0.0;
 	}
 	return self;
 }
@@ -49,6 +52,7 @@
 -(void)processTriangle:(GSTriangle*)t	{
 	CGRect	r		= t.frame;
 	CGFloat	height	= r.size.height;
+	CGFloat	width	= r.size.width;
 	CGFloat	originX = r.origin.x;
 	CGFloat	originY = r.origin.y;
 	
@@ -66,6 +70,8 @@
 	NSArray*	trianglePoints = [[NSArray alloc] initWithObjects:left, top, right, nil];
 	
 	[self addPointsFromArrayToParameterData:trianglePoints];
+
+	totalSize+=width;
 }
 
 -(void)processQuadrilateral:(GSQuadrilateral*)q	{
@@ -92,6 +98,8 @@
 	NSArray* quadPoints = [[NSArray alloc] initWithObjects:point_1, point_2, point_3, point_4, nil];
 	
 	[self addPointsFromArrayToParameterData:quadPoints];
+	
+	totalSize+=width;	
 }
 
 
@@ -133,6 +141,8 @@
 	sc_blue_total	+=	RGB[2];		
 	
 	[self addPointsFromArrayToParameterData:starPoints];
+	
+	totalSize+=width;	
 }
 
 -(void)processCircle:(GSCircle*)c	{
@@ -162,6 +172,8 @@
 	
 	for (int i = originX; i < originX+width; i++)
 		numcurves++;
+	
+	totalSize+=width;
 }
 
 -(void)resetLocalVariables	{
@@ -179,6 +191,9 @@
 	[points_x removeAllObjects];
 	[points_y removeAllObjects];
 	[points_z removeAllObjects];
+	
+	totalSize	= 0.0;	
+	averageSize = 0.0;
 }
 
 -(BOOL)touchAreaHasBeenUpatedWithShapesOnScreen:(NSMutableArray*)s	andFromNetwork:(NSMutableArray*)n {
@@ -204,6 +219,7 @@
 	//	Overall
 	NSNumber	*NSNumShapes	= [[NSNumber alloc] initWithInt:numshapes];
 	NSNumber	*NSNumCurves	= [[NSNumber alloc] initWithInt:numcurves];
+	NSNumber	*NSNumPoints	= [[NSNumber alloc] initWithInt:[points_w count]+[points_x count]+[points_y count]+[points_z count]];
 	
 	//	Alpha stats
 	NSNumber	*NSAlphaAverage = [[NSNumber alloc] initWithFloat:alpha_average];
@@ -221,12 +237,18 @@
 	NSNumber	*NSTotalG		= [[NSNumber alloc] initWithFloat:sc_red_total];
 	NSNumber	*NSTotalB		= [[NSNumber alloc] initWithFloat:sc_red_total];	
 	
+	//	Size
+	averageSize = totalSize/numshapes;
+	NSNumber	*NSSizeAverage	= [[NSNumber alloc] initWithFloat:averageSize];
+	NSNumber	*NSSizeTotal	= [[NSNumber alloc] initWithFloat:totalSize];
+	
 	NSArray		*parameters	 = [NSArray arrayWithObjects: 
 								points_w, points_x, points_y, points_z,
-								NSNumCurves, NSNumShapes,
+								NSNumCurves_w, NSNumCurves_x, NSNumCurves_y, NSNumCurves_z,								
+								NSNumCurves, NSNumShapes, NSNumPoints,
 								NSAlphaAverage, NSAlphaTotal,
-								NSNumCurves_w, NSNumCurves_x, NSNumCurves_y, NSNumCurves_z,
 								NSTotalR, NSTotalG, NSTotalB,
+								NSSizeAverage, NSSizeTotal,
 								nil];
 	
 	[delegate updatedParameters:parameters];

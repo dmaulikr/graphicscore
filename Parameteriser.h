@@ -32,6 +32,9 @@
 	
 	NSMutableArray*	points_z;
 	int		curves_z;	
+	
+	double	totalSize;
+	double	averageSize;
 }
 
 @property	float			alpha_total;

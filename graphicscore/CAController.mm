@@ -9,6 +9,8 @@
 #import "CAController.h"
 #import "FXLibrary.h"
 
+#define scale 0.00002267573696
+
 ////////////////////////////////////////////////////////////
 const		Float64		sampleRate = 44100.0;
 float*		bufferL;
@@ -20,17 +22,12 @@ bool		playback;	//	YES if noise is desired
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 
+
+//	Trigger arrays
 float*	w_triggers	= new float [30];
-//float*	w_pitches	= new float [480];
-
 float*	x_triggers	= new float [30];
-//float*	x_pitches	= new float [480];
-
 float*	y_triggers	= new float [30];
-//float*	y_pitches	= new float [480];
-
 float*	z_triggers	= new float [30];
-//float*	z_pitches	= new float [480];
 
 //	MAXI OBJECT DECLARATION
 
@@ -39,17 +36,59 @@ int			metroCount;
 double		metroOut;
 double		metroSpeed;
 
+
 //	Sample Players
 maxiSample	sample_w,
 			sample_x,
 			sample_y,
 			sample_z;
 
+
 //	Sample output vols
-double		w_vol, x_vol, y_vol, z_vol;
+double	w_vol, x_vol, y_vol, z_vol;
+
+
+//	Sample output variables
+double	w_out, x_out, y_out, z_out;
+
 
 //	Sample sustain vals
-double		w_sus, x_sus, y_sus, z_sus;
+double	w_sus, x_sus, y_sus, z_sus;		//	sustain = (1/44100) / sustain value in seconds
+
+
+/*
+NSArray		*parameters	 = [NSArray arrayWithObjects: 
+							points_w, points_x, points_y, points_z,
+							NSNumCurves_w, NSNumCurves_x, NSNumCurves_y, NSNumCurves_z,								
+							NSNumCurves, NSNumShapes, NSNumPoints,
+							NSAlphaAverage, NSAlphaTotal,
+							NSTotalR, NSTotalG, NSTotalB,
+							nil];
+*/
+
+//	Local curves
+int curves_w, curves_x, curves_y, curves_z;
+
+//	Local points
+int	points_w, points_x, points_y, points_z;
+
+//	Globals
+//	…shape
+int		globalNumCurves;
+int		globalNumShapes;
+int		globalNumPoints;
+
+double	globalShapeSizeAverage;
+double	globalShapeSizeTotal;
+
+//	…color
+double	globalAlphaAverage;
+double	globalAlphaTotal;
+double	globalColorTotalR;
+double	globalColorTotalG;
+double	globalColorTotalB;
+
+
 
 
 
@@ -57,79 +96,79 @@ double		w_sus, x_sus, y_sus, z_sus;
 ////////////////////////////////////////////////////////////
 
 inline void initLocalVariables	(void)	{	
+	//	Create trigger buffers
+	
 	memset(w_triggers,	0, sizeof(float)*16);
 	memset(x_triggers,	0, sizeof(float)*16);
 	memset(y_triggers,	0, sizeof(float)*16);
 	memset(z_triggers,	0, sizeof(float)*16);	
 }
 
-//	MAXI SETUP
-
-double w_out, x_out, y_out, z_out;
-
 inline void maxiSetup		(void)	{
 	initLocalVariables();
 	
 	//	Load samples
-	sample_w.load([[[NSBundle mainBundle] pathForResource:@"piano_4" ofType:@"wav"] cStringUsingEncoding:NSUTF8StringEncoding]);
-	sample_x.load([[[NSBundle mainBundle] pathForResource:@"evp_5ths_3" ofType:@"wav"] cStringUsingEncoding:NSUTF8StringEncoding]);
-	sample_y.load([[[NSBundle mainBundle] pathForResource:@"12st_odd_2" ofType:@"wav"] cStringUsingEncoding:NSUTF8StringEncoding]);
+	sample_w.load([[[NSBundle mainBundle] pathForResource:@"piano_odd_4"	ofType:@"wav"] cStringUsingEncoding:NSUTF8StringEncoding]);
+	sample_x.load([[[NSBundle mainBundle] pathForResource:@"evp_odd_3" ofType:@"wav"] cStringUsingEncoding:NSUTF8StringEncoding]);
+	sample_y.load([[[NSBundle mainBundle] pathForResource:@"12st_5ths_2" ofType:@"wav"] cStringUsingEncoding:NSUTF8StringEncoding]);
 	sample_z.load([[[NSBundle mainBundle] pathForResource:@"electric_1" ofType:@"wav"] cStringUsingEncoding:NSUTF8StringEncoding]);	
 	
-	
+	//	Metronome setup
 	metroSpeed	= 2.0f;
 	metroOut	= 0.0f;
 	metroCount	= 0;
-
 	
 	//	Sample outputs
 	w_out = x_out = y_out = z_out = 0.0f;
 	
 	//	Sustain values
-	w_sus = x_sus = y_sus = z_sus = .005f;	//	slower decay .004 is the minimum decay
+	w_sus = x_sus = y_sus = z_sus = 3.5f;	//	value in seconds
+	
+	//	Incoming params
+	globalNumCurves		= 0;
+	globalNumShapes		= 0;
+	globalNumPoints		= 0;
+	globalAlphaAverage	= 0;
+	globalAlphaTotal	= 0;
+	globalColorTotalR	= 0;
+	globalColorTotalG	= 0;
+	globalColorTotalB	= 0;
 }
 
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
-
-float	trigger_index = 0;
-float	triggerIncrement = 0.0018;
 
 inline void readTriggers	(int i)	{	
 	if (w_triggers[i]>=0.01f)	{
 		w_vol = 1.0f;
 		sample_w.trigger();
-		NSLog(@"W");
 	}
 
 	if (x_triggers[i]>=0.01f)	{
 		x_vol = 1.0f;		
 		sample_x.trigger();		
-		NSLog(@"X");
 	}
 
 	if (y_triggers[i]>=0.01f)	{
 		sample_y.trigger();
 		y_vol = 1.0f;
-		NSLog(@"Y");	
 	}
 	
 	if (z_triggers[i]>=0.01f)	{
 		sample_z.trigger();
 		z_vol =	1.0f;
-		NSLog(@"Z");
 	}
 }
 
 inline void sustain	()	{
 	if (w_vol>0.0f)
-		w_vol-=(0.0009*w_sus);	//	Reduce volume by sustained amount
+		w_vol-=(scale/w_sus);	//	Reduce volume by sustained amount
 	if (x_vol>0.0f)
-		x_vol-=(0.0009*x_sus);	//	Reduce volume by sustained amount
+		x_vol-=(scale/x_sus);	//	Reduce volume by sustained amount
 	if (y_vol>0.0f)
-		y_vol-=(0.0009*y_sus);	//	Reduce volume by sustained amount
+		y_vol-=(scale*y_sus);	//	Reduce volume by sustained amount
 	if (z_vol>0.0f)
-		z_vol-=(0.0009*z_sus);	//	Reduce volume by sustained amount
+		z_vol-=(scale*z_sus);	//	Reduce volume by sustained amount
 }
 
 ////////////////////////////////////////////////////////////
@@ -142,21 +181,14 @@ FXDelay			delay_1,		delay_2,		delay_3,		delay_4;
 FXFilter		filter_1,		filter_2,		filter_3,		filter_4;
 FXBitcrusher	bitcrusher_1,	bitcrusher_2,	bitcrusher_3,	bitcrusher_4;
 
-//NSArray		*parameters	 = [NSArray arrayWithObjects: 
-//							points_w, points_x, points_y, points_z,		// trigger arrays
-//							NSNumCurves, NSNumShapes,					
-//							NSAlphaAverage, NSAlphaTotal,
-//							NSNumCurves_w, NSNumCurves_x, NSNumCurves_y, NSNumCurves_z,
-//							NSTotalR, NSTotalG, NSTotalB,
-//							nil];
-
+//////////////////////////////////////////////////
 
 inline double voice_w()	{
 	double output = .0f;
 
 	output = w_vol*sample_w.playOnce();
 	
-	output = fxflanger_1.flange(output, 0.5, 0.5);
+//	output = fxflanger_1.flange(output, 0.5, 0.5);
 	
 	return output*w_vol;
 }
@@ -252,36 +284,101 @@ OSStatus renderAudioOutput  (
 -(void)updatedParameters:(NSArray*)parameters	{
 	initLocalVariables();
 	
-	NSArray*	points_w = [NSArray arrayWithArray:[parameters objectAtIndex:0]];
-	NSArray*	points_x = [NSArray arrayWithArray:[parameters objectAtIndex:1]];
-	NSArray*	points_y = [NSArray arrayWithArray:[parameters objectAtIndex:2]];
-	NSArray*	points_z = [NSArray arrayWithArray:[parameters objectAtIndex:3]];	
+	/*
+		Points and triggers
+	 */
+	NSArray*	NSPoints_w = [NSArray arrayWithArray:[parameters objectAtIndex:0]];
+	NSArray*	NSPoints_x = [NSArray arrayWithArray:[parameters objectAtIndex:1]];
+	NSArray*	NSPoints_y = [NSArray arrayWithArray:[parameters objectAtIndex:2]];
+	NSArray*	NSPoints_z = [NSArray arrayWithArray:[parameters objectAtIndex:3]];	
 	
-	for (NSPoint* p in points_w)	{
+	for (NSPoint* p in NSPoints_w)	{
 		p.x = p.x*0.03f;
-//		w_pitches[(int)p.x] = (int)floorf((80.0f-p.y)/8);
 		w_triggers[(int)p.x] = 1.0f;
 	}
 	
-	for (NSPoint* p in points_x)	{
+	for (NSPoint* p in NSPoints_x)	{
 		p.x = p.x*0.03f;		
-//		x_pitches[(int)p.x] = (int)floorf((160.0f-p.y)/8);
 		x_triggers[(int)p.x] = 1.0f;
 	}
 	
-	for (NSPoint* p in points_y)	{
+	for (NSPoint* p in NSPoints_y)	{
 		p.x = p.x*0.03f;		
-//		y_pitches[(int)p.x] = (int)floorf((240.0f-p.y)/8);
 		y_triggers[(int)p.x] = 1.0f;
 	}
 	
-	for (NSPoint* p in points_z)	{
+	for (NSPoint* p in NSPoints_z)	{
 		p.x = p.x*0.03f;		
-//		z_pitches[(int)p.x] = (int)floorf((320.0f-p.y)/8);
 		z_triggers[(int)p.x] = 1.0f;
 	}
+
+	/*
+		Local curve totals
+	 */
+	curves_w =	[[parameters objectAtIndex:4]intValue];
+	curves_x =	[[parameters objectAtIndex:5]intValue];
+	curves_y =	[[parameters objectAtIndex:6]intValue];
+	curves_z =	[[parameters objectAtIndex:7]intValue];
+
+	/*
+		Local point totals
+	*/
+	points_w =	[NSPoints_w count];
+	points_x =	[NSPoints_x count];
+	points_y =	[NSPoints_y count];
+	points_z =	[NSPoints_z count];
+	 
+	/*
+	 Global totals
+	 */
 	
+	//	Shape stats
+	globalNumCurves		= [[parameters objectAtIndex:8]intValue];
+	globalNumShapes		= [[parameters objectAtIndex:9]intValue];
+	globalNumPoints		= [[parameters objectAtIndex:10]intValue];
 	
+	//	Color info
+	globalAlphaAverage	= [[parameters objectAtIndex:11]doubleValue];
+	globalAlphaTotal	= [[parameters objectAtIndex:12]doubleValue];
+	globalColorTotalR	= [[parameters objectAtIndex:13]doubleValue];
+	globalColorTotalG	= [[parameters objectAtIndex:14]doubleValue];
+	globalColorTotalB	= [[parameters objectAtIndex:15]doubleValue];
+		
+	//	Size info
+	globalShapeSizeAverage	= [[parameters objectAtIndex:16] doubleValue];
+	globalShapeSizeTotal	= [[parameters objectAtIndex:17] doubleValue];	
+	
+	/*
+		Set some local variables
+	 */
+	metroSpeed = 0.25 * (globalNumShapes*globalAlphaAverage);		//	Lots of bolder shapes = faster playback.
+
+	NSLog(@"\n\n\n\n");	
+	
+	NSLog(@"Num curves: %i",	globalNumCurves);
+	NSLog(@"Num shapes: %i",	globalNumShapes);
+	NSLog(@"Num points: %i",	globalNumPoints);
+	
+	NSLog(@"Alpha average: %f", globalAlphaAverage);
+	NSLog(@"Alpha total: %f",	globalAlphaTotal);
+	NSLog(@"R total: %f",		globalColorTotalR);
+	NSLog(@"G total: %f",		globalColorTotalG);
+	NSLog(@"B total: %f",		globalColorTotalB);
+	
+	NSLog(@"W curves: %i",		curves_w);
+	NSLog(@"X curves: %i",		curves_x);
+	NSLog(@"Y curves: %i",		curves_y);
+	NSLog(@"Z curves: %i",		curves_z);
+	
+	NSLog(@"W points: %i",		points_w);
+	NSLog(@"X points: %i",		points_x);
+	NSLog(@"Y points: %i",		points_y);
+	NSLog(@"Z points: %i",		points_z);
+	
+	NSLog(@"Average size:	%f",		globalShapeSizeAverage);
+	NSLog(@"Total size:		%f",		globalShapeSizeTotal);
+	
+	NSLog(@"\n\n\n\n");
 }
 
 

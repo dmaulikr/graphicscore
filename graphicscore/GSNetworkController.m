@@ -32,7 +32,6 @@
 
 -(NSMutableArray*)requestData	{	
 	NSURL* serverAddress = [NSURL URLWithString:[NSString stringWithFormat:@"http://109.123.110.188/app/request_data.php?id=%i", session_id]];
-	NSLog(@"Request from: %@", serverAddress);
 	NSMutableArray*	responseFromServer = [[NSMutableArray alloc] initWithContentsOfURL:serverAddress];
 	return responseFromServer;
 }

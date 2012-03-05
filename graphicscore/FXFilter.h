@@ -17,16 +17,17 @@ public:
 	
 	double dry;
 	
-	double	lowpass		(double input, double res, double mix)	{
-		dry		= input;
-		input	= low_pass.lores(input, 100+(2000*res), 0.95-res);	
-		return ((input*mix)+(1-mix)*dry);	
-	}
-	
-	double	highpass	(double input, double res, double mix)	{
-		dry		= input;
-		input	= high_pass.hires(input, 100+(3000*res), 0.95-res);
-		return ((input*mix)+(1-mix)*dry);	
+	double	filter		(double input, double hi, double lo, double outputMix)	{
+		dry = input;
+		
+		double hiOut = high_pass.hires	(input, 100+(2000*hi),	1-lo);
+		double loOut = low_pass.lores	(input, 100+(300*lo),	1-hi);
+		
+		return (
+				(outputMix*dry)+
+				(((1-outputMix)*0.5)*hiOut)+
+				(((1-outputMix)*0.5)*loOut)
+		);
 	}
 };
 
