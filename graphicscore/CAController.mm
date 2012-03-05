@@ -55,6 +55,9 @@ double	w_out, x_out, y_out, z_out;
 //	Sample sustain vals
 double	w_sus, x_sus, y_sus, z_sus;		//	sustain = (1/44100) / sustain value in seconds
 
+//	Sample play speeds
+double	w_speed, x_speed, y_speed, z_speed;
+
 
 /*
 NSArray		*parameters	 = [NSArray arrayWithObjects: 
@@ -124,6 +127,9 @@ inline void maxiSetup		(void)	{
 	//	Sustain values
 	w_sus = x_sus = y_sus = z_sus = 3.5f;	//	value in seconds
 	
+	//	Speeds
+	w_speed = x_speed = y_speed = z_speed = 1.0f;
+	
 	//	Incoming params
 	globalNumCurves		= 0;
 	globalNumShapes		= 0;
@@ -174,57 +180,144 @@ inline void sustain	()	{
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 
+FXBitcrusher	bitcrusher_1,	bitcrusher_2,	bitcrusher_3,	bitcrusher_4;
 FXDistortion	dist_1,			dist_2,			dist_3,			dist_4;
 FXFlanger		fxflanger_1,	fxflanger_2,	fxflanger_3,	fxflanger_4;
 FXTremolo		tremolo_1,		tremolo_2,		tremolo_3,		tremolo_4;
 FXDelay			delay_1,		delay_2,		delay_3,		delay_4;
 FXFilter		filter_1,		filter_2,		filter_3,		filter_4;
-FXBitcrusher	bitcrusher_1,	bitcrusher_2,	bitcrusher_3,	bitcrusher_4;
 
-//////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+double	w_bitcrushAmount	= 0.1;
+
+double	w_distortionAmount	= 0.2;
+double	w_distortionMix		= 0.3;
+
+double	w_flangeAmount		= 0.4;
+double	w_flangeMix			= 0.5;
+
+double	w_tremoloAmount		= 0.6;
+double	w_tremoloMix		= 0.7;
+
+double	w_delayAmount		= 0.8;
+double	w_delayMix			= 0.9;
 
 inline double voice_w()	{
 	double output = .0f;
 
-	output = w_vol*sample_w.playOnce();
-	
-//	output = fxflanger_1.flange(output, 0.5, 0.5);
+	output = w_vol*sample_w.playOnce(w_speed);
+
+//	output = bitcrusher_1.	bitcrusher	(output, w_bitcrushAmount);
+//	output = dist_1.		distortion	(output, w_distortionAmount,	w_distortionMix);
+//	output = fxflanger_1.	flange		(output, w_flangeAmount,		w_flangeMix);
+	output = tremolo_1.		tremolo		(output, w_tremoloAmount,		w_tremoloMix);
+//	output = delay_1.		delay		(output, w_delayAmount,			w_delayMix);
+//	output	filter
 	
 	return output*w_vol;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+double	x_bitcrushAmount	= 0.9;
+
+double	x_distortionAmount	= 0.8;
+double	x_distortionMix		= 0.7;
+
+double	x_flangeAmount		= 0.6;
+double	x_flangeMix			= 0.5;
+
+double	x_tremoloAmount		= 0.4;
+double	x_tremoloMix		= 0.3;
+
+double	x_delayAmount		= 0.2;
+double	x_delayMix			= 0.1;
+
 inline double voice_x()	{
 	double output = .0f;
 
-	output = x_vol*sample_x.playOnce();
+	output = x_vol*sample_x.playOnce(x_speed);
 	
-	output = delay_2.delay(output, 0.8, 0.8);
+	output = bitcrusher_2.	bitcrusher	(output, x_bitcrushAmount);
+//	output = dist_2.		distortion	(output, x_distortionAmount,	x_distortionMix);
+//	output = fxflanger_2.	flange		(output, x_flangeAmount,		x_flangeMix);
+	output = tremolo_2.		tremolo		(output, x_tremoloAmount,		x_tremoloMix);
+//	output = delay_2.		delay		(output, x_delayAmount,			x_delayMix);
+	//	output	filter
 	
 	return output*x_vol;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+double	y_bitcrushAmount	= 0.1;
+
+double	y_distortionAmount	= 0.9;
+double	y_distortionMix		= 0.2;
+
+double	y_flangeAmount		= 0.8;
+double	y_flangeMix			= 0.3;
+
+double	y_tremoloAmount		= 0.7;
+double	y_tremoloMix		= 0.4;
+
+double	y_delayAmount		= 0.6;
+double	y_delayMix			= 0.1;
+
 inline double voice_y()	{
 	double output = .0f;
 	
-	output = y_vol*sample_y.playOnce();
+	output = y_vol*sample_y.playOnce(y_speed);
 	
-	output = tremolo_3.tremolo(output, 0.5, 0.5);
+//	output = bitcrusher_3.	bitcrusher	(output, y_bitcrushAmount);
+//	output = dist_3.		distortion	(output, y_distortionAmount,	y_distortionMix);
+//	output = fxflanger_3.	flange		(output, y_flangeAmount,		y_flangeMix);
+	output = tremolo_3.		tremolo		(output, y_tremoloAmount,		y_tremoloMix);
+//	output = delay_3.		delay		(output, y_delayAmount,			y_delayMix);
+	//	output	filter
 	
 	return output;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+double	z_bitcrushAmount	= 0.4;
+
+double	z_distortionAmount	= 0.6;
+double	z_distortionMix		= 0.3;
+
+double	z_flangeAmount		= 0.7;
+double	z_flangeMix			= 0.1;
+
+double	z_tremoloAmount		= 0.9;
+double	z_tremoloMix		= 0.2;
+
+double	z_delayAmount		= 0.8;
+double	z_delayMix			= 0.5;
 
 inline double voice_z()	{
 	double output = .0f;
 	
-	output = z_vol*sample_z.playOnce();
+	output = z_vol*sample_z.playOnce(z_speed);
 	
-	output = bitcrusher_4.bitcrusher(output, 0.5);
-	
-	output = dist_4.distortion(output, 0.5, 0.2);
+//	output = bitcrusher_4.	bitcrusher	(output, z_bitcrushAmount);
+//	output = dist_4.		distortion	(output, z_distortionAmount,	z_distortionMix);
+//	output = fxflanger_4.	flange		(output, z_flangeAmount,		z_flangeMix);
+	output = tremolo_4.		tremolo		(output, z_tremoloAmount,		z_tremoloMix);
+//	output = delay_4.		delay		(output, z_delayAmount,			z_delayMix);
+	//	output	filter
 	
 	return output;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 #pragma mark USER RENDERING METHOD
@@ -352,7 +445,12 @@ OSStatus renderAudioOutput  (
 		Set some local variables
 	 */
 	metroSpeed = 0.25 * (globalNumShapes*globalAlphaAverage);		//	Lots of bolder shapes = faster playback.
+																	//	up to 0.25 * 12 (3Hz)
 
+	
+	
+	
+	
 	NSLog(@"\n\n\n\n");	
 	
 	NSLog(@"Num curves: %i",	globalNumCurves);
@@ -379,6 +477,11 @@ OSStatus renderAudioOutput  (
 	NSLog(@"Total size:		%f",		globalShapeSizeTotal);
 	
 	NSLog(@"\n\n\n\n");
+	
+	w_speed = globalAlphaAverage;
+	x_speed = globalAlphaAverage*globalColorTotalR;
+	y_speed = globalAlphaAverage*globalColorTotalG;
+	z_speed = globalAlphaAverage*globalColorTotalB;
 }
 
 
