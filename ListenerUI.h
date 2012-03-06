@@ -40,7 +40,7 @@
 	RemoteMonitor* remote;
 }
 
-@property (strong) id delegate;
+@property id delegate;
 @property UIImageView *exitButtonImage;
 @property Parameteriser	*parameteriser;
 @property CAController* audioController;

@@ -446,10 +446,10 @@ OSStatus renderAudioOutput  (
 	 */
 	metroSpeed = 0.25 * (globalNumShapes*globalAlphaAverage);		//	Lots of bolder shapes = faster playback.
 																	//	up to 0.25 * 12 (3Hz)
-
-	
-	
-	
+	w_speed = globalColorTotalR;
+	x_speed = globalColorTotalG;
+	y_speed = globalColorTotalB;
+	z_speed = globalAlphaAverage*2;
 	
 	NSLog(@"\n\n\n\n");	
 	
