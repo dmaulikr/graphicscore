@@ -212,7 +212,7 @@ inline double voice_w()	{
 
 //	output = bitcrusher_1.	bitcrusher	(output, w_bitcrushAmount);
 //	output = dist_1.		distortion	(output, w_distortionAmount,	w_distortionMix);
-//	output = fxflanger_1.	flange		(output, w_flangeAmount,		w_flangeMix);
+	output = fxflanger_1.	flange		(output, w_flangeAmount,		w_flangeMix);
 	output = tremolo_1.		tremolo		(output, w_tremoloAmount,		w_tremoloMix);
 //	output = delay_1.		delay		(output, w_delayAmount,			w_delayMix);
 //	output	filter
@@ -244,7 +244,7 @@ inline double voice_x()	{
 	
 	output = bitcrusher_2.	bitcrusher	(output, x_bitcrushAmount);
 //	output = dist_2.		distortion	(output, x_distortionAmount,	x_distortionMix);
-//	output = fxflanger_2.	flange		(output, x_flangeAmount,		x_flangeMix);
+	output = fxflanger_2.	flange		(output, x_flangeAmount,		x_flangeMix);
 	output = tremolo_2.		tremolo		(output, x_tremoloAmount,		x_tremoloMix);
 //	output = delay_2.		delay		(output, x_delayAmount,			x_delayMix);
 	//	output	filter
@@ -276,7 +276,7 @@ inline double voice_y()	{
 	
 //	output = bitcrusher_3.	bitcrusher	(output, y_bitcrushAmount);
 //	output = dist_3.		distortion	(output, y_distortionAmount,	y_distortionMix);
-//	output = fxflanger_3.	flange		(output, y_flangeAmount,		y_flangeMix);
+	output = fxflanger_3.	flange		(output, y_flangeAmount,		y_flangeMix);
 	output = tremolo_3.		tremolo		(output, y_tremoloAmount,		y_tremoloMix);
 //	output = delay_3.		delay		(output, y_delayAmount,			y_delayMix);
 	//	output	filter
@@ -308,7 +308,7 @@ inline double voice_z()	{
 	
 //	output = bitcrusher_4.	bitcrusher	(output, z_bitcrushAmount);
 //	output = dist_4.		distortion	(output, z_distortionAmount,	z_distortionMix);
-//	output = fxflanger_4.	flange		(output, z_flangeAmount,		z_flangeMix);
+	output = fxflanger_4.	flange		(output, z_flangeAmount,		z_flangeMix);
 	output = tremolo_4.		tremolo		(output, z_tremoloAmount,		z_tremoloMix);
 //	output = delay_4.		delay		(output, z_delayAmount,			z_delayMix);
 	//	output	filter
@@ -446,10 +446,33 @@ OSStatus renderAudioOutput  (
 	 */
 	metroSpeed = 0.25 * (globalNumShapes*globalAlphaAverage);		//	Lots of bolder shapes = faster playback.
 																	//	up to 0.25 * 12 (3Hz)
+
+	//	Pitch, variant to color content
 	w_speed = globalColorTotalR;
 	x_speed = globalColorTotalG;
 	y_speed = globalColorTotalB;
 	z_speed = globalAlphaAverage*2;
+	
+	
+	//	Flange + bitcrush amount (METALLIC TEXTURE)
+	w_flangeAmount = w_flangeMix = w_bitcrushAmount = points_w;	w_flangeMix*=(0.01*globalNumPoints);
+	y_flangeAmount = x_flangeMix = x_bitcrushAmount = points_x;	x_flangeMix*=(0.02*globalNumPoints);
+	y_flangeAmount = y_flangeMix = y_bitcrushAmount = points_y;	y_flangeMix*=(0.03*globalNumPoints);
+	z_flangeAmount = z_flangeMix = z_bitcrushAmount = points_z;	z_flangeMix*=(0.04*globalNumPoints);
+	
+	
+	//	Distortion, mapped to 'busy'-ness (number of shapes * size)
+	w_distortionAmount	= (0.001*globalNumShapes)*globalShapeSizeTotal;		w_distortionMix = (0.004*globalNumShapes)*globalShapeSizeAverage;
+	x_distortionAmount	= (0.002*globalNumShapes)*globalShapeSizeTotal;		x_distortionMix = (0.003*globalNumShapes)*globalShapeSizeAverage;
+	y_distortionAmount	= (0.003*globalNumShapes)*globalShapeSizeTotal;		y_distortionMix = (0.002*globalNumShapes)*globalShapeSizeAverage;
+	z_distortionAmount	= (0.004*globalNumShapes)*globalShapeSizeTotal;		z_distortionMix = (0.001*globalNumShapes)*globalShapeSizeAverage;
+
+	//	Tremolo, texture (softer)
+	w_tremoloAmount = 0.04*curves_w; w_tremoloMix = 0.001*globalNumCurves;
+	x_tremoloAmount = 0.03*curves_x; x_tremoloMix = 0.002*globalNumCurves;
+	y_tremoloAmount = 0.02*curves_y; y_tremoloMix = 0.003*globalNumCurves;
+	z_tremoloAmount = 0.01*curves_z; z_tremoloMix = 0.004*globalNumCurves;	
+	
 	
 	NSLog(@"\n\n\n\n");	
 	

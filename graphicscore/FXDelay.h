@@ -21,10 +21,10 @@ class FXDelay {
 	public:
 		inline double	delay	(double input, double amount, double mix)	{
 			i = input;
-			input = delay_one.dl	(input, (.25*amount) * sr, amount);
-			input = delay_two.dl	(input, (0.5*amount) * sr, amount);	
-			input = delay_three.dl	(input, (0.75*amount)* sr, amount);
-			input = delay_four.dl	(input, (0.1*amount) * sr, amount);	
+			input = delay_one.dl	(input, (.1*amount) * sr, amount);
+			input = delay_two.dl	(input, (0.3*amount) * sr, amount);	
+			input = delay_three.dl	(input, (0.4*amount)* sr, amount);
+			input = delay_four.dl	(input, (0.6*amount) * sr, amount);	
 			return (input*mix)+(i*(1.0f-mix));	
 		}
 };
