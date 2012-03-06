@@ -13,17 +13,10 @@
 #import "Palette.h"
 #import "Shapes.h"
 #import "GSShapePalette.h"
+#import "GSNetworkProtocols.h"
+#import "GSNetworkController.h"
 
-@protocol RemoteMonitorDelegate <NSObject>
--(BOOL)touchAreaHasBeenUpatedWithShapesOnScreen:(NSMutableArray*)s	andFromNetwork:(NSMutableArray*)n;
-@end
-
-@protocol RemoteMonitorNetworkConnection <NSObject>
--(BOOL)pingServerForConnection;
--(NSMutableArray*)requestData;
-@end
-
-@interface RemoteMonitor : UIView	{
+@interface RemoteMonitor : UIView <GSNetworkCallbackDelegate>	{
 	//	Points incoming from user
 	NSMutableArray	*incoming_points;
 

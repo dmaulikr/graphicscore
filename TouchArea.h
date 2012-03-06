@@ -13,19 +13,10 @@
 #import "Palette.h"
 #import "Shapes.h"
 #import "GSShapePalette.h"
+#import "GSNetworkController.h"
 
-@protocol TouchAreaDelegate <NSObject>
--(BOOL)touchAreaHasBeenUpatedWithShapesOnScreen:(NSMutableArray*)s	andFromNetwork:(NSMutableArray*)n;
-@end
 
-@protocol TouchAreaNetworkConnection <NSObject>
--(int)fetchMemberIdForSession;
--(void)submitData:(NSMutableArray*)data;
--(NSMutableArray*)requestData;
--(BOOL)pingServerForConnection;
-@end
-
-@interface TouchArea : UIView	{
+@interface TouchArea : UIView <GSNetworkCallbackDelegate>	{
 	//	Points incoming from user
 	NSMutableArray	*incoming_points;
 	

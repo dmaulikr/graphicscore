@@ -7,21 +7,23 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "TouchArea.h"
 #import "RemoteMonitor.h"
+#import "GSNetworkProtocols.h"
 
 @interface GSNetworkController : NSObject	<TouchAreaNetworkConnection, RemoteMonitorNetworkConnection>
 
 //	Touch area network connection methods
 -(void)submitData:(NSMutableArray*)data;
--(NSMutableArray*)requestData;
+-(void)requestData;
 -(int)fetchMemberIdForSession;
+
 -(void)request_id;
 -(void)requestListenID;
--(id)init;
+
 -(id)initForListener;
+-(id)init;
 
 @property int	session_id;
 @property int	member_id;
-
+@property id	<GSNetworkCallbackDelegate> delegate;
 @end

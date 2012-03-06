@@ -12,7 +12,7 @@
 @synthesize shape_index, color_index, shapePalette, pingTimer;
 
 -(void)callForSync	{
-	[self processIncomingDataFromNetwork:[network requestData]];
+	[network requestData];
 	pollCountdown = 0;	
 }
 
@@ -36,22 +36,12 @@
 ////////////////////////////////////
 ////////////////////////////////////
 
--(void)fadeElementsFromScreen	{
-	for (GSShape* g in [self subviews])	{
-		g.alpha = [g alpha]*0.999;
-		if (g.alpha<0.01)
-			[g removeFromSuperview];
-	}
-}
-
 - (id)initWithFrame:(CGRect)frame andDelegate:(id)_d andNetworkController:(id)nc	{
     self = [super initWithFrame:frame];
     if (self) {
 		delegate	= _d;
 		network		= nc;
-		
-//		[NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(fadeElementsFromScreen) userInfo:nil repeats:YES];
-		
+		[(GSNetworkController*)network setDelegate:self];
 		//	Ping
 		pollCountdown = 0;
 		pingTimer = [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(pollServerForUpdates) userInfo:nil repeats:YES];
@@ -83,28 +73,6 @@
 	
 	CGRect	def = CGRectMake(originX, originY, width, height);
 	
-//	switch (shape_id)	{
-//		case 1:
-//			g = [[GSQuadrilateral alloc]	initWithFrame:def	andLocal:remotePalette]; 
-//			float angle = [[incoming objectAtIndex:offset+7]floatValue];
-//			[(GSQuadrilateral*)g setAngleOfRotation:angle];
-//			break;
-//			
-//		case 2:	g = [[GSCircle alloc]			initWithFrame:def]; break;			
-//			
-//		case 3:	g = [[GSStar alloc]				initWithFrame:def]; break;
-//			
-//		case 4:	
-//			g = [[GSTriangle alloc]			initWithFrame:def]; 
-//			float l = [[incoming objectAtIndex:offset+7]floatValue];
-//			float p = [[incoming objectAtIndex:offset+8]floatValue];
-//			float r = [[incoming objectAtIndex:offset+9]floatValue];
-//			[(GSTriangle*)g setLeft: l];
-//			[(GSTriangle*)g setPeak: p];
-//			[(GSTriangle*)g setRight:r];
-//			break;			
-//		default:	break;
-//	}
 	switch (shape_id)	{
 		case 1:
 			g = [[GSQuadrilateral alloc]	initWithFrame:def	andLocal:remotePalette andIndex:[[incoming objectAtIndex:offset+5]intValue]]; 
@@ -146,8 +114,6 @@
 			break;			
 		default:	break;
 	}
-
-	
 	
 	if (o==0)
 		[g setLocal:palette];	
@@ -166,7 +132,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
--(void)processIncomingDataFromNetwork:(NSMutableArray*)incoming	{
+-(void)processIncomingDataFromNetwork:(NSArray*)incoming	{
 	NSLog(@"Received data!");
 	
 	if (!refreshLock)	{
@@ -180,11 +146,11 @@
 	}
 	
 	for (int i = 0; i < 5; i++)	{
-		GSShape* k = [self createShapeUsingParameters:incoming withIndex:i andOrigin:0];
+		GSShape* k = [self createShapeUsingParameters:(NSMutableArray*)incoming withIndex:i andOrigin:0];
 		[self addSubview:k];
 	}
 	for (int i = 5; i < 10; i++)	{
-		GSShape* k = [self createShapeUsingParameters:incoming withIndex:i andOrigin:1];
+		GSShape* k = [self createShapeUsingParameters:(NSMutableArray*)incoming withIndex:i andOrigin:1];
 		[self addSubview:k];
 	}
 

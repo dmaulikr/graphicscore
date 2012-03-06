@@ -9,7 +9,7 @@
 #import "GSNetworkController.h"
 
 @implementation GSNetworkController
-@synthesize session_id, member_id;
+@synthesize session_id, member_id, delegate;
 
 -(id)init	{
 	self = [super init];
@@ -30,10 +30,11 @@
 	return self;
 }
 
--(NSMutableArray*)requestData	{	
+-(void)requestData	{	
+	NSLog(@"Requesting data…");
 	NSURL* serverAddress = [NSURL URLWithString:[NSString stringWithFormat:@"http://109.123.110.188/app/request_data.php?id=%i", session_id]];
-	NSMutableArray*	responseFromServer = [[NSMutableArray alloc] initWithContentsOfURL:serverAddress];
-	return responseFromServer;
+	NSArray*	responseFromServer = [[NSArray alloc] initWithContentsOfURL:serverAddress];
+	[delegate processIncomingDataFromNetwork:responseFromServer];
 }
 
 -(NSString*)URLGetStringForShape:(GSShape*)g withIndex:(int)i	{

@@ -35,14 +35,6 @@
 ////////////////////////////////////
 ////////////////////////////////////
 
--(void)fadeElementsFromScreen	{
-	for (GSShape* g in [self subviews])	{
-		g.alpha = [g alpha]*0.999;
-		if (g.alpha<0.01)
-			[g removeFromSuperview];
-	}
-}
-
 -(void) assignPaletteForLocal:(Palette*)p andRemote:(Palette*)r	{
 	palette = p;
 	remotePalette = r;
@@ -59,6 +51,7 @@
     self = [super initWithFrame:frame];
     if (self) {
 		network		= nc;
+		[(GSNetworkController*)network setDelegate: self];
 		delegate	= _d;
 		shape_index = 0;
 		color_index = 0;
@@ -69,7 +62,6 @@
 		[self addSubview:currentShape];
 		member_id = [network fetchMemberIdForSession];
 		shapesFromNetwork = [[NSMutableArray alloc] initWithCapacity:10];
-//		[NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(fadeElementsFromScreen) userInfo:nil repeats:YES];
 		pingTimer = [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(pollServerForUpdates) userInfo:nil repeats:YES];
 		
 		refreshLock = NO;
@@ -129,7 +121,8 @@
 	}
 
 	[network submitData:shapesOnScreen];
-	[self processIncomingDataFromNetwork:[network requestData]];
+//	[self processIncomingDataFromNetwork:[network requestData]];
+	[network requestData];
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -157,7 +150,6 @@
 			[g setOrigin:1];
 			g.index = [[incoming objectAtIndex:offset+5]intValue];
 			g.alpha = [[incoming objectAtIndex:offset+6]floatValue];
-//			float angle = [[incoming objectAtIndex:offset+7]floatValue];
 			break;
 
 		case 2:

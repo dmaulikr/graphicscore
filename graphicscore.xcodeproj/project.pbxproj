@@ -111,6 +111,7 @@
 		7328D2DE14FBD3DA000525DA /* listen_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "listen_pressed@2x.png"; sourceTree = "<group>"; };
 		7328D2DF14FBD3DA000525DA /* listen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = listen.png; sourceTree = "<group>"; };
 		7328D2E014FBD3DA000525DA /* listen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "listen@2x.png"; sourceTree = "<group>"; };
+		732F0309150616CA00B4ED00 /* GSNetworkProtocols.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSNetworkProtocols.h; sourceTree = "<group>"; };
 		7341794014E144FB00D4AAE2 /* FXDistortion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXDistortion.h; sourceTree = "<group>"; };
 		7341794314E145BD00D4AAE2 /* FXFlanger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FXFlanger.h; sourceTree = "<group>"; };
 		734AA41714E1439800990E5A /* FXLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXLibrary.h; sourceTree = "<group>"; };
@@ -248,6 +249,7 @@
 		7323739E149A0B7E00D86DFC /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				732373A2149A0C4F00D86DFC /* NSPoint */,
 				7329855E14FCE3FC00DF0DF8 /* Listen Mode */,
 				739F964714FCE3D500E34381 /* Multiplayer */,
 			);
@@ -393,6 +395,7 @@
 			children = (
 				7370DE6414E4273F00583DBA /* GSNetworkController.h */,
 				7370DE6514E4273F00583DBA /* GSNetworkController.m */,
+				732F0309150616CA00B4ED00 /* GSNetworkProtocols.h */,
 			);
 			name = "Network Controller";
 			sourceTree = "<group>";
@@ -548,7 +551,6 @@
 		73CB2F0314DC600B00D4709E /* Touch Handling */ = {
 			isa = PBXGroup;
 			children = (
-				732373A2149A0C4F00D86DFC /* NSPoint */,
 				7323739F149A0B9F00D86DFC /* TouchArea.h */,
 				732373A0149A0B9F00D86DFC /* TouchArea.m */,
 			);
