@@ -12,7 +12,8 @@
 @synthesize incoming_points, shape_index, color_index, currentShape, shapePalette, member_id, pingTimer;
 
 -(void)callForSync	{
-	[self processIncomingDataFromNetwork:[network requestData]];
+//	[self processIncomingDataFromNetwork:[network requestData]];
+	[network requestData];
 }
 
 -(void)callForPing	{
@@ -43,7 +44,8 @@
 	[generic setOrigin:0];
 	for (int i = 0; i < 10; i++)
 		[shapesOnScreen addObject:generic];
-	[self processIncomingDataFromNetwork:[network requestData]];
+//	[self processIncomingDataFromNetwork:[network requestData]];
+	[network requestData];
 	[delegate touchAreaHasBeenUpatedWithShapesOnScreen:shapesOnScreen andFromNetwork:shapesFromNetwork];
 }
 
@@ -121,7 +123,6 @@
 	}
 
 	[network submitData:shapesOnScreen];
-//	[self processIncomingDataFromNetwork:[network requestData]];
 	[network requestData];
 }
 
@@ -129,8 +130,9 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 -(id)createShapeUsingParameters:(NSMutableArray*)incoming withIndex:(int)index	{
+
 	GSShape* g = [[GSShape alloc] init];
-	
+
 	int offset = 10 * index;
 
 	int shape_id = [[incoming objectAtIndex:offset]intValue];
@@ -183,8 +185,6 @@
 			break;			
 		default:	break;
 	}
-
-
 	return g;
 }
 
@@ -193,19 +193,16 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 -(void)processIncomingDataFromNetwork:(NSMutableArray*)incoming	{
-	NSLog(@"Received data!");
-	
-	[shapesFromNetwork removeAllObjects];	
-	
-	GSShape* generic = [[GSShape alloc] init];
-	
-	//	Populate with generics
-	for (int i = 0; i < 10; i++)
-		[shapesFromNetwork addObject:generic];
-	
 	int start = 0;
 	start = member_id == 1 ? 0 : 5;
 	if (!refreshLock)	{
+		
+		//	Populate with generics
+		GSShape* generic = [[GSShape alloc] init];	
+		[shapesFromNetwork removeAllObjects];		
+		for (int i = 0; i < 10; i++)
+			[shapesFromNetwork addObject:generic];
+
 		refreshLock = YES;
 		for (int i = start; i < start+5; i++)	{
 			[shapesFromNetwork replaceObjectAtIndex:i withObject:
@@ -221,6 +218,8 @@
 		}
 		refreshLock = NO;
 	}
+	[delegate touchAreaHasBeenUpatedWithShapesOnScreen:shapesOnScreen andFromNetwork:shapesFromNetwork];	
+	NSLog(@"Update called from processIncoming");
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////

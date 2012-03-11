@@ -21,17 +21,30 @@
 	int		numcurves;
 	float	alpha_average;
 	
-	NSMutableArray*	points_w;	
-	int		curves_w;
+	int		totalStars;
+	int		totalQuads;
+	int		totalEllipse;
+	int		totalTriangles;
 	
-	NSMutableArray*	points_x;
-	int		curves_x;	
+	NSMutableArray*	starPoints_w;	
+	NSMutableArray*	quadPoints_w;	
+	NSMutableArray*	triPoints_w;		
+	NSMutableArray*	curves_w;
 	
-	NSMutableArray*	points_y;
-	int		curves_y;	
+	NSMutableArray*	starPoints_x;	
+	NSMutableArray*	quadPoints_x;	
+	NSMutableArray*	triPoints_x;		
+	NSMutableArray*	curves_x;
 	
-	NSMutableArray*	points_z;
-	int		curves_z;	
+	NSMutableArray*	starPoints_y;	
+	NSMutableArray*	quadPoints_y;	
+	NSMutableArray*	triPoints_y;		
+	NSMutableArray*	curves_y;
+
+	NSMutableArray*	starPoints_z;	
+	NSMutableArray*	quadPoints_z;	
+	NSMutableArray*	triPoints_z;		
+	NSMutableArray*	curves_z;
 	
 	double	totalSize;
 	double	averageSize;

@@ -20,14 +20,16 @@ public:
 	double	filter		(double input, double hi, double lo, double outputMix)	{
 		dry = input;
 		
-		double hiOut = high_pass.hires	(input, 100+(2000*hi),	1-lo);
-		double loOut = low_pass.lores	(input, 100+(300*lo),	1-hi);
+//		double hiOut = high_pass.hires	(input, 100+(2000*hi),	1-lo);
+//		double loOut = low_pass.lores	(input, 100+(300*lo),	1-hi);
+//		
+//		return (
+//				(outputMix*dry)+
+//				(((1-outputMix)*0.5)*hiOut)+
+//				(((1-outputMix)*0.5)*loOut)
+//		);
 		
-		return (
-				(outputMix*dry)+
-				(((1-outputMix)*0.5)*hiOut)+
-				(((1-outputMix)*0.5)*loOut)
-		);
+		return .5*(low_pass.hires(input, 3000*hi, 15*hi)+(low_pass.lopass(input, lo)));
 	}
 };
 

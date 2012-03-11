@@ -23,10 +23,30 @@
 		numcurves		= 0;
 		alpha_average	= 0.0f;
 		
-		points_w = [[NSMutableArray alloc] init];
-		points_x = [[NSMutableArray alloc] init];
-		points_y = [[NSMutableArray alloc] init];
-		points_z = [[NSMutableArray alloc] init];
+		totalEllipse	= 0;
+		totalQuads		= 0;
+		totalStars		= 0;
+		totalTriangles	= 0;
+		
+		starPoints_w	= [[NSMutableArray alloc] init];	
+		quadPoints_w	= [[NSMutableArray alloc] init];	
+		triPoints_w		= [[NSMutableArray alloc] init];
+		curves_w		= [[NSMutableArray alloc] init];
+		
+		starPoints_x	= [[NSMutableArray alloc] init];	
+		quadPoints_x	= [[NSMutableArray alloc] init];	
+		triPoints_x		= [[NSMutableArray alloc] init];
+		curves_x		= [[NSMutableArray alloc] init];
+		
+		starPoints_y	= [[NSMutableArray alloc] init];	
+		quadPoints_y	= [[NSMutableArray alloc] init];	
+		triPoints_y		= [[NSMutableArray alloc] init];
+		curves_y		= [[NSMutableArray alloc] init];
+		
+		starPoints_z	= [[NSMutableArray alloc] init];	
+		quadPoints_z	= [[NSMutableArray alloc] init];	
+		triPoints_z		= [[NSMutableArray alloc] init];
+		curves_z		= [[NSMutableArray alloc] init];
 		
 		curves_w = curves_x = curves_y = curves_z = 0;
 		
@@ -36,16 +56,42 @@
 	return self;
 }
 
--(void)addPointsFromArrayToParameterData:(NSArray*)a	{
+-(void)addStarPointsFromArrayToParameterData:(NSArray*)a	{
 	for (NSPoint* p in a)	{
 		if (p.y<=80.0f)
-			[points_w addObject:p];
+			[starPoints_w addObject:p];
 		if (p.y<=160.0f&&p.y>80.0f)
-			[points_x addObject:p];
+			[starPoints_x addObject:p];
 		if (p.y<=240.0f&&p.y>160.0f)
-			[points_y addObject:p];
+			[starPoints_y addObject:p];
 		if (p.y>240.0f)
-			[points_z addObject:p];
+			[starPoints_z addObject:p];
+	}
+}
+
+-(void)addTrianglePointsFromArrayToParameterData:(NSArray*)a	{
+	for (NSPoint* p in a)	{
+		if (p.y<=80.0f)
+			[triPoints_w addObject:p];
+		if (p.y<=160.0f&&p.y>80.0f)
+			[triPoints_x addObject:p];
+		if (p.y<=240.0f&&p.y>160.0f)
+			[triPoints_y addObject:p];
+		if (p.y>240.0f)
+			[triPoints_z addObject:p];
+	}
+}
+
+-(void)addQuadPointsFromArrayToParameterData:(NSArray*)a	{
+	for (NSPoint* p in a)	{
+		if (p.y<=80.0f)
+			[quadPoints_w addObject:p];
+		if (p.y<=160.0f&&p.y>80.0f)
+			[quadPoints_x addObject:p];
+		if (p.y<=240.0f&&p.y>160.0f)
+			[quadPoints_y addObject:p];
+		if (p.y>240.0f)
+			[quadPoints_z addObject:p];
 	}
 }
 
@@ -69,7 +115,9 @@
 
 	NSArray*	trianglePoints = [[NSArray alloc] initWithObjects:left, top, right, nil];
 	
-	[self addPointsFromArrayToParameterData:trianglePoints];
+	totalTriangles++;
+	
+	[self addTrianglePointsFromArrayToParameterData:trianglePoints];
 
 	totalSize+=width;
 }
@@ -97,7 +145,9 @@
 	
 	NSArray* quadPoints = [[NSArray alloc] initWithObjects:point_1, point_2, point_3, point_4, nil];
 	
-	[self addPointsFromArrayToParameterData:quadPoints];
+	[self addQuadPointsFromArrayToParameterData:quadPoints];
+
+	totalQuads++;
 	
 	totalSize+=width;	
 }
@@ -140,7 +190,10 @@
 	sc_green_total	+=	RGB[1];
 	sc_blue_total	+=	RGB[2];		
 	
-	[self addPointsFromArrayToParameterData:starPoints];
+//	[self addPointsFromArrayToParameterData:starPoints];
+	[self addStarPointsFromArrayToParameterData:starPoints];
+	
+	totalStars++;
 	
 	totalSize+=width;	
 }
@@ -161,17 +214,19 @@
 	for (int i = originY; i < originY+height; i++){
 		//	Calculate curve occurrence in each frequency band
 		if (i<=80)
-			curves_w++;
+			[curves_w addObject:[NSNumber numberWithInt:i]];
 		if (i<=160&&i>80)
-			curves_x++;
+			[curves_x addObject:[NSNumber numberWithInt:i]];
 		if (i<=240&&i>160)
-			curves_y++;
+			[curves_y addObject:[NSNumber numberWithInt:i]];
 		if (i>240)
-			curves_z++;
+			[curves_z addObject:[NSNumber numberWithInt:i]];
 	}
 	
 	for (int i = originX; i < originX+width; i++)
 		numcurves++;
+	
+	totalEllipse++;
 	
 	totalSize+=width;
 }
@@ -187,20 +242,33 @@
 	
 	curves_w = curves_x = curves_y = curves_z = 0;	
 	
-	[points_w removeAllObjects];
-	[points_x removeAllObjects];
-	[points_y removeAllObjects];
-	[points_z removeAllObjects];
+	[starPoints_w removeAllObjects];
+	[starPoints_x removeAllObjects];	
+	[starPoints_y removeAllObjects];
+	[starPoints_z removeAllObjects];
+	
+	[quadPoints_w removeAllObjects];
+	[quadPoints_x removeAllObjects];
+	[quadPoints_y removeAllObjects];
+	[quadPoints_z removeAllObjects];
+	
+	[triPoints_w removeAllObjects];
+	[triPoints_x removeAllObjects];
+	[triPoints_y removeAllObjects];
+	[triPoints_z removeAllObjects];
 	
 	totalSize	= 0.0;	
 	averageSize = 0.0;
+	
+	totalStars = totalQuads = totalEllipse = totalTriangles = 0;
 }
 
 -(BOOL)touchAreaHasBeenUpatedWithShapesOnScreen:(NSMutableArray*)s	andFromNetwork:(NSMutableArray*)n {
 	NSMutableArray* combo = [[NSMutableArray alloc] init];
+	
 	[combo addObjectsFromArray:s];
 	[combo addObjectsFromArray:n];
-	
+
 	for (GSShape* g in combo)	{		
 		switch (g.shape_index) {
 			case 0:		break;	//GSShape generic id
@@ -219,17 +287,21 @@
 	//	Overall
 	NSNumber	*NSNumShapes	= [[NSNumber alloc] initWithInt:numshapes];
 	NSNumber	*NSNumCurves	= [[NSNumber alloc] initWithInt:numcurves];
-	NSNumber	*NSNumPoints	= [[NSNumber alloc] initWithInt:[points_w count]+[points_x count]+[points_y count]+[points_z count]];
+	NSNumber	*NSNumPoints	= [[NSNumber alloc] initWithInt:
+								   [starPoints_w count]+[starPoints_x count]+[starPoints_y count]+[starPoints_z count]+
+								   [quadPoints_w count]+[quadPoints_x count]+[quadPoints_y count]+[quadPoints_z count]+
+								   [triPoints_w count] +[triPoints_x count]	+[triPoints_y count] +[triPoints_z  count]
+								   ];
 	
 	//	Alpha stats
 	NSNumber	*NSAlphaAverage = [[NSNumber alloc] initWithFloat:alpha_average];
 	NSNumber	*NSAlphaTotal	= [[NSNumber alloc] initWithFloat:alpha_total];
 	
 	//	Segmented curves
-	NSNumber	*NSNumCurves_w	= [[NSNumber alloc] initWithInt:curves_w];
-	NSNumber	*NSNumCurves_x	= [[NSNumber alloc] initWithInt:curves_x];
-	NSNumber	*NSNumCurves_y	= [[NSNumber alloc] initWithInt:curves_y];
-	NSNumber	*NSNumCurves_z	= [[NSNumber alloc] initWithInt:curves_z];
+	NSNumber	*NSNumCurves_w	= [[NSNumber alloc] initWithInt:[curves_w count]];
+	NSNumber	*NSNumCurves_x	= [[NSNumber alloc] initWithInt:[curves_x count]];
+	NSNumber	*NSNumCurves_y	= [[NSNumber alloc] initWithInt:[curves_y count]];
+	NSNumber	*NSNumCurves_z	= [[NSNumber alloc] initWithInt:[curves_z count]];
 	
 	
 	//	Colors
@@ -242,14 +314,22 @@
 	NSNumber	*NSSizeAverage	= [[NSNumber alloc] initWithFloat:averageSize];
 	NSNumber	*NSSizeTotal	= [[NSNumber alloc] initWithFloat:totalSize];
 	
+	//	Shape totals
+	NSNumber	*NSStarTotal	= [[NSNumber alloc] initWithInt:totalStars];
+	NSNumber	*NSQuadTotal	= [[NSNumber alloc] initWithInt:totalQuads];
+	NSNumber	*NSTriTotal		= [[NSNumber alloc] initWithInt:totalTriangles];
+	NSNumber	*NSEllipseTotal	= [[NSNumber alloc] initWithInt:totalEllipse];
+	
 	NSArray		*parameters	 = [NSArray arrayWithObjects: 
-								points_w, points_x, points_y, points_z,
-								NSNumCurves_w, NSNumCurves_x, NSNumCurves_y, NSNumCurves_z,								
-								NSNumCurves, NSNumShapes, NSNumPoints,
-								NSAlphaAverage, NSAlphaTotal,
-								NSTotalR, NSTotalG, NSTotalB,
-								NSSizeAverage, NSSizeTotal,
-								nil];
+								starPoints_w,	starPoints_x,	starPoints_y,	starPoints_z,
+								triPoints_w,	triPoints_x,	triPoints_y,	triPoints_z,
+								quadPoints_w,	quadPoints_x,	quadPoints_y,	quadPoints_z, nil];
+//								NSNumCurves_w, NSNumCurves_x, NSNumCurves_y, NSNumCurves_z,								
+//								NSNumCurves, NSNumShapes, NSNumPoints,
+//								NSAlphaAverage, NSAlphaTotal,
+//								NSTotalR, NSTotalG, NSTotalB,
+//								NSSizeAverage, NSSizeTotal,
+//								nil];
 	
 	[delegate updatedParameters:parameters];
 	

@@ -31,7 +31,6 @@
 }
 
 -(void)requestData	{	
-	NSLog(@"Requesting data…");
 	NSURL* serverAddress = [NSURL URLWithString:[NSString stringWithFormat:@"http://109.123.110.188/app/request_data.php?id=%i", session_id]];
 	NSArray*	responseFromServer = [[NSArray alloc] initWithContentsOfURL:serverAddress];
 	[delegate processIncomingDataFromNetwork:responseFromServer];

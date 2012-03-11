@@ -20,7 +20,7 @@
 @protocol TouchAreaNetworkConnection <NSObject>
 -(int)fetchMemberIdForSession;
 -(void)submitData:(NSMutableArray*)data;
--(NSMutableArray*)requestData;
+-(void)requestData;
 -(BOOL)pingServerForConnection;
 @end
 

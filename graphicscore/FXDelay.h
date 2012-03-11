@@ -21,11 +21,13 @@ class FXDelay {
 	public:
 		inline double	delay	(double input, double amount, double mix)	{
 			i = input;
-			input = delay_one.dl	(input, (.1*amount) * sr, amount);
-			input = delay_two.dl	(input, (0.3*amount) * sr, amount);	
-			input = delay_three.dl	(input, (0.4*amount)* sr, amount);
-			input = delay_four.dl	(input, (0.6*amount) * sr, amount);	
-			return (input*mix)+(i*(1.0f-mix));	
+			amount	= amount	> 0.75 ? 0.75 : amount;
+			mix		= mix		> 0.75 ? 0.75 : mix;			
+			input	= delay_one.dl	(input, (.22*amount)  * sr, amount);
+			input	= delay_two.dl	(input, (0.44*amount) * sr, amount);	
+			input	= delay_three.dl(input, (0.66*amount) * sr, amount);
+			input	= delay_four.dl	(input, (0.88*amount) * sr, amount);	
+			return	(input*mix)+(i*(1.0f-mix));	
 		}
 };
 
