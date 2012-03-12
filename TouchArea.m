@@ -12,7 +12,6 @@
 @synthesize incoming_points, shape_index, color_index, currentShape, shapePalette, member_id, pingTimer;
 
 -(void)callForSync	{
-//	[self processIncomingDataFromNetwork:[network requestData]];
 	[network requestData];
 }
 
@@ -44,7 +43,6 @@
 	[generic setOrigin:0];
 	for (int i = 0; i < 10; i++)
 		[shapesOnScreen addObject:generic];
-//	[self processIncomingDataFromNetwork:[network requestData]];
 	[network requestData];
 	[delegate touchAreaHasBeenUpatedWithShapesOnScreen:shapesOnScreen andFromNetwork:shapesFromNetwork];
 }
@@ -74,8 +72,9 @@
 -(void)processTouches:(NSSet*)touches	{
 	UITouch *touch = [touches anyObject];
 	if (touch.view==self)	{
-		NSPoint *pp = [[NSPoint alloc] initWithCGPoint:[touch locationInView:self]];
-		[incoming_points addObject:pp];
+//		NSPoint *pp = [[NSPoint alloc] initWithCGPoint:[touch locationInView:self]];
+//		[incoming_points addObject:pp];
+		[incoming_points addObject:[NSPoint pointWithCGPoint:[touch locationInView:self]]];
 	}
 }
 

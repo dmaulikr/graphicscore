@@ -47,7 +47,13 @@
 	NSMutableArray*	curves_z;
 	
 	double	totalSize;
-	double	averageSize;
+	double	averageArea;
+	double	averageWidth;
+	double	averageHeight;
+	
+	//	all origins (distances)
+	NSMutableArray*	origins;
+	double	overlap;
 }
 
 @property	float			alpha_total;

@@ -21,4 +21,13 @@
 	return self;
 }
 
+-(BOOL)matchesNSPoint:(NSPoint *)p	{
+	return (p.x==x&&p.y==y);
+}
+
++(NSPoint*)pointWithCGPoint:(CGPoint)p	{
+	NSPoint* nsp = [[NSPoint alloc] initWithCGPoint:p];
+	return nsp;
+}
+
 @end

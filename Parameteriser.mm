@@ -51,13 +51,17 @@
 		curves_w = curves_x = curves_y = curves_z = 0;
 		
 		totalSize	= 0.0;	
-		averageSize = 0.0;
+		averageArea = 0.0;
+		
+		origins			= [[NSMutableArray alloc] init];
 	}
 	return self;
 }
 
 -(void)addStarPointsFromArrayToParameterData:(NSArray*)a	{
 	for (NSPoint* p in a)	{
+		if (p.x!=0.0f)
+			p.x=floorf(p.x/30);
 		if (p.y<=80.0f)
 			[starPoints_w addObject:p];
 		if (p.y<=160.0f&&p.y>80.0f)
@@ -71,6 +75,8 @@
 
 -(void)addTrianglePointsFromArrayToParameterData:(NSArray*)a	{
 	for (NSPoint* p in a)	{
+		if (p.x!=0.0f)
+			p.x=floorf(p.x/30);
 		if (p.y<=80.0f)
 			[triPoints_w addObject:p];
 		if (p.y<=160.0f&&p.y>80.0f)
@@ -84,6 +90,8 @@
 
 -(void)addQuadPointsFromArrayToParameterData:(NSArray*)a	{
 	for (NSPoint* p in a)	{
+		if (p.x!=0.0f)
+			p.x=floorf(p.x/30);
 		if (p.y<=80.0f)
 			[quadPoints_w addObject:p];
 		if (p.y<=160.0f&&p.y>80.0f)
@@ -120,6 +128,11 @@
 	[self addTrianglePointsFromArrayToParameterData:trianglePoints];
 
 	totalSize+=width;
+	
+	averageWidth	+=width;
+	averageHeight	+=height;
+	
+	[origins addObject:left];
 }
 
 -(void)processQuadrilateral:(GSQuadrilateral*)q	{
@@ -149,7 +162,12 @@
 
 	totalQuads++;
 	
-	totalSize+=width;	
+	totalSize+=width;
+	
+	averageWidth	+=width;
+	averageHeight	+=height;
+	
+	[origins addObject:[NSPoint pointWithCGPoint:CGPointMake(originX, originY)]];
 }
 
 
@@ -190,10 +208,14 @@
 	sc_green_total	+=	RGB[1];
 	sc_blue_total	+=	RGB[2];		
 	
-//	[self addPointsFromArrayToParameterData:starPoints];
 	[self addStarPointsFromArrayToParameterData:starPoints];
 	
+	[origins addObject:nine];
+	
 	totalStars++;
+	
+	averageWidth	+=width;
+	averageHeight	+=height;
 	
 	totalSize+=width;	
 }
@@ -228,6 +250,11 @@
 	
 	totalEllipse++;
 	
+	[origins addObject:[NSPoint pointWithCGPoint:CGPointMake(originX, originY)]];
+	
+	averageHeight	+=height;
+	averageWidth	+=width;
+	
 	totalSize+=width;
 }
 
@@ -258,9 +285,51 @@
 	[triPoints_z removeAllObjects];
 	
 	totalSize	= 0.0;	
-	averageSize = 0.0;
+	averageHeight = averageWidth = averageArea = 0.0;
 	
 	totalStars = totalQuads = totalEllipse = totalTriangles = 0;
+	
+	[origins removeAllObjects];
+	
+	overlap = 0.0f;
+}
+
+-(double)calculateOverlapWithOrigins:(NSArray*)_origins	averageShapeWidth:(float)_averageSizeW 	andAverageShapeHeight:(float)_averageSizeH	{
+	double	overlapFactor = .0f;
+		
+	for (int i = 0; i < [_origins count]; i++)	{
+		NSPoint* p = [_origins objectAtIndex:i];		
+		for (int j = i; j < [_origins count]; j++)	{
+			NSPoint* o = [_origins objectAtIndex:j];
+			
+			float	overlapX = 0.0;
+			float	overlapY = 0.0;
+			
+			if (![p matchesNSPoint:o])	{			
+				float	lowestX		= p.x > o.x ? o.x : p.x;
+				float	highestX	= p.x > o.x ? p.x : o.x;
+				float	lowestY		= p.y > o.y ? o.y : p.y;
+				float	highestY	= p.y > o.y ? p.y : o.y;
+				
+				float	endX		= lowestX + _averageSizeW;
+				float	endY		= lowestY + _averageSizeH;
+				
+				float	overlapX	= 0.0f;
+				float	overlapY	= 0.0f;
+				
+				overlapX = endX-highestX;
+				overlapY = endY-highestY;
+				
+				float	overlapArea	= 0.0f;
+				
+				if ((overlapY>0.0f)&&(overlapX>0.0f))	{
+					overlapArea = overlapY*overlapX;
+					overlapFactor+=(overlapArea*0.000005);
+				}
+			}
+		}
+	}
+	return	overlapFactor;
 }
 
 -(BOOL)touchAreaHasBeenUpatedWithShapesOnScreen:(NSMutableArray*)s	andFromNetwork:(NSMutableArray*)n {
@@ -281,8 +350,14 @@
 	}
 
 	//	Prevent /0 error
-	if (numshapes!=0)
-		alpha_average = alpha_total/numshapes;
+	if (numshapes!=0)	{
+		alpha_average	= alpha_total/numshapes;
+		averageHeight	= averageHeight/numshapes;
+		averageWidth	= averageWidth/numshapes;
+	}
+	
+	//	CALCULATE BUSY-NESS/OVERLAP USING DIFF BETWEEN ORIGINS + AVERAGE SIZE 
+	overlap = [self calculateOverlapWithOrigins:origins averageShapeWidth:averageWidth andAverageShapeHeight:averageHeight];
 	
 	//	Overall
 	NSNumber	*NSNumShapes	= [[NSNumber alloc] initWithInt:numshapes];
@@ -297,12 +372,11 @@
 	NSNumber	*NSAlphaAverage = [[NSNumber alloc] initWithFloat:alpha_average];
 	NSNumber	*NSAlphaTotal	= [[NSNumber alloc] initWithFloat:alpha_total];
 	
-	//	Segmented curves
+	//	Frequency segmented curves
 	NSNumber	*NSNumCurves_w	= [[NSNumber alloc] initWithInt:[curves_w count]];
 	NSNumber	*NSNumCurves_x	= [[NSNumber alloc] initWithInt:[curves_x count]];
 	NSNumber	*NSNumCurves_y	= [[NSNumber alloc] initWithInt:[curves_y count]];
 	NSNumber	*NSNumCurves_z	= [[NSNumber alloc] initWithInt:[curves_z count]];
-	
 	
 	//	Colors
 	NSNumber	*NSTotalR		= [[NSNumber alloc] initWithFloat:sc_red_total];
@@ -310,9 +384,13 @@
 	NSNumber	*NSTotalB		= [[NSNumber alloc] initWithFloat:sc_red_total];	
 	
 	//	Size
-	averageSize = totalSize/numshapes;
-	NSNumber	*NSSizeAverage	= [[NSNumber alloc] initWithFloat:averageSize];
+	averageArea = averageHeight*averageWidth;
+	NSNumber	*NSAreaAverage	= [[NSNumber alloc] initWithFloat:averageArea];
 	NSNumber	*NSSizeTotal	= [[NSNumber alloc] initWithFloat:totalSize];
+	NSNumber	*NSWidthAverage	= [[NSNumber alloc] initWithFloat:averageWidth];
+	NSNumber	*NSHeightAverage= [[NSNumber alloc] initWithFloat:averageHeight];	
+	
+	NSNumber	*NSOverlap		= [[NSNumber alloc] initWithFloat:overlap];
 	
 	//	Shape totals
 	NSNumber	*NSStarTotal	= [[NSNumber alloc] initWithInt:totalStars];

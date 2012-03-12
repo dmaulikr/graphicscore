@@ -22,6 +22,21 @@ bool		playback;	//	YES if noise is desired
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 
+NSArray*	starPoints_w;
+NSArray*	starPoints_x;
+NSArray*	starPoints_y;
+NSArray*	starPoints_z;	
+
+NSArray*	triPoints_w;	
+NSArray*	triPoints_x;
+NSArray*	triPoints_y;
+NSArray*	triPoints_z;
+
+NSArray*	quadPoints_w;
+NSArray*	quadPoints_x;
+NSArray*	quadPoints_y;
+NSArray*	quadPoints_z;
+
 //	MAX OBJECT DECLARATION
 
 #pragma mark METRONOME
@@ -65,13 +80,60 @@ double	globalColorTotalR;
 double	globalColorTotalG;
 double	globalColorTotalB;
 
+//	SAMPLE PLAYERS
+//	QUAD
+maxiSample quad_w;
+maxiSample quad_x;
+maxiSample quad_y;
+maxiSample quad_z;
+
+double	quad_w_out, quad_x_out, quad_y_out, quad_z_out;
+double	quad_w_vol, quad_x_vol, quad_y_vol, quad_z_vol;
+
+double	quadOut;
+
+//	STAR
+maxiSample star_w;
+maxiSample star_x;
+maxiSample star_y;
+maxiSample star_z;
+
+double	star_w_out, star_x_out, star_y_out, star_z_out;
+double	star_w_vol, star_x_vol, star_y_vol, star_z_vol;
+
+double	starOut;
+
+
+//	TRI
+maxiSample tri_w;
+maxiSample tri_x;
+maxiSample tri_y;
+maxiSample tri_z;
+
+double	tri_w_out, tri_x_out, tri_y_out, tri_z_out;
+double	tri_w_vol, tri_x_vol, tri_y_vol, tri_z_vol;
+
+double	triOut;
+
 
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 
 inline void initLocalVariables	(void)	{	
-	//	Create trigger buffers
+	starPoints_w = [[NSArray alloc] init];
+	starPoints_x = [[NSArray alloc] init];
+	starPoints_y = [[NSArray alloc] init];
+	starPoints_z = [[NSArray alloc] init];	
 	
+	triPoints_w  = [[NSArray alloc] init];
+	triPoints_x  = [[NSArray alloc] init];
+	triPoints_y  = [[NSArray alloc] init];
+	triPoints_z	 = [[NSArray alloc] init];
+	
+	quadPoints_w = [[NSArray alloc] init];
+	quadPoints_x = [[NSArray alloc] init];
+	quadPoints_y = [[NSArray alloc] init];
+	quadPoints_z = [[NSArray alloc] init];	
 }
 
 inline void maxiSetup		(void)	{
@@ -91,41 +153,138 @@ inline void maxiSetup		(void)	{
 	globalColorTotalR	= 0;
 	globalColorTotalG	= 0;
 	globalColorTotalB	= 0;
+	
+	//	Load samples
+	
+	//	QUAD
+	quad_w.load([[[NSBundle mainBundle] pathForResource:@"piano_4" ofType:@"wav"] cStringUsingEncoding:NSUTF8StringEncoding]);
+	
+	quad_x.load([[[NSBundle mainBundle] pathForResource:@"piano_5ths_3" ofType:@"wav"] cStringUsingEncoding:NSUTF8StringEncoding]);
+	
+	quad_y.load([[[NSBundle mainBundle] pathForResource:@"piano_2" ofType:@"wav"] cStringUsingEncoding:NSUTF8StringEncoding]);
+	
+	quad_z.load([[[NSBundle mainBundle] pathForResource:@"piano_5ths_1" ofType:@"wav"] cStringUsingEncoding:NSUTF8StringEncoding]);	
+	
+	
+	//	STAR
+	star_w.load([[[NSBundle mainBundle] pathForResource:@"12st_5ths_4" ofType:@"wav"] cStringUsingEncoding:NSUTF8StringEncoding]);
+	
+	star_x.load([[[NSBundle mainBundle] pathForResource:@"12st_3" ofType:@"wav"] cStringUsingEncoding:NSUTF8StringEncoding]);
+	
+	star_y.load([[[NSBundle mainBundle] pathForResource:@"12st_5ths_2" ofType:@"wav"] cStringUsingEncoding:NSUTF8StringEncoding]);
+	
+	star_z.load([[[NSBundle mainBundle] pathForResource:@"12st_1" ofType:@"wav"] cStringUsingEncoding:NSUTF8StringEncoding]);	
+	
+	
+	//	TRI
+	tri_w.load([[[NSBundle mainBundle] pathForResource:@"electric_odd_4" ofType:@"wav"] cStringUsingEncoding:NSUTF8StringEncoding]);
+	
+	tri_x.load([[[NSBundle mainBundle] pathForResource:@"electric_3" ofType:@"wav"] cStringUsingEncoding:NSUTF8StringEncoding]);
+	
+	tri_y.load([[[NSBundle mainBundle] pathForResource:@"electric_odd_2" ofType:@"wav"] cStringUsingEncoding:NSUTF8StringEncoding]);
+	
+	tri_z.load([[[NSBundle mainBundle] pathForResource:@"electric_1" ofType:@"wav"] cStringUsingEncoding:NSUTF8StringEncoding]);
 }
 
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
+
+inline bool readArrayForIndex(NSArray* a, int i)	{
+	bool trigger = false;
+	for (NSPoint* p in a)	{
+		if (p.x==i)	{
+			trigger = true;
+			break;
+		}
+	}
+	return trigger;
+}
+
 
 inline void readTriggers	(int i)	{	
-//	if (w_triggers[i]>=0.01f)	{
-//		w_vol = 1.0f;
-//		sample_w.trigger();
-//	}
-//
-//	if (x_triggers[i]>=0.01f)	{
-//		x_vol = 1.0f;		
-//		sample_x.trigger();		
-//	}
-//
-//	if (y_triggers[i]>=0.01f)	{
-//		sample_y.trigger();
-//		y_vol = 1.0f;
-//	}
-//	
-//	if (z_triggers[i]>=0.01f)	{
-//		sample_z.trigger();
-//		z_vol =	1.0f;
-//	}
+	//	QUAD
+	if (readArrayForIndex(quadPoints_w, i))	{
+		quad_w.trigger();
+		quad_w_vol=1.0f;
+	}
+	if (readArrayForIndex(quadPoints_x, i))	{
+		quad_x.trigger();		
+		quad_x_vol=1.0f;
+	}
+	if (readArrayForIndex(quadPoints_y, i))	{		
+		quad_y.trigger();
+		quad_y_vol=1.0f;
+	}
+	if (readArrayForIndex(quadPoints_z, i))	{
+		quad_z.trigger();
+		quad_z_vol=1.0f;
+	}
+	
+	//	STAR
+	if (readArrayForIndex(starPoints_w, i))	{
+		star_w.trigger();
+		star_w_vol=1.0f;
+	}
+	if (readArrayForIndex(starPoints_x, i))	{
+		star_x.trigger();		
+		star_x_vol=1.0f;
+	}
+	if (readArrayForIndex(starPoints_y, i))	{		
+		star_y.trigger();
+		star_y_vol=1.0f;
+	}
+	if (readArrayForIndex(starPoints_z, i))	{
+		star_z.trigger();
+		star_z_vol=1.0f;
+	}	
+	
+	//	TRI
+	if (readArrayForIndex(triPoints_w, i))	{
+		tri_w.trigger();
+		tri_w_vol=1.0f;
+	}
+	if (readArrayForIndex(triPoints_x, i))	{
+		tri_x.trigger();		
+		star_x_vol=1.0f;
+	}
+	if (readArrayForIndex(triPoints_y, i))	{		
+		tri_y.trigger();
+		tri_y_vol=1.0f;
+	}
+	if (readArrayForIndex(triPoints_z, i))	{
+		tri_z.trigger();
+		tri_z_vol=1.0f;
+	}	
+}
+
+inline void sustain	()	{
+	//	QUAD
+	quad_w_out*=0.9995;
+	quad_x_out*=0.9995;
+	quad_y_out*=0.9995;
+	quad_z_out*=0.9995;
+	//	STAR
+	star_w_out*=0.9995;
+	star_x_out*=0.9995;
+	star_y_out*=0.9995;
+	star_z_out*=0.9995;
+	
+	//	TRI
+	tri_w_out*=0.9995;
+	tri_x_out*=0.9995;
+	tri_y_out*=0.9995;
+	tri_z_out*=0.9995;
 }
 
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
-
 
 #pragma mark USER RENDERING METHOD
 float*	output	()	{
-    render_output[0] = render_output[1] = 0;
+	sustain();
 	
+    render_output[0] = render_output[1] = 0;
+
 	if ((int)metro.phasor(metroSpeed)>=1)	{
 		metroCount++;
 		if (metroCount>15)
@@ -133,8 +292,33 @@ float*	output	()	{
 		readTriggers(metroCount);
 	}
 	
-	render_output	[0] = .0f;
-	render_output	[1] = .0f;
+	//	QUAD
+	quad_w_out	= quad_w.playOnce()*quad_w_vol;
+	quad_x_out	= quad_x.playOnce()*quad_x_vol;
+	quad_y_out	= quad_y.playOnce()*quad_y_vol;
+	quad_z_out	= quad_z.playOnce()*quad_z_vol;
+	quadOut		= .25*(quad_w_out+quad_x_out+quad_y_out+quad_z_out);
+	
+	
+	//	STAR
+	star_w_out	= star_w.playOnce()*star_w_vol;
+	star_x_out	= star_x.playOnce()*star_x_vol;
+	star_y_out	= star_y.playOnce()*star_y_vol;
+	star_z_out	= star_z.playOnce()*star_z_vol;
+	starOut		= .25*(star_w_out + star_x_out + star_y_out + star_z_out);
+	
+	
+	//	TRI
+	tri_w_out	= tri_w.playOnce()*tri_w_vol;
+	tri_x_out	= tri_x.playOnce()*tri_x_vol;
+	tri_y_out	= tri_y.playOnce()*tri_y_vol;
+	tri_z_out	= tri_z.playOnce()*tri_z_vol;
+	triOut		= .25*(tri_w_out + tri_x_out + tri_y_out + tri_z_out);
+	
+	//	ELLIPSE
+	
+	render_output	[0] = .3*(starOut+triOut);
+	render_output	[1] = .3*(quadOut+triOut);
 
     return render_output;
 }
@@ -179,27 +363,27 @@ OSStatus renderAudioOutput  (
 	/*
 		Points and triggers
 	 */
-	NSArray*	starPoints_w = [NSArray arrayWithArray:[parameters objectAtIndex:0]];
-	NSArray*	starPoints_x = [NSArray arrayWithArray:[parameters objectAtIndex:1]];
-	NSArray*	starPoints_y = [NSArray arrayWithArray:[parameters objectAtIndex:2]];
-	NSArray*	starPoints_z = [NSArray arrayWithArray:[parameters objectAtIndex:3]];	
+	starPoints_w = [NSArray arrayWithArray:[parameters objectAtIndex:0]];
+	starPoints_x = [NSArray arrayWithArray:[parameters objectAtIndex:1]];
+	starPoints_y = [NSArray arrayWithArray:[parameters objectAtIndex:2]];
+	starPoints_z = [NSArray arrayWithArray:[parameters objectAtIndex:3]];	
 	
 	NSLog(@"STAR:	W POINTS: %i	X POINTS: %i	Y POINTS: %i	Z POINTS: %i", [starPoints_w count], [starPoints_x count], [starPoints_y count], [starPoints_z count]);
 	
 //	TRI TOTALS
-	NSArray*	triPoints_w = [NSArray arrayWithArray:[parameters objectAtIndex:4]];
-	NSArray*	triPoints_x = [NSArray arrayWithArray:[parameters objectAtIndex:5]];
-	NSArray*	triPoints_y = [NSArray arrayWithArray:[parameters objectAtIndex:6]];
-	NSArray*	triPoints_z = [NSArray arrayWithArray:[parameters objectAtIndex:7]];	
+	triPoints_w = [NSArray arrayWithArray:[parameters objectAtIndex:4]];
+	triPoints_x = [NSArray arrayWithArray:[parameters objectAtIndex:5]];
+	triPoints_y = [NSArray arrayWithArray:[parameters objectAtIndex:6]];
+	triPoints_z = [NSArray arrayWithArray:[parameters objectAtIndex:7]];	
 
 	NSLog(@"TRI:	W POINTS: %i	X POINTS: %i	Y POINTS: %i	Z POINTS: %i", [triPoints_w count], [triPoints_x count], [triPoints_y count], [triPoints_z count]);
 	
 //	QUAD TOTALS
-	NSArray*	quadPoints_w = [NSArray arrayWithArray:[parameters objectAtIndex:8]];
-	NSArray*	quadPoints_x = [NSArray arrayWithArray:[parameters objectAtIndex:9]];
-	NSArray*	quadPoints_y = [NSArray arrayWithArray:[parameters objectAtIndex:10]];
-	NSArray*	quadPoints_z = [NSArray arrayWithArray:[parameters objectAtIndex:11]];	
-
+	quadPoints_w = [NSArray arrayWithArray:[parameters objectAtIndex:8]];
+	quadPoints_x = [NSArray arrayWithArray:[parameters objectAtIndex:9]];
+	quadPoints_y = [NSArray arrayWithArray:[parameters objectAtIndex:10]];
+	quadPoints_z = [NSArray arrayWithArray:[parameters objectAtIndex:11]];	
+	
 	NSLog(@"QUAD:	W POINTS: %i	X POINTS: %i	Y POINTS: %i	Z POINTS: %i", [quadPoints_w count], [quadPoints_x count], [quadPoints_y count], [quadPoints_z count]);	
 
 
