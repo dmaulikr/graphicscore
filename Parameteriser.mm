@@ -48,8 +48,6 @@
 		triPoints_z		= [[NSMutableArray alloc] init];
 		curves_z		= [[NSMutableArray alloc] init];
 		
-		curves_w = curves_x = curves_y = curves_z = 0;
-		
 		totalSize	= 0.0;	
 		averageArea = 0.0;
 		
@@ -234,15 +232,29 @@
 	sc_blue_total	+=	RGB[2];
 	
 	for (int i = originY; i < originY+height; i++){
+		NSPoint* p = [NSPoint pointWithCGPoint:CGPointMake(0.0f, 0.0f)];
+		double x = .0f;
 		//	Calculate curve occurrence in each frequency band
-		if (i<=80)
-			[curves_w addObject:[NSNumber numberWithInt:i]];
-		if (i<=160&&i>80)
-			[curves_x addObject:[NSNumber numberWithInt:i]];
-		if (i<=240&&i>160)
-			[curves_y addObject:[NSNumber numberWithInt:i]];
-		if (i>240)
-			[curves_z addObject:[NSNumber numberWithInt:i]];
+		if (i<=80)	{
+			[p setX:	i];
+			[p setY:	floor((80-i)/2.6)];	
+			[curves_w	addObject:p];
+		}
+		if (i<=160&&i>80)	{
+			x = i-80;
+			[p setY:	floor((80-x)/2.6)];
+			[curves_x	addObject:p];
+		}
+		if (i<=240&&i>160)	{
+			x = i-160;
+			[p setY:	floor((80-x)/2.6)];
+			[curves_y	addObject:p];
+		}
+		if (i>240)	{
+			x = i-240;
+			[p setY:	floor((80-x)/2.6)];
+			[curves_z	addObject:p];
+		}
 	}
 	
 	for (int i = originX; i < originX+width; i++)
@@ -266,8 +278,11 @@
 	numshapes		= 0;
 	numcurves		= 0;
 	alpha_average	= 0.0f;
-	
-	curves_w = curves_x = curves_y = curves_z = 0;	
+
+	[curves_w	removeAllObjects];
+	[curves_x	removeAllObjects];
+	[curves_y	removeAllObjects];
+	[curves_z	removeAllObjects];
 	
 	[starPoints_w removeAllObjects];
 	[starPoints_x removeAllObjects];	
@@ -314,8 +329,8 @@
 				float	endX		= lowestX + _averageSizeW;
 				float	endY		= lowestY + _averageSizeH;
 				
-				float	overlapX	= 0.0f;
-				float	overlapY	= 0.0f;
+				overlapX	= 0.0f;
+				overlapY	= 0.0f;
 				
 				overlapX = endX-highestX;
 				overlapY = endY-highestY;
@@ -361,53 +376,35 @@
 	
 	//	Overall
 	NSNumber	*NSNumShapes	= [[NSNumber alloc] initWithInt:numshapes];
-	NSNumber	*NSNumCurves	= [[NSNumber alloc] initWithInt:numcurves];
-	NSNumber	*NSNumPoints	= [[NSNumber alloc] initWithInt:
-								   [starPoints_w count]+[starPoints_x count]+[starPoints_y count]+[starPoints_z count]+
-								   [quadPoints_w count]+[quadPoints_x count]+[quadPoints_y count]+[quadPoints_z count]+
-								   [triPoints_w count] +[triPoints_x count]	+[triPoints_y count] +[triPoints_z  count]
-								   ];
 	
 	//	Alpha stats
 	NSNumber	*NSAlphaAverage = [[NSNumber alloc] initWithFloat:alpha_average];
-	NSNumber	*NSAlphaTotal	= [[NSNumber alloc] initWithFloat:alpha_total];
-	
-	//	Frequency segmented curves
-	NSNumber	*NSNumCurves_w	= [[NSNumber alloc] initWithInt:[curves_w count]];
-	NSNumber	*NSNumCurves_x	= [[NSNumber alloc] initWithInt:[curves_x count]];
-	NSNumber	*NSNumCurves_y	= [[NSNumber alloc] initWithInt:[curves_y count]];
-	NSNumber	*NSNumCurves_z	= [[NSNumber alloc] initWithInt:[curves_z count]];
 	
 	//	Colors
 	NSNumber	*NSTotalR		= [[NSNumber alloc] initWithFloat:sc_red_total];
 	NSNumber	*NSTotalG		= [[NSNumber alloc] initWithFloat:sc_red_total];
 	NSNumber	*NSTotalB		= [[NSNumber alloc] initWithFloat:sc_red_total];	
 	
-	//	Size
 	averageArea = averageHeight*averageWidth;
-	NSNumber	*NSAreaAverage	= [[NSNumber alloc] initWithFloat:averageArea];
-	NSNumber	*NSSizeTotal	= [[NSNumber alloc] initWithFloat:totalSize];
-	NSNumber	*NSWidthAverage	= [[NSNumber alloc] initWithFloat:averageWidth];
-	NSNumber	*NSHeightAverage= [[NSNumber alloc] initWithFloat:averageHeight];	
-	
 	NSNumber	*NSOverlap		= [[NSNumber alloc] initWithFloat:overlap];
 	
-	//	Shape totals
-	NSNumber	*NSStarTotal	= [[NSNumber alloc] initWithInt:totalStars];
-	NSNumber	*NSQuadTotal	= [[NSNumber alloc] initWithInt:totalQuads];
-	NSNumber	*NSTriTotal		= [[NSNumber alloc] initWithInt:totalTriangles];
-	NSNumber	*NSEllipseTotal	= [[NSNumber alloc] initWithInt:totalEllipse];
-	
 	NSArray		*parameters	 = [NSArray arrayWithObjects: 
+								//	Triggers
 								starPoints_w,	starPoints_x,	starPoints_y,	starPoints_z,
 								triPoints_w,	triPoints_x,	triPoints_y,	triPoints_z,
-								quadPoints_w,	quadPoints_x,	quadPoints_y,	quadPoints_z, nil];
-//								NSNumCurves_w, NSNumCurves_x, NSNumCurves_y, NSNumCurves_z,								
-//								NSNumCurves, NSNumShapes, NSNumPoints,
-//								NSAlphaAverage, NSAlphaTotal,
-//								NSTotalR, NSTotalG, NSTotalB,
-//								NSSizeAverage, NSSizeTotal,
-//								nil];
+								quadPoints_w,	quadPoints_x,	quadPoints_y,	quadPoints_z,
+								
+								//	Busy, bold
+								NSOverlap,		NSAlphaAverage, 
+								
+								//	Soft
+								curves_w,		curves_x,		curves_y,		curves_z,
+								
+								//	Colors
+								NSTotalR, NSTotalG, NSTotalB,	
+								
+								//	NumShapes
+								NSNumShapes, nil];
 	
 	[delegate updatedParameters:parameters];
 	

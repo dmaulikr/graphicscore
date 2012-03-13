@@ -218,7 +218,6 @@
 		refreshLock = NO;
 	}
 	[delegate touchAreaHasBeenUpatedWithShapesOnScreen:shapesOnScreen andFromNetwork:shapesFromNetwork];	
-	NSLog(@"Update called from processIncoming");
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////

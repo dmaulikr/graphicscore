@@ -37,6 +37,11 @@ NSArray*	quadPoints_x;
 NSArray*	quadPoints_y;
 NSArray*	quadPoints_z;
 
+NSArray*	curvesW;
+NSArray*	curvesX;
+NSArray*	curvesY;
+NSArray*	curvesZ;
+
 //	MAX OBJECT DECLARATION
 
 #pragma mark METRONOME
@@ -44,76 +49,52 @@ maxiOsc		metro;
 int			metroCount;
 double		metroOut;
 double		metroSpeed;
-
-/*
-NSArray		*parameters	 = [NSArray arrayWithObjects: 
-							points_w, points_x, points_y, points_z,
-							NSNumCurves_w, NSNumCurves_x, NSNumCurves_y, NSNumCurves_z,								
-							NSNumCurves, NSNumShapes, NSNumPoints,
-							NSAlphaAverage, NSAlphaTotal,
-							NSTotalR, NSTotalG, NSTotalB,
-							nil];
-*/
+int			oddMod = 1;
 
 #pragma mark PARAMETERS
-//	Local curves
-int curves_w, curves_x, curves_y, curves_z;
 
-//	Local points
+//	Band outputs
+double w_out, x_out, y_out, z_out;
 
-//	STAR
-int	starPoints_w_Total, starPoints_x_Total, starPoints_y_Total, starPoints_z_Total;
+//	Overlap
+double overlap;
 
 //	Globals
-//	…shape
-int		globalNumCurves;
-int		globalNumShapes;
-int		globalNumPoints;
-
-double	globalShapeSizeAverage;
-double	globalShapeSizeTotal;
-
 //	…color
-double	globalAlphaAverage;
-double	globalAlphaTotal;
-double	globalColorTotalR;
-double	globalColorTotalG;
-double	globalColorTotalB;
+double		globalAlphaAverage;
+double		globalAlphaTotal;
+double		globalColorTotalR;
+double		globalColorTotalG;
+double		globalColorTotalB;
 
 //	SAMPLE PLAYERS
 //	QUAD
-maxiSample quad_w;
-maxiSample quad_x;
-maxiSample quad_y;
-maxiSample quad_z;
-
-double	quad_w_out, quad_x_out, quad_y_out, quad_z_out;
-double	quad_w_vol, quad_x_vol, quad_y_vol, quad_z_vol;
-
-double	quadOut;
+maxiSample	quad_w;
+maxiSample	quad_x;
+maxiSample	quad_y;
+maxiSample	quad_z;
+double		quad_w_out, quad_x_out, quad_y_out, quad_z_out;
+double		quad_w_vol, quad_x_vol, quad_y_vol, quad_z_vol;
+double		quadOut;
 
 //	STAR
-maxiSample star_w;
-maxiSample star_x;
-maxiSample star_y;
-maxiSample star_z;
-
-double	star_w_out, star_x_out, star_y_out, star_z_out;
-double	star_w_vol, star_x_vol, star_y_vol, star_z_vol;
-
-double	starOut;
+maxiSample	star_w;
+maxiSample	star_x;
+maxiSample	star_y;
+maxiSample	star_z;
+double		star_w_out, star_x_out, star_y_out, star_z_out;
+double		star_w_vol, star_x_vol, star_y_vol, star_z_vol;
+double		starOut;
 
 
 //	TRI
-maxiSample tri_w;
-maxiSample tri_x;
-maxiSample tri_y;
-maxiSample tri_z;
-
-double	tri_w_out, tri_x_out, tri_y_out, tri_z_out;
-double	tri_w_vol, tri_x_vol, tri_y_vol, tri_z_vol;
-
-double	triOut;
+maxiSample	tri_w;
+maxiSample	tri_x;
+maxiSample	tri_y;
+maxiSample	tri_z;
+double		tri_w_out, tri_x_out, tri_y_out, tri_z_out;
+double		tri_w_vol, tri_x_vol, tri_y_vol, tri_z_vol;
+double		triOut;
 
 
 ////////////////////////////////////////////////////////////
@@ -133,7 +114,12 @@ inline void initLocalVariables	(void)	{
 	quadPoints_w = [[NSArray alloc] init];
 	quadPoints_x = [[NSArray alloc] init];
 	quadPoints_y = [[NSArray alloc] init];
-	quadPoints_z = [[NSArray alloc] init];	
+	quadPoints_z = [[NSArray alloc] init];
+	
+	curvesW		 = [[NSArray alloc] init];
+	curvesX		 = [[NSArray alloc] init];
+	curvesY		 = [[NSArray alloc] init];
+	curvesZ		 = [[NSArray alloc] init];
 }
 
 inline void maxiSetup		(void)	{
@@ -145,11 +131,7 @@ inline void maxiSetup		(void)	{
 	metroCount	= 0;
 	
 	//	Incoming params
-	globalNumCurves		= 0;
-	globalNumShapes		= 0;
-	globalNumPoints		= 0;
 	globalAlphaAverage	= 0;
-	globalAlphaTotal	= 0;
 	globalColorTotalR	= 0;
 	globalColorTotalG	= 0;
 	globalColorTotalB	= 0;
@@ -177,13 +159,13 @@ inline void maxiSetup		(void)	{
 	
 	
 	//	TRI
-	tri_w.load([[[NSBundle mainBundle] pathForResource:@"electric_odd_4" ofType:@"wav"] cStringUsingEncoding:NSUTF8StringEncoding]);
+	tri_w.load([[[NSBundle mainBundle] pathForResource:@"evp_4" ofType:@"wav"] cStringUsingEncoding:NSUTF8StringEncoding]);
 	
-	tri_x.load([[[NSBundle mainBundle] pathForResource:@"electric_3" ofType:@"wav"] cStringUsingEncoding:NSUTF8StringEncoding]);
+	tri_x.load([[[NSBundle mainBundle] pathForResource:@"evp_3" ofType:@"wav"] cStringUsingEncoding:NSUTF8StringEncoding]);
 	
-	tri_y.load([[[NSBundle mainBundle] pathForResource:@"electric_odd_2" ofType:@"wav"] cStringUsingEncoding:NSUTF8StringEncoding]);
+	tri_y.load([[[NSBundle mainBundle] pathForResource:@"evp_2" ofType:@"wav"] cStringUsingEncoding:NSUTF8StringEncoding]);
 	
-	tri_z.load([[[NSBundle mainBundle] pathForResource:@"electric_1" ofType:@"wav"] cStringUsingEncoding:NSUTF8StringEncoding]);
+	tri_z.load([[[NSBundle mainBundle] pathForResource:@"evp_1" ofType:@"wav"] cStringUsingEncoding:NSUTF8StringEncoding]);
 }
 
 ////////////////////////////////////////////////////////////
@@ -255,40 +237,66 @@ inline void readTriggers	(int i)	{
 		tri_z.trigger();
 		tri_z_vol=1.0f;
 	}	
+
+	NSLog(@"I: %i", i);
 }
 
 inline void sustain	()	{
 	//	QUAD
-	quad_w_out*=0.9995;
-	quad_x_out*=0.9995;
-	quad_y_out*=0.9995;
-	quad_z_out*=0.9995;
+	quad_w_vol*=0.99993;
+	quad_x_vol*=0.99993;
+	quad_y_vol*=0.99993;
+	quad_z_vol*=0.99993;
 	//	STAR
-	star_w_out*=0.9995;
-	star_x_out*=0.9995;
-	star_y_out*=0.9995;
-	star_z_out*=0.9995;
+	star_w_vol*=0.99993;
+	star_x_vol*=0.99993;
+	star_y_vol*=0.99993;
+	star_z_vol*=0.99993;
 	
 	//	TRI
-	tri_w_out*=0.9995;
-	tri_x_out*=0.9995;
-	tri_y_out*=0.9995;
-	tri_z_out*=0.9995;
+	tri_w_vol *=0.99993;
+	tri_x_vol *=0.99993;
+	tri_y_vol *=0.99993;
+	tri_z_vol *=0.99993;
 }
 
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 
+
+double			dryOut		= 0.0f;
+double			dryDelOut	= 0.0f;
+double			dryTremOut	= 0.0f;
+double			dryTremSpeed= 0.66;
+maxiDelayline	dryDel;
+maxiOsc			dryTrem;
+double			dryDelLength	= 0.33;
+double			dryDelFeedback  = 0.45;
+
+double			padOut		= 0.0f;
+double			padModLevel = 0.5;
+double			padModSpeed	= 0.5;
+maxiFilter		loPass, loPass2, loPass3;
+maxiDelayline	pad, pad2, pad3;
+maxiOsc			padMod1, padMod2, padMod3;
+maxiOsc			padTrem;
+double			padTremSpeed = 0.5f;
+
 #pragma mark USER RENDERING METHOD
 float*	output	()	{
 	sustain();
-	
-    render_output[0] = render_output[1] = 0;
 
 	if ((int)metro.phasor(metroSpeed)>=1)	{
-		metroCount++;
-		if (metroCount>15)
-			metroCount = 0;
+		metroCount+=2;
+		if (metroCount>15)	{
+			metroCount	= oddMod;
+			if (!oddMod)	{
+				oddMod = 1;
+			}
+			else	{
+				oddMod = 0;
+			}
+		}
 		readTriggers(metroCount);
 	}
 	
@@ -299,7 +307,6 @@ float*	output	()	{
 	quad_z_out	= quad_z.playOnce()*quad_z_vol;
 	quadOut		= .25*(quad_w_out+quad_x_out+quad_y_out+quad_z_out);
 	
-	
 	//	STAR
 	star_w_out	= star_w.playOnce()*star_w_vol;
 	star_x_out	= star_x.playOnce()*star_x_vol;
@@ -307,18 +314,31 @@ float*	output	()	{
 	star_z_out	= star_z.playOnce()*star_z_vol;
 	starOut		= .25*(star_w_out + star_x_out + star_y_out + star_z_out);
 	
-	
 	//	TRI
 	tri_w_out	= tri_w.playOnce()*tri_w_vol;
 	tri_x_out	= tri_x.playOnce()*tri_x_vol;
 	tri_y_out	= tri_y.playOnce()*tri_y_vol;
 	tri_z_out	= tri_z.playOnce()*tri_z_vol;
 	triOut		= .25*(tri_w_out + tri_x_out + tri_y_out + tri_z_out);
+		
+	//	PAD
+	dryOut		= padOut = (triOut+starOut+quadOut);
+	padOut		= pad.dl		(padOut, 44100*(0.33 + (padModLevel*padMod1.sinewave(padModSpeed*0.5))),   0.9);
+	padOut		= loPass.lopass (padOut, 0.09);
+	padOut		= pad2.dl		(padOut, 44100*(0.5  + (padModLevel*padMod2.sinewave(padModSpeed*0.33))),  0.925);
+	padOut		= loPass2.lopass(padOut, 0.09);	
+	padOut		= pad3.dl		(padOut, 44100*(0.66 + (padModLevel*padMod3.sinewave(padModSpeed*0.66))),  0.9);	
+	padOut		= loPass3.lopass(padOut, 0.09);	
+//	padOut		= padOut*(1+0.25*(padTrem.sinewave(padTremSpeed)));
 	
-	//	ELLIPSE
 	
-	render_output	[0] = .3*(starOut+triOut);
-	render_output	[1] = .3*(quadOut+triOut);
+	//	DRY
+	dryDelOut	= dryDel.dl(dryOut, 44100*dryDelLength, dryDelFeedback);
+//	dryTremOut	= 1+(0.2*dryTrem.sinewave(dryTremSpeed));
+	dryOut		= 0.5*(dryDelOut+dryOut);
+	
+	render_output	[0] = padOut*globalAlphaAverage+((1-globalAlphaAverage)*dryOut);
+	render_output	[1] = padOut*globalAlphaAverage+((1-globalAlphaAverage)*dryOut);
 
     return render_output;
 }
@@ -356,10 +376,6 @@ OSStatus renderAudioOutput  (
 -(void)updatedParameters:(NSArray*)parameters	{
 	initLocalVariables();
 	
-	if (playback)
-		NSLog(@"PLAYBACK");
-	if (!playback)
-		NSLog(@"!PLAYBACK");	
 	/*
 		Points and triggers
 	 */
@@ -367,16 +383,12 @@ OSStatus renderAudioOutput  (
 	starPoints_x = [NSArray arrayWithArray:[parameters objectAtIndex:1]];
 	starPoints_y = [NSArray arrayWithArray:[parameters objectAtIndex:2]];
 	starPoints_z = [NSArray arrayWithArray:[parameters objectAtIndex:3]];	
-	
-	NSLog(@"STAR:	W POINTS: %i	X POINTS: %i	Y POINTS: %i	Z POINTS: %i", [starPoints_w count], [starPoints_x count], [starPoints_y count], [starPoints_z count]);
-	
+		
 //	TRI TOTALS
 	triPoints_w = [NSArray arrayWithArray:[parameters objectAtIndex:4]];
 	triPoints_x = [NSArray arrayWithArray:[parameters objectAtIndex:5]];
 	triPoints_y = [NSArray arrayWithArray:[parameters objectAtIndex:6]];
 	triPoints_z = [NSArray arrayWithArray:[parameters objectAtIndex:7]];	
-
-	NSLog(@"TRI:	W POINTS: %i	X POINTS: %i	Y POINTS: %i	Z POINTS: %i", [triPoints_w count], [triPoints_x count], [triPoints_y count], [triPoints_z count]);
 	
 //	QUAD TOTALS
 	quadPoints_w = [NSArray arrayWithArray:[parameters objectAtIndex:8]];
@@ -384,80 +396,24 @@ OSStatus renderAudioOutput  (
 	quadPoints_y = [NSArray arrayWithArray:[parameters objectAtIndex:10]];
 	quadPoints_z = [NSArray arrayWithArray:[parameters objectAtIndex:11]];	
 	
-	NSLog(@"QUAD:	W POINTS: %i	X POINTS: %i	Y POINTS: %i	Z POINTS: %i", [quadPoints_w count], [quadPoints_x count], [quadPoints_y count], [quadPoints_z count]);	
-
-
+	overlap				= [[parameters objectAtIndex:12]doubleValue];
+	globalAlphaAverage	= [[parameters objectAtIndex:13]doubleValue];	
 	
-//	for (int i = 0; i < 30; i++)	{
-//		w_triggers[i] = 0.0f;
-//		x_triggers[i] = 0.0f;
-//		y_triggers[i] = 0.0f;
-//		z_triggers[i] = 0.0f;
-//	}
-		
-	/*
-	for (NSPoint* p in NSPoints_w)	{
-		p.x = p.x*0.03f;
-		w_triggers[(int)p.x] = 1.0f;
-	}
-	
-	for (NSPoint* p in NSPoints_x)	{
-		p.x = p.x*0.03f;		
-		x_triggers[(int)p.x] = 1.0f;
-	}
-	
-	for (NSPoint* p in NSPoints_y)	{
-		p.x = p.x*0.03f;		
-		y_triggers[(int)p.x] = 1.0f;
-	}
-	
-	for (NSPoint* p in NSPoints_z)	{
-		p.x = p.x*0.03f;		
-		z_triggers[(int)p.x] = 1.0f;
-	}
-	 */
-
 	/*
 		Local curve totals
 	 */
-//	curves_w =	[[parameters objectAtIndex:4]intValue];
-//	curves_x =	[[parameters objectAtIndex:5]intValue];
-//	curves_y =	[[parameters objectAtIndex:6]intValue];
-//	curves_z =	[[parameters objectAtIndex:7]intValue];
-
-	/*
-		Local point totals
-	*/
-	//	STAR
-	starPoints_w_Total =	[starPoints_w count];
-	starPoints_x_Total =	[starPoints_x count];
-	starPoints_y_Total =	[starPoints_y count];
-	starPoints_z_Total =	[starPoints_z count];
-	 
-//	/*
-//	 Global totals
-//	 */
-//	
-//	//	Shape stats
-//	globalNumCurves		= [[parameters objectAtIndex:8]intValue];
-//	globalNumShapes		= [[parameters objectAtIndex:9]intValue];
-//	globalNumPoints		= [[parameters objectAtIndex:10]intValue];
-//	
-//	//	Color info
-//	globalAlphaAverage	= [[parameters objectAtIndex:11]doubleValue];
-//	globalAlphaTotal	= [[parameters objectAtIndex:12]doubleValue];
-//	globalColorTotalR	= [[parameters objectAtIndex:13]doubleValue];
-//	globalColorTotalG	= [[parameters objectAtIndex:14]doubleValue];
-//	globalColorTotalB	= [[parameters objectAtIndex:15]doubleValue];
-//		
-//	//	Size info
-//	globalShapeSizeAverage	= [[parameters objectAtIndex:16] doubleValue];
-//	globalShapeSizeTotal	= [[parameters objectAtIndex:17] doubleValue];	
-//	
-//	/*
-//		Set some local variables
-//	 */
-//	metroSpeed = 1.0 + (globalNumShapes * globalAlphaAverage);
+	curvesW =	[NSMutableArray arrayWithArray:[parameters objectAtIndex:14]];
+	curvesX =	[NSMutableArray arrayWithArray:[parameters objectAtIndex:15]];
+	curvesY =	[NSMutableArray arrayWithArray:[parameters objectAtIndex:16]];
+	curvesZ =	[NSMutableArray arrayWithArray:[parameters objectAtIndex:17]];
+	
+//	COLOR INFO
+	globalColorTotalR	= [[parameters objectAtIndex:18]doubleValue];
+	globalColorTotalG	= [[parameters objectAtIndex:19]doubleValue];
+	globalColorTotalB	= [[parameters objectAtIndex:20]doubleValue];
+	globalAlphaAverage	= [[parameters objectAtIndex:21]doubleValue];
+	
+	metroSpeed = 0.5;
 }
 
 
