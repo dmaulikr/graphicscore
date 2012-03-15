@@ -130,7 +130,9 @@ double			padMod1Out		= 0.0f;
 double			padMod2Out		= 0.0f;
 double			padMod3Out		= 0.0f;
 double			padBrightness	= 0.4f;
-
+double			padMod1Depth	= 0.5f;
+double			padMod2Depth	= 0.5f;
+double			padMod3Depth	= 0.5f;
 
 //	Degrader
 FXDegrade		degrader;
@@ -371,16 +373,16 @@ float*	output	()	{
 	dryOut		= degrader.degrade(dryOut, degradeAmount, degradeMix*0.75);
 
 	//	PAD
-	padMod1Out	= (1+padMod1.sinewave	(padModSpeed*0.99))*0.5;
-	padMod2Out	= (1+padMod2.sinewave	(padModSpeed*0.66))*0.5;
-	padMod3Out	= (1+padMod3.sinewave	(padModSpeed*0.33))*0.5;
+	padMod1Out	= padMod1Depth*(1+padMod1.saw	(padModSpeed*0.99));
+	padMod2Out	= padMod2Depth*(1+padMod2.saw	(padModSpeed*0.66));
+	padMod3Out	= padMod3Depth*(1+padMod3.saw	(padModSpeed*0.33));
 	
-	padOut		= pad.dl		(padOut, 1+(44100*padMod1Out),	0.75+(0.2*padMod1Out));
-	padOut		= loPass.lopass (padOut, padBrightness*0.66);
-	padOut		= pad2.dl		(padOut, 1+(44100*padMod2Out),  0.75+(0.2*padMod2Out));
-	padOut		= loPass2.lopass(padOut, padBrightness*0.66);
-	padOut		= pad3.dl		(padOut, 1+(44100*padMod3Out),  0.75+(0.2*padMod3Out));
-	padOut		= loPass3.lopass(padOut, padBrightness*0.66);
+	padOut		= pad.dl		(padOut, 22050+(44100*(padMod1Out*0.33)),	0.75+(0.2*padMod1Out));
+	padOut		= loPass.lopass (padOut, padBrightness);
+	padOut		= pad2.dl		(padOut, 11025+(44100*(padMod2Out*0.66)),  0.75+(0.2*padMod2Out));
+	padOut		= loPass2.lopass(padOut, padBrightness*0.75);
+	padOut		= pad3.dl		(padOut, 11025+(44100*(padMod3Out*0.5)),  0.75+(0.2*padMod3Out));
+	padOut		= loPass3.lopass(padOut, padBrightness*0.33);
 	
 	//	DRY
 	dryDelOut	= dryDel.dl(dryOut, 1+(44100*dryDelLength), dryDelFeedback);
@@ -396,20 +398,19 @@ float*	output	()	{
 	texture1Pan = 1+(0.5*texturePan1.sinewave(texture1Speed));
 	texture2Pan = 1+(0.5*texturePan2.sinewave(texture2Speed));
 	
-	
 	padOut *=	padMix;
 	dryOut *=	(1-padMix);
 	
-	combo	=	0.75*(padOut+dryOut);
+	combo	=	(padOut+dryOut);
 	
-	panLD	=	0.5*(texture1Pan*dryOut);
-	panRD	=	0.5*(texture2Pan*dryOut);
+	panLD	=	(texture1Pan*dryOut);
+	panRD	=	(texture2Pan*dryOut);
 	
-	panLW	=	0.5*((1-texture1Pan)*padOut);
-	panRW	=	0.5*((1-texture2Pan)*padOut);
+	panLW	=	((1-texture1Pan)*padOut);
+	panRW	=	((1-texture2Pan)*padOut);
 
-	render_output	[0] =	panLD+panLW+combo;
-	render_output	[1] =	panRD+panRW+combo;
+	render_output	[0] =	2.0*(panLD+panLW+combo) > .95f ? .95f : 2.0*(panLD+panLW+combo);
+	render_output	[1] =	2.0*(panRD+panRW+combo) > .95f ? .95f : 2.0*(panRD+panRW+combo);
 
     return render_output;
 }
@@ -505,6 +506,10 @@ OSStatus renderAudioOutput  (
 
 	
 	//	PAD SIG	+ BRIGHTNESS
+	padMod1Depth	=	0.2 + (0.25*numTriangles	> 1.0f ? 1.0f : 0.25*numTriangles);
+	padMod2Depth	=	0.2 + (0.25*numQuads		> 1.0f ? 1.0f : 0.25*numQuads);
+	padMod3Depth	=	0.2 + (0.25*numEllipses		> 1.0f ? 1.0f : 0.25*numEllipses);
+	
 	padMix			=	0.1+(overlap*2 > .9f ? .9f : overlap*2);
 	padBrightness	=	0.1+(globalColorAverage * globalAlphaAverage);
 	
@@ -527,12 +532,11 @@ OSStatus renderAudioOutput  (
 		texture1Mix = 0.01+2*(globalColorTotalB/globalNumShapes)*globalAlphaAverage > 1
 		? 1.0f : (globalColorTotalB/globalNumShapes)*globalAlphaAverage;
 		
-		texture1Speed = 0.01+0.77*(globalNumCurves*0.0065) > 1.0f ? 1.0f : 0.01+(globalNumCurves*0.0008);
+		texture1Speed = 0.01+0.77*(globalNumCurves*0.0065);
 
-		texture2Speed = 0.01+1.6*(globalColorTotalB/globalNumShapes)*globalAlphaAverage > 1
-		? 1.0f : (globalColorTotalB/globalNumShapes)*globalAlphaAverage;
+		texture2Speed = 0.01+0.5*(globalColorTotalB/globalNumShapes)*globalAlphaAverage;
 
-		texture2Mix = 0.01+0.66*(globalNumCurves*0.0065) > 1.0f ? 1.0f : 0.01+(globalNumCurves*0.0008);
+		texture2Mix = 0.01+(0.66*(globalNumCurves*0.0065) > 0.75 ? 0.75 : 0.66*(globalNumCurves*0.0065));
 	}
 }
 
