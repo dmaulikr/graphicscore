@@ -61,11 +61,18 @@ double overlap;
 
 //	Globals
 //	…color
-double		globalAlphaAverage;
-double		globalAlphaTotal;
-double		globalColorTotalR;
-double		globalColorTotalG;
-double		globalColorTotalB;
+double		globalAlphaAverage	= 0.0f;
+double		globalAlphaTotal	= 0.0f;	
+double		globalColorTotalR	= 0.0f;
+double		globalColorTotalG	= 0.0f;
+double		globalColorTotalB	= 0.0f;
+double		globalColorAverage	= 0.0f;
+int			globalNumShapes		= 0;
+
+int			numQuads			= 0;
+int			numEllipses			= 0;
+int			numStars			= 0;
+int			numTriangles		= 0;
 
 //	SAMPLE PLAYERS
 //	QUAD
@@ -75,7 +82,7 @@ maxiSample	quad_y;
 maxiSample	quad_z;
 double		quad_w_out, quad_x_out, quad_y_out, quad_z_out;
 double		quad_w_vol, quad_x_vol, quad_y_vol, quad_z_vol;
-double		quadOut;
+double		quadOut = 0.0f;
 
 //	STAR
 maxiSample	star_w;
@@ -84,7 +91,7 @@ maxiSample	star_y;
 maxiSample	star_z;
 double		star_w_out, star_x_out, star_y_out, star_z_out;
 double		star_w_vol, star_x_vol, star_y_vol, star_z_vol;
-double		starOut;
+double		starOut = 0.0f;
 
 
 //	TRI
@@ -99,6 +106,54 @@ double		triOut;
 
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
+
+
+
+//	Dry signal + delay
+double			dryOut		= 0.0f;
+double			dryDelOut	= 0.0f;
+maxiDelayline	dryDel;
+double			dryDelLength	= 0.33;
+double			dryDelFeedback  = 0.45;
+
+
+//	Pad, plus modulation
+double			padMix		= 0.0f;
+double			padOut		= 0.0f;
+double			padModLevel = 0.5;
+double			padModSpeed	= 0.5;
+
+maxiFilter		loPass, loPass2, loPass3;
+maxiDelayline	pad, pad2, pad3;
+maxiOsc			padMod1, padMod2, padMod3;
+double			padMod1Out		= 0.0f;
+double			padMod2Out		= 0.0f;
+double			padMod3Out		= 0.0f;
+double			padBrightness	= 0.4f;
+
+
+//	Degrader
+FXDegrade		degrader;
+double			degradeAmount = 1;
+double			degradeMix	  = 0.0f;
+
+//	FLANGER
+FXFlanger		flanger;
+double			metalAmount = 1.0f;
+double			metalMix	= 0.0f;
+
+//	TEXTURE
+FXTexture		texture1;
+double			texture1Mix	= 0.0f;
+double			texture1Speed= 0.0f;
+FXTexture		texture2;
+double			texture2Mix	= 0.0f;
+double			texture2Speed= 0.0f;
+double			globalNumCurves = 0.0f;
+
+maxiOsc			texturePan1, texturePan2;
+double			texture1Pan = 1.0f;
+double			texture2Pan = 1.0f;
 
 inline void initLocalVariables	(void)	{	
 	starPoints_w = [[NSArray alloc] init];
@@ -166,6 +221,8 @@ inline void maxiSetup		(void)	{
 	tri_y.load([[[NSBundle mainBundle] pathForResource:@"evp_2" ofType:@"wav"] cStringUsingEncoding:NSUTF8StringEncoding]);
 	
 	tri_z.load([[[NSBundle mainBundle] pathForResource:@"evp_1" ofType:@"wav"] cStringUsingEncoding:NSUTF8StringEncoding]);
+	
+	padBrightness = 0.5f;
 }
 
 ////////////////////////////////////////////////////////////
@@ -237,50 +294,35 @@ inline void readTriggers	(int i)	{
 		tri_z.trigger();
 		tri_z_vol=1.0f;
 	}	
-
-	NSLog(@"I: %i", i);
 }
 
 inline void sustain	()	{
 	//	QUAD
-	quad_w_vol*=0.99993;
-	quad_x_vol*=0.99993;
-	quad_y_vol*=0.99993;
-	quad_z_vol*=0.99993;
+	quad_w_vol*=0.99994;
+	quad_x_vol*=0.99994;
+	quad_y_vol*=0.99994;
+	quad_z_vol*=0.99994;
 	//	STAR
-	star_w_vol*=0.99993;
-	star_x_vol*=0.99993;
-	star_y_vol*=0.99993;
-	star_z_vol*=0.99993;
+	star_w_vol*=0.99994;
+	star_x_vol*=0.99994;
+	star_y_vol*=0.99994;
+	star_z_vol*=0.99994;
 	
 	//	TRI
-	tri_w_vol *=0.99993;
-	tri_x_vol *=0.99993;
-	tri_y_vol *=0.99993;
-	tri_z_vol *=0.99993;
+	tri_w_vol *=0.99994;
+	tri_x_vol *=0.99994;
+	tri_y_vol *=0.99994;
+	tri_z_vol *=0.99994;
 }
 
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 
-
-double			dryOut		= 0.0f;
-double			dryDelOut	= 0.0f;
-double			dryTremOut	= 0.0f;
-double			dryTremSpeed= 0.66;
-maxiDelayline	dryDel;
-maxiOsc			dryTrem;
-double			dryDelLength	= 0.33;
-double			dryDelFeedback  = 0.45;
-
-double			padOut		= 0.0f;
-double			padModLevel = 0.5;
-double			padModSpeed	= 0.5;
-maxiFilter		loPass, loPass2, loPass3;
-maxiDelayline	pad, pad2, pad3;
-maxiOsc			padMod1, padMod2, padMod3;
-maxiOsc			padTrem;
-double			padTremSpeed = 0.5f;
+double	combo	= 0.0f;
+double	panLD	= 0.0f;
+double	panRD	= 0.0f;
+double	panLW	= 0.0f;
+double	panRW	= 0.0f;
 
 #pragma mark USER RENDERING METHOD
 float*	output	()	{
@@ -290,12 +332,10 @@ float*	output	()	{
 		metroCount+=2;
 		if (metroCount>15)	{
 			metroCount	= oddMod;
-			if (!oddMod)	{
+			if (!oddMod)
 				oddMod = 1;
-			}
-			else	{
+			else
 				oddMod = 0;
-			}
 		}
 		readTriggers(metroCount);
 	}
@@ -321,24 +361,55 @@ float*	output	()	{
 	tri_z_out	= tri_z.playOnce()*tri_z_vol;
 	triOut		= .25*(tri_w_out + tri_x_out + tri_y_out + tri_z_out);
 		
-	//	PAD
-	dryOut		= padOut = (triOut+starOut+quadOut);
-	padOut		= pad.dl		(padOut, 44100*(0.33 + (padModLevel*padMod1.sinewave(padModSpeed*0.5))),   0.9);
-	padOut		= loPass.lopass (padOut, 0.09);
-	padOut		= pad2.dl		(padOut, 44100*(0.5  + (padModLevel*padMod2.sinewave(padModSpeed*0.33))),  0.925);
-	padOut		= loPass2.lopass(padOut, 0.09);	
-	padOut		= pad3.dl		(padOut, 44100*(0.66 + (padModLevel*padMod3.sinewave(padModSpeed*0.66))),  0.9);	
-	padOut		= loPass3.lopass(padOut, 0.09);	
-//	padOut		= padOut*(1+0.25*(padTrem.sinewave(padTremSpeed)));
+	//	MIX
+	dryOut		= padOut = ((triOut+starOut+quadOut)*globalAlphaAverage);
 	
+	//	FLANGER
+	dryOut		= flanger.flange(dryOut, metalAmount, metalMix);
+	
+	//	DEGRADER
+	dryOut		= degrader.degrade(dryOut, degradeAmount, degradeMix*0.75);
+
+	//	PAD
+	padMod1Out	= (1+padMod1.sinewave	(padModSpeed*0.99))*0.5;
+	padMod2Out	= (1+padMod2.sinewave	(padModSpeed*0.66))*0.5;
+	padMod3Out	= (1+padMod3.sinewave	(padModSpeed*0.33))*0.5;
+	
+	padOut		= pad.dl		(padOut, 1+(44100*padMod1Out),	0.75+(0.2*padMod1Out));
+	padOut		= loPass.lopass (padOut, padBrightness*0.66);
+	padOut		= pad2.dl		(padOut, 1+(44100*padMod2Out),  0.75+(0.2*padMod2Out));
+	padOut		= loPass2.lopass(padOut, padBrightness*0.66);
+	padOut		= pad3.dl		(padOut, 1+(44100*padMod3Out),  0.75+(0.2*padMod3Out));
+	padOut		= loPass3.lopass(padOut, padBrightness*0.66);
 	
 	//	DRY
-	dryDelOut	= dryDel.dl(dryOut, 44100*dryDelLength, dryDelFeedback);
-//	dryTremOut	= 1+(0.2*dryTrem.sinewave(dryTremSpeed));
+	dryDelOut	= dryDel.dl(dryOut, 1+(44100*dryDelLength), dryDelFeedback);
 	dryOut		= 0.5*(dryDelOut+dryOut);
+
+	//	Texture 1
+	dryOut		= texture1.texture(dryOut, texture1Speed, texture1Mix);
+
+	//	Texture 2
+	padOut		= texture2.texture(padOut, texture2Speed, texture2Mix);
 	
-	render_output	[0] = padOut*globalAlphaAverage+((1-globalAlphaAverage)*dryOut);
-	render_output	[1] = padOut*globalAlphaAverage+((1-globalAlphaAverage)*dryOut);
+	//	Rectify, scale
+	texture1Pan = 1+(0.5*texturePan1.sinewave(texture1Speed));
+	texture2Pan = 1+(0.5*texturePan2.sinewave(texture2Speed));
+	
+	
+	padOut *=	padMix;
+	dryOut *=	(1-padMix);
+	
+	combo	=	0.75*(padOut+dryOut);
+	
+	panLD	=	0.5*(texture1Pan*dryOut);
+	panRD	=	0.5*(texture2Pan*dryOut);
+	
+	panLW	=	0.5*((1-texture1Pan)*padOut);
+	panRW	=	0.5*((1-texture2Pan)*padOut);
+
+	render_output	[0] =	panLD+panLW+combo;
+	render_output	[1] =	panRD+panRW+combo;
 
     return render_output;
 }
@@ -406,14 +477,63 @@ OSStatus renderAudioOutput  (
 	curvesX =	[NSMutableArray arrayWithArray:[parameters objectAtIndex:15]];
 	curvesY =	[NSMutableArray arrayWithArray:[parameters objectAtIndex:16]];
 	curvesZ =	[NSMutableArray arrayWithArray:[parameters objectAtIndex:17]];
+	globalNumCurves = [curvesW count] + [curvesX count] + [curvesY count] + [curvesZ count];
 	
 //	COLOR INFO
 	globalColorTotalR	= [[parameters objectAtIndex:18]doubleValue];
 	globalColorTotalG	= [[parameters objectAtIndex:19]doubleValue];
 	globalColorTotalB	= [[parameters objectAtIndex:20]doubleValue];
-	globalAlphaAverage	= [[parameters objectAtIndex:21]doubleValue];
+	if (globalColorTotalB>0.0f&&globalColorTotalG>0.0f&&globalColorTotalR>0.0f&&globalNumShapes>0)	{
+		globalColorAverage	= (((globalColorTotalB+globalColorTotalG+globalColorTotalR)/3)/globalNumShapes);		
+	}
+	else {
+		globalColorAverage = 0.1;
+	}	
 	
 	metroSpeed = 0.5;
+	
+	//	Num shapes
+	globalNumShapes		= [[parameters objectAtIndex:21]intValue];
+	numQuads			= [[parameters objectAtIndex:22]intValue];
+	numEllipses			= [[parameters objectAtIndex:23]intValue];
+	numStars			= [[parameters objectAtIndex:24]intValue];
+	numTriangles		= [[parameters objectAtIndex:25]intValue];
+	
+	//	DRY SIG
+	dryDelLength	=	overlap*0.5 > 0.75 ? 0.75 : overlap*0.5;
+	dryDelFeedback	=	overlap > 0.75 ? 0.75 : overlap;
+
+	
+	//	PAD SIG	+ BRIGHTNESS
+	padMix			=	0.1+(overlap*2 > .9f ? .9f : overlap*2);
+	padBrightness	=	0.1+(globalColorAverage * globalAlphaAverage);
+	
+	if (globalNumShapes>0)	{
+	//	DEGRADER	
+		degradeMix		=	0.01+(globalColorTotalR/globalNumShapes)*globalAlphaAverage > 1 
+		? 1.0f : (globalColorTotalR/globalNumShapes)*globalAlphaAverage;
+		
+		degradeAmount	=	0.01+(globalColorTotalR/globalNumShapes)*globalAlphaAverage > 1 
+		? 1.0f : (globalColorTotalR/globalNumShapes)*globalAlphaAverage;
+
+	//	FLANGER
+		metalAmount		=	0.05+(globalColorTotalG/globalNumShapes)*globalAlphaAverage > 1 
+		? 1.0f : (globalColorTotalG/globalNumShapes)*globalAlphaAverage;
+		
+		metalMix		=	0.05+(globalColorTotalG/globalNumShapes)*globalAlphaAverage > 1
+		? 1.0f : (globalColorTotalG/globalNumShapes)*globalAlphaAverage;	 
+		
+	//	TEXTURE
+		texture1Mix = 0.01+2*(globalColorTotalB/globalNumShapes)*globalAlphaAverage > 1
+		? 1.0f : (globalColorTotalB/globalNumShapes)*globalAlphaAverage;
+		
+		texture1Speed = 0.01+0.77*(globalNumCurves*0.0065) > 1.0f ? 1.0f : 0.01+(globalNumCurves*0.0008);
+
+		texture2Speed = 0.01+1.6*(globalColorTotalB/globalNumShapes)*globalAlphaAverage > 1
+		? 1.0f : (globalColorTotalB/globalNumShapes)*globalAlphaAverage;
+
+		texture2Mix = 0.01+0.66*(globalNumCurves*0.0065) > 1.0f ? 1.0f : 0.01+(globalNumCurves*0.0008);
+	}
 }
 
 

@@ -99,7 +99,6 @@
 		7328D2DF14FBD3DA000525DA /* listen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = listen.png; sourceTree = "<group>"; };
 		7328D2E014FBD3DA000525DA /* listen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "listen@2x.png"; sourceTree = "<group>"; };
 		732F0309150616CA00B4ED00 /* GSNetworkProtocols.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSNetworkProtocols.h; sourceTree = "<group>"; };
-		7341794014E144FB00D4AAE2 /* FXDistortion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXDistortion.h; sourceTree = "<group>"; };
 		7341794314E145BD00D4AAE2 /* FXFlanger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FXFlanger.h; sourceTree = "<group>"; };
 		734AA41714E1439800990E5A /* FXLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXLibrary.h; sourceTree = "<group>"; };
 		734CBFED14D7EB4600546EAC /* GSQuadrilateral.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSQuadrilateral.h; sourceTree = "<group>"; };
@@ -150,10 +149,8 @@
 		736BA7D614D81E0900AF88D9 /* GSStar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSStar.m; sourceTree = "<group>"; };
 		7370DE6414E4273F00583DBA /* GSNetworkController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSNetworkController.h; sourceTree = "<group>"; };
 		7370DE6514E4273F00583DBA /* GSNetworkController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSNetworkController.m; sourceTree = "<group>"; };
-		7378751714E146FB003387D2 /* FXTremolo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXTremolo.h; sourceTree = "<group>"; };
-		7378751914E147C9003387D2 /* FXDelay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXDelay.h; sourceTree = "<group>"; };
-		7378751A14E14923003387D2 /* FXFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXFilter.h; sourceTree = "<group>"; };
-		7378751B14E149A8003387D2 /* FXBitcrusher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXBitcrusher.h; sourceTree = "<group>"; };
+		7386051015113BB900DAE0A7 /* FXDegrade.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXDegrade.h; sourceTree = "<group>"; };
+		7386051215113EB500DAE0A7 /* FXTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXTexture.h; sourceTree = "<group>"; };
 		738701BF14D7596400F196AF /* GSCircle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSCircle.h; sourceTree = "<group>"; };
 		738701C014D7596400F196AF /* GSCircle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSCircle.m; sourceTree = "<group>"; };
 		738B28EA14F3B27C007A3834 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
@@ -266,12 +263,9 @@
 			isa = PBXGroup;
 			children = (
 				734AA41714E1439800990E5A /* FXLibrary.h */,
-				7341794014E144FB00D4AAE2 /* FXDistortion.h */,
 				7341794314E145BD00D4AAE2 /* FXFlanger.h */,
-				7378751714E146FB003387D2 /* FXTremolo.h */,
-				7378751914E147C9003387D2 /* FXDelay.h */,
-				7378751A14E14923003387D2 /* FXFilter.h */,
-				7378751B14E149A8003387D2 /* FXBitcrusher.h */,
+				7386051015113BB900DAE0A7 /* FXDegrade.h */,
+				7386051215113EB500DAE0A7 /* FXTexture.h */,
 			);
 			name = "FX Library";
 			sourceTree = "<group>";

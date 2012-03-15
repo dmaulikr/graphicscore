@@ -7,16 +7,12 @@
 //
 
 #import "maximilian.h"
-#import "FXDistortion.h"
+
 #import "FXFlanger.h"
-#import "FXTremolo.h"
-#import "FXDelay.h"
-#import "FXFilter.h"
-#import "FXBitcrusher.h"
+#import "FXTexture.h"
+#import "FXDegrade.h"
 
 #ifndef graphicscore_FXLibrary_h
 #define graphicscore_FXLibrary_h
-
-
 
 #endif

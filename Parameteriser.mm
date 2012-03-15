@@ -108,29 +108,32 @@
 	CGFloat	originX = r.origin.x;
 	CGFloat	originY = r.origin.y;
 	
-	NSPoint*	left	= [[NSPoint alloc] initWithCGPoint:CGPointMake(originX, t.left)];
-	NSPoint*	top		= [[NSPoint alloc] initWithCGPoint:CGPointMake(t.peak, originY)];
-	NSPoint*	right	= [[NSPoint alloc] initWithCGPoint:CGPointMake(t.right, originY+height)];	
+	if (width>5)	{
 	
-	const float* RGB = CGColorGetComponents([(UIColor*)[[[t local] colors] objectAtIndex:[t index]] CGColor]);
+		NSPoint*	left	= [[NSPoint alloc] initWithCGPoint:CGPointMake(originX, t.left)];
+		NSPoint*	top		= [[NSPoint alloc] initWithCGPoint:CGPointMake(t.peak, originY)];
+		NSPoint*	right	= [[NSPoint alloc] initWithCGPoint:CGPointMake(t.right, originY+height)];	
 	
-	alpha_total		+=	t.alpha;
-	sc_red_total	+=	RGB[0];
-	sc_green_total	+=	RGB[1];
-	sc_blue_total	+=	RGB[2];
+		const float* RGB = CGColorGetComponents([(UIColor*)[[[t local] colors] objectAtIndex:[t index]] CGColor]);
+	
+		alpha_total		+=	t.alpha;
+		sc_red_total	+=	RGB[0];
+		sc_green_total	+=	RGB[1];
+		sc_blue_total	+=	RGB[2];
 
-	NSArray*	trianglePoints = [[NSArray alloc] initWithObjects:left, top, right, nil];
+		NSArray*	trianglePoints = [[NSArray alloc] initWithObjects:left, top, right, nil];
 	
-	totalTriangles++;
+		totalTriangles++;
 	
-	[self addTrianglePointsFromArrayToParameterData:trianglePoints];
+		[self addTrianglePointsFromArrayToParameterData:trianglePoints];
 
-	totalSize+=width;
+		totalSize+=width;
 	
-	averageWidth	+=width;
-	averageHeight	+=height;
+		averageWidth	+=width;
+		averageHeight	+=height;
 	
-	[origins addObject:left];
+		[origins addObject:left];
+	}
 }
 
 -(void)processQuadrilateral:(GSQuadrilateral*)q	{
@@ -140,32 +143,34 @@
 	CGFloat	originX = r.origin.x;
 	CGFloat	originY = r.origin.y;	
 
-	const float* RGB = CGColorGetComponents([(UIColor*)[[[q local] colors] objectAtIndex:[q index]] CGColor]);
+	if (width>5)	{
+		const float* RGB = CGColorGetComponents([(UIColor*)[[[q local] colors] objectAtIndex:[q index]] CGColor]);
 	
-	alpha_total		+=	q.alpha;
-	sc_red_total	+=	RGB[0];
-	sc_green_total	+=	RGB[1];
-	sc_blue_total	+=	RGB[2];
+		alpha_total		+=	q.alpha;
+		sc_red_total	+=	RGB[0];
+		sc_green_total	+=	RGB[1];
+		sc_blue_total	+=	RGB[2];
 	
-	numpoints+=4;
+		numpoints+=4;
 	
-	NSPoint* point_1 = [[NSPoint alloc] initWithCGPoint:CGPointMake(originX,		originY)];
-	NSPoint* point_2 = [[NSPoint alloc] initWithCGPoint:CGPointMake(originX,		originY+height)];
-	NSPoint* point_3 = [[NSPoint alloc] initWithCGPoint:CGPointMake(originX+width,	originY)];
-	NSPoint* point_4 = [[NSPoint alloc] initWithCGPoint:CGPointMake(originX+width,	originY+height)];
+		NSPoint* point_1 = [[NSPoint alloc] initWithCGPoint:CGPointMake(originX,		originY)];
+		NSPoint* point_2 = [[NSPoint alloc] initWithCGPoint:CGPointMake(originX,		originY+height)];
+		NSPoint* point_3 = [[NSPoint alloc] initWithCGPoint:CGPointMake(originX+width,	originY)];
+		NSPoint* point_4 = [[NSPoint alloc] initWithCGPoint:CGPointMake(originX+width,	originY+height)];
 	
-	NSArray* quadPoints = [[NSArray alloc] initWithObjects:point_1, point_2, point_3, point_4, nil];
+		NSArray* quadPoints = [[NSArray alloc] initWithObjects:point_1, point_2, point_3, point_4, nil];
 	
-	[self addQuadPointsFromArrayToParameterData:quadPoints];
+		[self addQuadPointsFromArrayToParameterData:quadPoints];
 
-	totalQuads++;
+		totalQuads++;
 	
-	totalSize+=width;
+		totalSize+=width;
 	
-	averageWidth	+=width;
-	averageHeight	+=height;
+		averageWidth	+=width;
+		averageHeight	+=height;
 	
-	[origins addObject:[NSPoint pointWithCGPoint:CGPointMake(originX, originY)]];
+		[origins addObject:[NSPoint pointWithCGPoint:CGPointMake(originX, originY)]];
+	}
 }
 
 
@@ -176,46 +181,49 @@
 	CGFloat	width	= r.size.width;
 	CGFloat	originX = r.origin.x;
 	CGFloat	originY = r.origin.y;
+	
+	if (width > 5)	{
 
-	NSPoint* one	= [[NSPoint alloc] initWithCGPoint:CGPointMake(originX+width*0.5,	originY)];
-	NSPoint* two	= [[NSPoint alloc] initWithCGPoint:CGPointMake(originX+width*0.6,	originY+height*0.33)];
-	NSPoint* three	= [[NSPoint alloc] initWithCGPoint:CGPointMake(originX+width*0.9,	originY+height*0.33)];
-	NSPoint* four	= [[NSPoint alloc] initWithCGPoint:CGPointMake(originX+width*0.66,	originY+height*0.55)];
-	NSPoint* five	= [[NSPoint alloc] initWithCGPoint:CGPointMake(originX+width*0.75,	originY+height*0.88)];
-	NSPoint* six	= [[NSPoint alloc] initWithCGPoint:CGPointMake(originX+width*0.5,	originY+height*0.66)];
-	NSPoint* seven	= [[NSPoint alloc] initWithCGPoint:CGPointMake(originX+width*0.25,	originY+height*0.88)];
-	NSPoint* eight	= [[NSPoint alloc] initWithCGPoint:CGPointMake(originX+width*0.33,	originY+height*0.52)];
-	NSPoint* nine	= [[NSPoint alloc] initWithCGPoint:CGPointMake(originX+width*0.1,	originY+height*0.33)];
-	NSPoint* ten	= [[NSPoint alloc] initWithCGPoint:CGPointMake(originX+width*0.4,	originY+height*0.33)];
+		NSPoint* one	= [[NSPoint alloc] initWithCGPoint:CGPointMake(originX+width*0.5,	originY)];
+		NSPoint* two	= [[NSPoint alloc] initWithCGPoint:CGPointMake(originX+width*0.6,	originY+height*0.33)];
+		NSPoint* three	= [[NSPoint alloc] initWithCGPoint:CGPointMake(originX+width*0.9,	originY+height*0.33)];
+		NSPoint* four	= [[NSPoint alloc] initWithCGPoint:CGPointMake(originX+width*0.66,	originY+height*0.55)];
+		NSPoint* five	= [[NSPoint alloc] initWithCGPoint:CGPointMake(originX+width*0.75,	originY+height*0.88)];
+		NSPoint* six	= [[NSPoint alloc] initWithCGPoint:CGPointMake(originX+width*0.5,	originY+height*0.66)];
+		NSPoint* seven	= [[NSPoint alloc] initWithCGPoint:CGPointMake(originX+width*0.25,	originY+height*0.88)];
+		NSPoint* eight	= [[NSPoint alloc] initWithCGPoint:CGPointMake(originX+width*0.33,	originY+height*0.52)];
+		NSPoint* nine	= [[NSPoint alloc] initWithCGPoint:CGPointMake(originX+width*0.1,	originY+height*0.33)];
+		NSPoint* ten	= [[NSPoint alloc] initWithCGPoint:CGPointMake(originX+width*0.4,	originY+height*0.33)];
 	
-	NSMutableArray* starPoints = [[NSMutableArray alloc] init];	
-	[starPoints addObject:one];
-	[starPoints addObject:two];
-	[starPoints addObject:three];
-	[starPoints addObject:four];
-	[starPoints addObject:five];
-	[starPoints addObject:six];
-	[starPoints addObject:seven];
-	[starPoints addObject:eight];
-	[starPoints addObject:nine];
-	[starPoints addObject:ten];	
+		NSMutableArray* starPoints = [[NSMutableArray alloc] init];	
+		[starPoints addObject:one];
+		[starPoints addObject:two];
+		[starPoints addObject:three];
+		[starPoints addObject:four];
+		[starPoints addObject:five];
+		[starPoints addObject:six];
+		[starPoints addObject:seven];
+		[starPoints addObject:eight];
+		[starPoints addObject:nine];
+		[starPoints addObject:ten];	
 	
-	const float* RGB = CGColorGetComponents([(UIColor*)[[[s local] colors] objectAtIndex:[s index]] CGColor]);	
-	alpha_total		+=	s.alpha;
-	sc_red_total	+=	RGB[0];
-	sc_green_total	+=	RGB[1];
-	sc_blue_total	+=	RGB[2];		
+		const float* RGB = CGColorGetComponents([(UIColor*)[[[s local] colors] objectAtIndex:[s index]] CGColor]);	
+		alpha_total		+=	s.alpha;
+		sc_red_total	+=	RGB[0];
+		sc_green_total	+=	RGB[1];
+		sc_blue_total	+=	RGB[2];		
 	
-	[self addStarPointsFromArrayToParameterData:starPoints];
+		[self addStarPointsFromArrayToParameterData:starPoints];
 	
-	[origins addObject:nine];
+		[origins addObject:nine];
 	
-	totalStars++;
+		totalStars++;
 	
-	averageWidth	+=width;
-	averageHeight	+=height;
+		averageWidth	+=width;
+		averageHeight	+=height;
 	
-	totalSize+=width;	
+		totalSize+=width;	
+	}
 }
 
 -(void)processCircle:(GSCircle*)c	{
@@ -225,49 +233,51 @@
 	CGFloat	originX = r.origin.x;
 	CGFloat	originY = r.origin.y;
 
-	const float* RGB = CGColorGetComponents([(UIColor*)[[[c local] colors] objectAtIndex:[c index]] CGColor]);
-	alpha_total		+=	c.alpha;
-	sc_red_total	+=	RGB[0];
-	sc_green_total	+=	RGB[1];
-	sc_blue_total	+=	RGB[2];
+	if (width>5)	{
+		const float* RGB = CGColorGetComponents([(UIColor*)[[[c local] colors] objectAtIndex:[c index]] CGColor]);
+		alpha_total		+=	c.alpha;
+		sc_red_total	+=	RGB[0];
+		sc_green_total	+=	RGB[1];
+		sc_blue_total	+=	RGB[2];
 	
-	for (int i = originY; i < originY+height; i++){
-		NSPoint* p = [NSPoint pointWithCGPoint:CGPointMake(0.0f, 0.0f)];
-		double x = .0f;
-		//	Calculate curve occurrence in each frequency band
-		if (i<=80)	{
-			[p setX:	i];
-			[p setY:	floor((80-i)/2.6)];	
-			[curves_w	addObject:p];
+		for (int i = originY; i < originY+height; i++){
+			NSPoint* p = [NSPoint pointWithCGPoint:CGPointMake(0.0f, 0.0f)];
+			double x = .0f;
+			//	Calculate curve occurrence in each frequency band
+			if (i<=80)	{
+				[p setX:	i];
+				[p setY:	floor((80-i)/2.6)];	
+				[curves_w	addObject:p];
+			}
+			if (i<=160&&i>80)	{
+				x = i-80;
+				[p setY:	floor((80-x)/2.6)];
+				[curves_x	addObject:p];
+			}
+			if (i<=240&&i>160)	{
+				x = i-160;
+				[p setY:	floor((80-x)/2.6)];
+				[curves_y	addObject:p];
+			}
+			if (i>240)	{
+				x = i-240;
+				[p setY:	floor((80-x)/2.6)];
+				[curves_z	addObject:p];
+			}
 		}
-		if (i<=160&&i>80)	{
-			x = i-80;
-			[p setY:	floor((80-x)/2.6)];
-			[curves_x	addObject:p];
-		}
-		if (i<=240&&i>160)	{
-			x = i-160;
-			[p setY:	floor((80-x)/2.6)];
-			[curves_y	addObject:p];
-		}
-		if (i>240)	{
-			x = i-240;
-			[p setY:	floor((80-x)/2.6)];
-			[curves_z	addObject:p];
-		}
+	
+		for (int i = originX; i < originX+width; i++)
+			numcurves++;
+	
+		totalEllipse++;
+	
+		[origins addObject:[NSPoint pointWithCGPoint:CGPointMake(originX, originY)]];
+	
+		averageHeight	+=height;
+		averageWidth	+=width;
+	
+		totalSize+=width;
 	}
-	
-	for (int i = originX; i < originX+width; i++)
-		numcurves++;
-	
-	totalEllipse++;
-	
-	[origins addObject:[NSPoint pointWithCGPoint:CGPointMake(originX, originY)]];
-	
-	averageHeight	+=height;
-	averageWidth	+=width;
-	
-	totalSize+=width;
 }
 
 -(void)resetLocalVariables	{
@@ -316,27 +326,27 @@
 		NSPoint* p = [_origins objectAtIndex:i];		
 		for (int j = i; j < [_origins count]; j++)	{
 			NSPoint* o = [_origins objectAtIndex:j];
-			
+
 			float	overlapX = 0.0;
 			float	overlapY = 0.0;
-			
+
 			if (![p matchesNSPoint:o])	{			
 				float	lowestX		= p.x > o.x ? o.x : p.x;
 				float	highestX	= p.x > o.x ? p.x : o.x;
 				float	lowestY		= p.y > o.y ? o.y : p.y;
 				float	highestY	= p.y > o.y ? p.y : o.y;
-				
+
 				float	endX		= lowestX + _averageSizeW;
 				float	endY		= lowestY + _averageSizeH;
-				
+
 				overlapX	= 0.0f;
 				overlapY	= 0.0f;
-				
+
 				overlapX = endX-highestX;
 				overlapY = endY-highestY;
-				
+
 				float	overlapArea	= 0.0f;
-				
+
 				if ((overlapY>0.0f)&&(overlapX>0.0f))	{
 					overlapArea = overlapY*overlapX;
 					overlapFactor+=(overlapArea*0.000005);
@@ -356,12 +366,14 @@
 	for (GSShape* g in combo)	{		
 		switch (g.shape_index) {
 			case 0:		break;	//GSShape generic id
-			case 1:		[self processQuadrilateral:(GSQuadrilateral*)g];	numshapes++;	break;
-			case 2:		[self processCircle:(GSCircle*)g];					numshapes++;	break;
-			case 3:		[self processStar:(GSStar*)g];						numshapes++;	break;
-			case 4:		[self processTriangle:(GSTriangle*)g];				numshapes++;	break;
+			case 1:		[self processQuadrilateral:(GSQuadrilateral*)g];	break;
+			case 2:		[self processCircle:(GSCircle*)g];					break;
+			case 3:		[self processStar:(GSStar*)g];						break;
+			case 4:		[self processTriangle:(GSTriangle*)g];				break;
 			default:	break;
 		}
+		if (g.frame.size.width>1&&![[g label] isEqualToString:@"Generic"])
+			numshapes++;
 	}
 
 	//	Prevent /0 error
@@ -376,19 +388,23 @@
 	
 	//	Overall
 	NSNumber	*NSNumShapes	= [[NSNumber alloc] initWithInt:numshapes];
+	NSNumber	*NSNumQuads		= [[NSNumber alloc] initWithInt:totalQuads];
+	NSNumber	*NSNumStars		= [[NSNumber alloc] initWithInt:totalStars];
+	NSNumber	*NSNumEllipses	= [[NSNumber alloc] initWithInt:totalEllipse];
+	NSNumber	*NSNumTriangles	= [[NSNumber alloc] initWithInt:totalTriangles];	
 	
 	//	Alpha stats
 	NSNumber	*NSAlphaAverage = [[NSNumber alloc] initWithFloat:alpha_average];
 	
 	//	Colors
 	NSNumber	*NSTotalR		= [[NSNumber alloc] initWithFloat:sc_red_total];
-	NSNumber	*NSTotalG		= [[NSNumber alloc] initWithFloat:sc_red_total];
-	NSNumber	*NSTotalB		= [[NSNumber alloc] initWithFloat:sc_red_total];	
+	NSNumber	*NSTotalG		= [[NSNumber alloc] initWithFloat:sc_green_total];
+	NSNumber	*NSTotalB		= [[NSNumber alloc] initWithFloat:sc_blue_total];	
 	
 	averageArea = averageHeight*averageWidth;
 	NSNumber	*NSOverlap		= [[NSNumber alloc] initWithFloat:overlap];
 	
-	NSArray		*parameters	 = [NSArray arrayWithObjects: 
+	NSArray		*parameters		= [NSArray arrayWithObjects: 
 								//	Triggers
 								starPoints_w,	starPoints_x,	starPoints_y,	starPoints_z,
 								triPoints_w,	triPoints_x,	triPoints_y,	triPoints_z,
@@ -404,7 +420,10 @@
 								NSTotalR, NSTotalG, NSTotalB,	
 								
 								//	NumShapes
-								NSNumShapes, nil];
+								NSNumShapes, 
+								
+								NSNumQuads, NSNumEllipses,	NSNumStars,  NSNumTriangles,
+								nil];
 	
 	[delegate updatedParameters:parameters];
 	
