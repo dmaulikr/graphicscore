@@ -21,9 +21,9 @@
 @property int index;
 @property Palette	*local;
 @property NSString	*label;	
-@property int shape_index;
-@property int origin;
-
+@property int		shape_index;
+@property int		origin;
+@property BOOL		isBeingDrawn;
 -(void) reset;
 
 @end

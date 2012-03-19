@@ -36,7 +36,6 @@
 	
 	//	Begin the animations
 	[UIView commitAnimations];
-	NSLog(@"RESTORED");
 }
 
 
@@ -82,15 +81,12 @@
 
 //	LISTENING SESSION
 -(void)presentListeningSession	{
-	NSLog(@"Loading...");
 	ListenerUI* listenerScreen	= [[ListenerUI alloc] init];
 	[listenerScreen setDelegate:self];
 	[self presentModalViewController:listenerScreen animated:NO];
-	NSLog(@"...Done");
 }
 
 -(void)beginNewListeningSession	{
-	NSLog(@"Present listening session!");
 	[self fadeImage:mainScreenBackground_ImageView withDuration:1.15 andWait:0.0];
 	[self dismissButtonFromView:startButton withDuration:1.0 andWait:0.15 withTargetPosition:CGPointMake(-50, 160)];
 	[self dismissButtonFromView:listenModeButton withDuration:1.0 andWait:0.15 withTargetPosition:CGPointMake(530, 220)];

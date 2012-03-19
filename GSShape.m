@@ -9,7 +9,7 @@
 #import "GSShape.h"
 
 @implementation GSShape
-@synthesize index, local, label, shape_index, origin;
+@synthesize index, local, label, shape_index, origin, isBeingDrawn;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -20,6 +20,7 @@
 		self.userInteractionEnabled = NO;
 		shape_index = 0; 
 		origin = 0;	//	0 = LOCAL – 1 = REMOTE
+		isBeingDrawn = NO;
     }
     return self;
 }

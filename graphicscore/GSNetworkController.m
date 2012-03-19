@@ -15,8 +15,6 @@
 	self = [super init];
 	if (self)	{
 		[self request_id];
-		NSLog(@"Session ID: %i", session_id);
-		NSLog(@"Member ID: %i", member_id);
 	}
 	return self;
 }
@@ -25,7 +23,6 @@
 	self = [super init];
 	if (self)	{
 		[self requestListenID];
-		NSLog(@"Listen ID: %i", session_id);
 	}
 	return self;
 }
@@ -76,7 +73,6 @@
 }
 
 -(void)submitData:(NSMutableArray*)data	{
-	NSLog(@"Submitting");
 	NSString* URLSuffix = [NSString stringWithFormat:@"%@%@%@%@%@",
 						   [self URLGetStringForShape:(GSShape*)[data objectAtIndex:((member_id-1)*5)]	withIndex:((member_id-1)*5)],
 						   [self URLGetStringForShape:(GSShape*)[data objectAtIndex:((member_id-1)*5)+1]withIndex:((member_id-1)*5)+1],
@@ -94,7 +90,6 @@
 }
 
 -(void)request_id	{
-	NSLog(@"Requesting ID...");
 	NSURL* id_request = [NSURL URLWithString:@"http://109.123.110.188/app/request_id.php"];
 	NSMutableArray*	responseFromServer = [[NSMutableArray alloc] initWithContentsOfURL:id_request];
 	

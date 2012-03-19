@@ -16,7 +16,7 @@
 #import "GSNetworkController.h"
 
 
-@interface TouchArea : UIView <GSNetworkCallbackDelegate>	{
+@interface TouchArea : UIView <GSNetworkCallbackDelegate, UIAlertViewDelegate>	{
 	//	Points incoming from user
 	NSMutableArray	*incoming_points;
 	

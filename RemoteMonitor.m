@@ -17,10 +17,10 @@
 }
 
 -(void)callForPing	{
-	if ([network pingServerForConnection])
-		NSLog(@"Connection confirmed");
-	else
-		NSLog(@"Connection broken");
+	if (![network pingServerForConnection])	{
+		UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Connection error" message:@"Connection was lost" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+		[alertView show];
+	}	
 }
 
 -(void)pollServerForUpdates	{
@@ -45,7 +45,6 @@
 		//	Ping
 		pollCountdown = 0;
 		pingTimer = [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(pollServerForUpdates) userInfo:nil repeats:YES];
-		NSLog(@"RemoteMonitor loaded");
 		
 		palette			= [Palette createPlayerOne];
 		remotePalette	= [Palette createPlayerTwo];
@@ -132,9 +131,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
--(void)processIncomingDataFromNetwork:(NSArray*)incoming	{
-	NSLog(@"Received data!");
-	
+-(void)processIncomingDataFromNetwork:(NSArray*)incoming	{	
 	if (!refreshLock)	{
 		refreshLock = YES;
 		for (GSShape* g in [self subviews])	{

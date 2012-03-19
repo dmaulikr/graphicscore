@@ -15,7 +15,6 @@
 
 -(void)alertView:(UIAlertView*)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex	{
 	[self triggerDismissalProcedure];
-	NSLog(@"Connection unavailable");
 }
 
 /*
@@ -75,9 +74,6 @@
 -(void)triggerDismissalProcedure	{
 	//	1:	Fade elements from screen 
 	[self fadeViewFromScreen];
-	
-	
-	NSLog(@"DISMISSED");
 	
 	//	2:	Invalidate ping timer
 	[[remote pingTimer] invalidate];

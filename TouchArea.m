@@ -16,10 +16,10 @@
 }
 
 -(void)callForPing	{
-	if ([network pingServerForConnection])
-		NSLog(@"Connection confirmed");
-	else
-		NSLog(@"Connection broken");
+	if (![network pingServerForConnection])	{
+		UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Connection error" message:@"Connection was lost" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+		[alertView show];
+	}
 }
 
 -(void)pollServerForUpdates	{
@@ -72,33 +72,33 @@
 -(void)processTouches:(NSSet*)touches	{
 	UITouch *touch = [touches anyObject];
 	if (touch.view==self)	{
-//		NSPoint *pp = [[NSPoint alloc] initWithCGPoint:[touch locationInView:self]];
-//		[incoming_points addObject:pp];
 		[incoming_points addObject:[NSPoint pointWithCGPoint:[touch locationInView:self]]];
 	}
 }
 
 -(void)touchesBegan:(NSSet*)touches		withEvent:(UIEvent*)event	{
 	[incoming_points removeAllObjects];
-	
+
 	CGRect def = CGRectMake(0, 0, 0, 0);
 	switch ([[[shapePalette shapes]objectAtIndex:shape_index]shape_index]) {
 		case 1:	currentShape = [[GSQuadrilateral alloc] initWithFrame:def andLocal:palette andIndex:color_index]; break;
-		case 2:	currentShape = [[GSCircle alloc] initWithFrame:def]; break;
-		case 3:	currentShape = [[GSStar alloc] initWithFrame:def]; break;
-		case 4:	currentShape = [[GSTriangle alloc] initWithFrame:def]; break;			
+		case 2:	currentShape = [[GSCircle alloc]		initWithFrame:def]; break;
+		case 3:	currentShape = [[GSStar alloc]			initWithFrame:def]; break;
+		case 4:	currentShape = [[GSTriangle alloc]		initWithFrame:def]; break;			
 		default:	break;
 	}
-	
+	[currentShape setIsBeingDrawn:YES];
+
 	[currentShape setOrigin:0];
-	
-	[currentShape setLocal:palette];
-	[currentShape setIndex:color_index];
-	
-	for (GSShape* k in [self subviews])
-			if((currentShape.index==k.index)&&(currentShape.origin==k.origin))//&&(currentShape.shape_index==k.shape_index))
-				[k removeFromSuperview];
-	
+	[currentShape setLocal:	palette];
+	[currentShape setIndex:	color_index];
+
+	for (GSShape* k in [self subviews])	{
+		if((currentShape.index==k.index)&&(currentShape.origin==k.origin))	{
+			[k removeFromSuperview];
+		}
+	}
+
 	[self addSubview:currentShape];
 	[self processTouches:touches];
 }
@@ -111,7 +111,8 @@
 -(void)touchesCancelled:(NSSet*)touches withEvent:(UIEvent*)event	{	[self processTouches:touches];	}
 
 -(void)touchesEnded:(NSSet*)touches		withEvent:(UIEvent*)event	{		
-	[currentShape removeFromSuperview];	
+	[currentShape	setIsBeingDrawn: NO];
+	[currentShape	removeFromSuperview];	
 	[shapesOnScreen replaceObjectAtIndex:color_index+(5*member_id) withObject:currentShape];
 	[self addSubview:(GSShape*)[shapesOnScreen objectAtIndex:color_index+(5*member_id)]];
 	
@@ -195,6 +196,7 @@
 	int start = 0;
 	start = member_id == 1 ? 0 : 5;
 	if (!refreshLock)	{
+		refreshLock = YES;
 		
 		//	Populate with generics
 		GSShape* generic = [[GSShape alloc] init];	
@@ -202,19 +204,23 @@
 		for (int i = 0; i < 10; i++)
 			[shapesFromNetwork addObject:generic];
 
-		refreshLock = YES;
+
 		for (int i = start; i < start+5; i++)	{
 			[shapesFromNetwork replaceObjectAtIndex:i withObject:
-			 [self createShapeUsingParameters:incoming withIndex:i]];
-			
-			for (GSShape* k in [self subviews])	{
-				GSShape* g = [shapesFromNetwork objectAtIndex:i];
-				if ((g.frame.origin.x==k.frame.origin.x)&&(g.frame.origin.y==k.frame.origin.y))
-					[k removeFromSuperview];
-			}
-			[shapesOnScreen replaceObjectAtIndex:i withObject:[shapesFromNetwork objectAtIndex:i]];
-			[self addSubview:[shapesOnScreen objectAtIndex:i]];
+			[self createShapeUsingParameters:incoming withIndex:i]];
+			[shapesOnScreen replaceObjectAtIndex:i withObject:[shapesFromNetwork objectAtIndex:i]];			
 		}
+		
+		for (GSShape* k in [self subviews])	{					
+			if (![k isBeingDrawn])	{
+				[k removeFromSuperview];
+			}
+		}
+		
+		for (GSShape* k in shapesOnScreen)	{
+			[self addSubview:k];
+		}
+
 		refreshLock = NO;
 	}
 	[delegate touchAreaHasBeenUpatedWithShapesOnScreen:shapesOnScreen andFromNetwork:shapesFromNetwork];	
