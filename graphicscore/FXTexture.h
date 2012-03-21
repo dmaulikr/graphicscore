@@ -9,6 +9,14 @@
 #ifndef graphicscore_FXTexture_h
 #define graphicscore_FXTexture_h
 
+/*
+ **********	FXTEXTURE	**********
+
+ FXTexture is an amplitude modulation object which alters the volume
+ of a signal (input) by a speed (amount). This effected signal is then
+ blended with the dry input signal according to the value of 'mix'.
+ */
+
 class FXTexture {
 	maxiOsc am;	
 public:

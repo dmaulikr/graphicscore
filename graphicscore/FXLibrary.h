@@ -6,6 +6,12 @@
 //  Copyright (c) 2012 zebpedersen. All rights reserved.
 //
 
+/*
+ **********	FXLIBRARY	**********
+ This file collects the three FX* headers and maximilian in one header so that the
+ whole library can be imported in a single statement.
+ */
+
 #import "maximilian.h"
 
 #import "FXFlanger.h"

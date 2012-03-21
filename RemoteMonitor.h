@@ -24,7 +24,7 @@
 	Palette	*palette;
 	Palette *remotePalette;
 
-	id <RemoteMonitorDelegate> delegate;
+	id <TouchAreaDelegate> delegate;
 
 	id <RemoteMonitorNetworkConnection> network;
 

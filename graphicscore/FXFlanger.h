@@ -10,6 +10,21 @@
 #define graphicscore_FXFlanger_h
 #include "FXLibrary.h"
 
+/*
+ **********	FXFlanger	**********
+
+ This object is an audio DSP flanger, used to add a metallic effect
+ to any audio signal it is passed.
+ 
+ The flanger takes the audio signal and a control value as its 
+ arguments – the control value is used to set the breadth and metallic
+ quality of the effect.
+ 
+ A metallic feel is created by allowing more feedback signal into the 
+ signal path, creating a metallic ringing. The 'amount' also sets the
+ speed of the osciallator which controls the frequency sweep.
+ */
+
 class FXFlanger {
 	maxiDelayline	flanger;
 	maxiOsc			flangerCTL;

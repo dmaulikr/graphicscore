@@ -13,7 +13,7 @@
 #import "ParameteriserDelegateProtocol.h"
 #import "RemoteMonitor.h"
 
-@interface Parameteriser : NSObject <TouchAreaDelegate, RemoteMonitorDelegate>	{
+@interface Parameteriser : NSObject <TouchAreaDelegate>	{//, RemoteMonitorDelegate>	{
 	id <ParameteriserDelegate> delegate;
 
 	int		numpoints;

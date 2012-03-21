@@ -9,6 +9,22 @@
 #ifndef graphicscore_FXDegrade_h
 #define graphicscore_FXDegrade_h
 
+/*
+ **********	FXDegrade	**********
+ 
+ This audio DSP object has two parts, both designed to degrade the signal.
+ 
+ The first is a distortion effect. The volume of the incoming signal is boosted 
+ by the 'amount' argument, and is clipped when it exceeds either 1.0 or -1.0. This 
+ creats a jarring distorted effect.
+ 
+ Second, the signal is 'bitcrushed'. Bitcrushing creates the effect of a low sample
+ rate, only allowing an altered signal amount to be returned every several frames
+ (an amount set using the 'amount' variable).
+ 
+ These effects are mixed in with the dry signal using the 'mix' argument.
+ */
+
 class FXDegrade {
 public:
 	//	Master
