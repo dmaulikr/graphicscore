@@ -12,6 +12,24 @@
 
 @implementation Palette
 @synthesize colors;
+/*
+ **********	PALETTE	**********
+ 
+ Each Palette instance contains a set of colors, which are used to
+ set the drawing colors for GSShapes. 
+ 
+ The Palette itself has only one member – an NSArray of UIColor 
+ objects – and the Palette class provides three class convenience
+ methods for creating the different types of palette used in the 
+ application: 
+ 
+ - Player one
+ - Player two
+ - Black (used for drawing the shape selection buttons)
+
+ The colors are defined in RGB (0-255), and then scaled to match the 
+ 0.0-1.0 floating point UIColor scale. 
+ */
 
 +(Palette*)createPlayerOne	{
 	Palette* p = [[Palette alloc] init];
@@ -21,7 +39,7 @@
 							 [UIColor colorWithRed:100*scale	green:255*scale		blue:50*scale	alpha:1.0],
 							 [UIColor colorWithRed:255*scale	green:0*scale		blue:50*scale	alpha:1.0],
 							 [UIColor colorWithRed:0*scale		green:200*scale		blue:100*scale	alpha:1.0],
-							 [UIColor colorWithRed:255*scale	green:100*scale		blue:0*scale	alpha:1.0]							 
+							 [UIColor colorWithRed:255*scale	green:100*scale		blue:0*scale	alpha:1.0]	 
 							 , nil];
 	
 	[p setColors:local_colors];

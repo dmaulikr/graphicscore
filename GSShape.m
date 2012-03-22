@@ -11,6 +11,14 @@
 @implementation GSShape
 @synthesize index, local, label, shape_index, origin, isBeingDrawn;
 
+/*
+ The GSShape default [initWithFrame:] method. 
+ 
+ All of the generic GSShape variables are overridden by
+ objects inheriting from it, however they all maintain a value
+ of NO for [self userInteractionEnabled].
+ */
+
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -25,8 +33,14 @@
     return self;
 }
 
-//	Overridden in subclasses
--(void) reset	{	}
+/*
+ All GSShapes have a reset method which (at least) resets the alpha
+ channel to full. This can be overriden by more complex shapes.
+ */
+
+-(void) reset	{
+	[self setAlpha:1.0f];
+}
 
 @end
 

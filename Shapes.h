@@ -9,6 +9,14 @@
 #ifndef graphicscore_Shapes_h
 #define graphicscore_Shapes_h
 
+/*
+ **********	SHAPES.H	**********
+
+ This header contains imports for the GSShape library, and exists
+ to make the library a one line import (as it is used in a number
+ of objects throughout the project).
+ */
+
 #import "GSShape.h"
 #import "GSQuadrilateral.h"
 #import "GSStar.h"
