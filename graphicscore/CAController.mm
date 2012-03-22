@@ -9,19 +9,38 @@
 #import "CAController.h"
 #import "FXLibrary.h"
 
-#define scale 0.00002267573696
-
 ////////////////////////////////////////////////////////////
-const		Float64		sampleRate = 44100.0;
-float*		bufferL;
-float*		bufferR;
-float*		j = new float [2];
-float*		render_output = new float [2];
+/*
+ The Audio Unit created by CAController is configured by these
+ variables. The sampleRate remains constant at 44.1kHz, and the
+ bool 'playback' is used to toggle the audio output.
+ 
+ Float pointers 'bufferL' and 'bufferR' are assigned to the left and
+ right channel buffers in the AU callback, and are populated
+ by 'j', which is filled in the audio rendering loop using the 
+ audio processing method 'output' (render_output is used within
+ that method to hold the audio signal).
+ */
 
-bool		playback;	//	YES if noise is desired
+const		Float64			sampleRate		= 44100.0;
+			float*			bufferL;
+			float*			bufferR;
+			float*			j				= new float [2];
+			float*			render_output	= new float [2];
+			bool			playback;
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 
+/*
+ Each of the pointed GSShapes triggers a different source sample,
+ while the ellipses drawn to the screen are used to control audio
+ FX levels. The 'curves' and 'points' are separated by shape and 
+ frequency band (w->z).
+
+ These values are stores in NSArray objects which are populated
+ by values passed to the CAController instance by the Parameteriser.
+ */
+ 
 NSArray*	starPoints_w;
 NSArray*	starPoints_x;
 NSArray*	starPoints_y;
@@ -42,7 +61,18 @@ NSArray*	curvesX;
 NSArray*	curvesY;
 NSArray*	curvesZ;
 
-//	MAX OBJECT DECLARATION
+/* 
+ The metronome is used to perform sequencing. It uses a phasor oscillator,
+ which ramps from -1 to +1 in each sweep. When the output of this 
+ oscillator ('metroOut') reaches +1, 'metroCount' is incremented, cycling
+ through to the next stage of the sequence. 
+
+ The sequence is 16 units long, however it is read back alternating in odd
+ and even values, creating two 8 unit variations. 'oddMod' is switched at
+ each run through of the oscillator from zero to one, and added to the value
+ of 'metroCount', creating this behaviour (at count 16, 'metroOut' is reset to
+ zero, and 'oddMod' is switched).
+ */
 
 #pragma mark METRONOME
 maxiOsc		metro;
@@ -54,10 +84,10 @@ int			oddMod = 1;
 #pragma mark PARAMETERS
 
 //	Band outputs
-double w_out, x_out, y_out, z_out;
+double		w_out, x_out, y_out, z_out;
 
 //	Overlap
-double overlap;
+double		overlap;
 
 //	Globals
 //	…color
