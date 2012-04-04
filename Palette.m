@@ -35,11 +35,11 @@
 	Palette* p = [[Palette alloc] init];
 	
 	NSArray* local_colors = [[NSArray alloc] initWithObjects:
-							 [UIColor colorWithRed:0*scale		green:100*scale		blue:255*scale	alpha:1.0],
-							 [UIColor colorWithRed:100*scale	green:255*scale		blue:50*scale	alpha:1.0],
-							 [UIColor colorWithRed:255*scale	green:0*scale		blue:50*scale	alpha:1.0],
-							 [UIColor colorWithRed:0*scale		green:200*scale		blue:100*scale	alpha:1.0],
-							 [UIColor colorWithRed:255*scale	green:100*scale		blue:0*scale	alpha:1.0]	 
+							 [UIColor colorWithRed:89*scale		green:188*scale		blue:26*scale	alpha:1.0],
+							 [UIColor colorWithRed:44*scale		green:218*scale		blue:150*scale	alpha:1.0],
+							 [UIColor colorWithRed:0*scale		green:200*scale		blue:213*scale	alpha:1.0],
+							 [UIColor colorWithRed:0*scale		green:109*scale		blue:230*scale	alpha:1.0],
+							 [UIColor colorWithRed:0*scale		green:66*scale		blue:213*scale	alpha:1.0]	 
 							 , nil];
 	
 	[p setColors:local_colors];
@@ -50,11 +50,11 @@
 	Palette* p = [[Palette alloc] init];
 	
 	NSArray* remote_colors = [[NSArray alloc] initWithObjects:
-							  [UIColor colorWithRed:0*scale		green:255*scale		blue:50*scale	alpha:1.0],
-							  [UIColor colorWithRed:0*scale		green:100*scale		blue:255*scale	alpha:1.0],
-							  [UIColor colorWithRed:255*scale	green:100*scale		blue:50*scale	alpha:1.0],
-							  [UIColor colorWithRed:100*scale	green:0*scale		blue:100*scale	alpha:1.0],
-							  [UIColor colorWithRed:240*scale	green:0*scale		blue:0*scale	alpha:1.0]
+							  [UIColor colorWithRed:255*scale	green:255*scale		blue:50*scale	alpha:1.0],
+							  [UIColor colorWithRed:255*scale	green:155*scale		blue:0*scale	alpha:1.0],
+							  [UIColor colorWithRed:200*scale	green:109*scale		blue:70*scale	alpha:1.0],
+							  [UIColor colorWithRed:190*scale	green:37*scale		blue:100*scale	alpha:1.0],
+							  [UIColor colorWithRed:240*scale	green:43*scale		blue:31*scale	alpha:1.0]
 							  , nil];
 							  
 	[p setColors:remote_colors];
